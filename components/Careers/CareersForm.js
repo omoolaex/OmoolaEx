@@ -13,10 +13,10 @@ export default function CareersForm() {
           transition={{ duration: 0.5 }}
         >
           <h2 className="text-3xl md:text-4xl font-bold text-gray-800">
-            Can't find a role? We'd still love to hear from you!
+            Can&rsquo;t find a role? We&rsquo;d still love to hear from you!
           </h2>
           <p className="mt-4 text-gray-600 text-lg">
-            Join our talent network and we’ll reach out when the right opportunity comes up.
+            Join our talent network and we&rsquo;ll reach out when the right opportunity comes up.
           </p>
         </motion.div>
 

@@ -24,7 +24,7 @@ export default function CTA() {
           viewport={{ once: true }}
           className="text-lg md:text-xl text-gray-200 mb-10"
         >
-          Partner with OmoolaEx and let's create powerful, tailored solutions that drive real results.
+          Partner with OmoolaEx and let&rsquo;s create powerful, tailored solutions that drive real results.
         </motion.p>
 
         <motion.div
@@ -38,7 +38,7 @@ export default function CTA() {
               onClick={() => setIsOpen(false)}
               className="bg-white text-blue-900 font-semibold px-8 py-4 rounded-full shadow-lg hover:bg-gray-200 transition duration-300"
             >
-              Let’s Work Together
+              Let&rsquo;s Work Together
         </Link>
         </motion.div>
       </div>

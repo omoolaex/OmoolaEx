@@ -22,7 +22,7 @@ export default function CareersHero() {
           transition={{ delay: 0.3, duration: 0.6 }}
           className="mt-6 text-lg md:text-xl text-gray-600 max-w-3xl mx-auto"
         >
-          We're a team of innovators, builders, and creators shaping the future of digital solutions. Come be a part of something meaningful.
+          We&rsquo;re a team of innovators, builders, and creators shaping the future of digital solutions. Come be a part of something meaningful.
         </motion.p>
 
         <motion.div
