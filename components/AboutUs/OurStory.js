@@ -7,7 +7,7 @@ const timeline = [
   {
     year: '2020',
     title: 'The Spark',
-    desc: 'OmoolaEx started as a vision — to bring digital growth closer to individuals and small businesses.',
+    desc: 'OmoolaEx started as a vision to bring digital growth closer to individuals and small businesses.',
     image: '/illustrations/idea.svg',
   },
   {
@@ -19,7 +19,7 @@ const timeline = [
   {
     year: '2022',
     title: 'Expanding Reach',
-    desc: 'Word of mouth grew. We refined our services around what our audience truly needed — conversion-focused web development.',
+    desc: 'Word of mouth grew. We refined our services around what our audience truly needed conversion-focused web development.',
     image: '/illustrations/network.svg',
   },
   {
@@ -49,7 +49,7 @@ export default function OurStory() {
         >
           <h2 className="text-3xl md:text-4xl font-bold text-blue-900">Our Journey So Far</h2>
           <p className="mt-4 text-gray-600 text-lg max-w-2xl mx-auto">
-            From a simple idea in 2020 to becoming a go-to tech partner — here's how OmoolaEx came to life.
+            From a simple idea in 2020 to becoming a go-to tech partner.
           </p>
         </motion.div>
 
