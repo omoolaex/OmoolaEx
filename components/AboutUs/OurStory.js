@@ -31,7 +31,7 @@ const timeline = [
   {
     year: '2024+',
     title: 'Now & Next',
-    desc: 'Today, OmoolaEx stands as a trusted partner for forward-thinking founders and teams. And we&rsquo;re just getting started.',
+    desc: "Today, OmoolaEx stands as a trusted partner for forward-thinking founders and teams. And we&rsquo;re just getting started.",
     image: '/illustrations/rocket.svg',
   },
 ]
