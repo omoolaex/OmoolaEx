@@ -1,6 +1,7 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
+import { Analytics } from '@vercel/analytics/react'
 import Navbar from "@/components/NavBar";
 import Footer from "@/components/Footer";
 import DiscountPopup from "@/components/DiscountPopup";
