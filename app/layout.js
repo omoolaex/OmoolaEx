@@ -1,7 +1,8 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
-import { Analytics } from '@vercel/analytics/react'
+import { Analytics } from "@vercel/analytics/next"
+import { SpeedInsights } from "@vercel/speed-insights/next"
 import Navbar from "@/components/NavBar";
 import Footer from "@/components/Footer";
 import DiscountPopup from "@/components/DiscountPopup";
@@ -135,6 +136,8 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}
       >
+        <Analytics />
+        <SpeedInsights />
         <Navbar />
         <DiscountPopup />
         <main className="flex-grow">{children}</main>
