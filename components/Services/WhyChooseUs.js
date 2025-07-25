@@ -59,7 +59,7 @@ export default function WhyChooseUs() {
           viewport={{ once: true }}
           className="text-gray-600 max-w-2xl mx-auto mb-12"
         >
-          We&rsquo;re more than just a service provider — we&rsquo;re your digital growth partner. Here's what makes OmoolaEx a standout choice.
+          We&rsquo;re more than just a service provider — we&rsquo;re your digital growth partner. Here&rsquo;s what makes OmoolaEx a standout choice.
         </motion.p>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
