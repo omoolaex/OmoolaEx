@@ -17,7 +17,7 @@ export default function CareersForm() {
           </h2>
           <p className="mt-4 text-gray-600 text-lg">
             Whether you're a student, intern, or a jobseeker ready for your next chapter,
-            we're excited to connect.
+            we are excited to connect.
           </p>
         </motion.div>
 
