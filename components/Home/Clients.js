@@ -13,21 +13,24 @@ export default function TrustedBy() {
   ]
 
   return (
-    <section className="bg-gray-50 py-12">
-      <div className="max-w-6xl mx-auto px-6 text-center">
-        <h2 className="text-gray-700 text-xl md:text-2xl font-medium mb-8">
+    <section className="bg-gray-50 py-10 sm:py-14 md:py-16">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 text-center">
+        <h2 className="text-gray-700 text-lg sm:text-xl md:text-2xl font-medium mb-8 sm:mb-10">
           Trusted by forward-thinking brands
         </h2>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 items-center justify-items-center">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-6 sm:gap-8 items-center justify-items-center">
           {logos.map((logo, index) => (
-            <div key={index} className="grayscale hover:grayscale-0 transition duration-300">
+            <div
+              key={index}
+              className="grayscale hover:grayscale-0 transition duration-300"
+            >
               <Image
                 src={logo.src}
                 alt={logo.alt}
                 width={120}
                 height={60}
-                className="h-auto object-contain"
+                className="object-contain h-auto max-h-[60px]"
               />
             </div>
           ))}

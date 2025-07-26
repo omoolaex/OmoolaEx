@@ -24,3 +24,9 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+@import 'keen-slider/keen-slider.min.css';
+
+html, body {
+  overflow-x: hidden;
+}

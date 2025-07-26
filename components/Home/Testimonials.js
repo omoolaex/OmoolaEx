@@ -29,18 +29,19 @@ const testimonials = [
 
 export default function Testimonials() {
   return (
-    <section className="relative py-24 bg-gradient-to-b from-blue-50 via-white to-gray-50 overflow-hidden">
+    <section className="relative bg-gradient-to-b from-blue-50 via-white to-gray-50 py-12 sm:py-16 md:py-20 lg:py-24 overflow-hidden">
       {/* Background blobs */}
-      <div className="absolute top-[-60px] left-[-60px] w-[200px] h-[200px] bg-blue-100 rounded-full blur-[100px] opacity-40 -z-10" />
-      <div className="absolute bottom-[-40px] right-[-40px] w-[180px] h-[180px] bg-yellow-100 rounded-full blur-[90px] opacity-30 -z-10" />
+      <div className="absolute top-[-60px] left-[-60px] w-[160px] h-[160px] sm:w-[200px] sm:h-[200px] bg-blue-100 rounded-full blur-[80px] sm:blur-[100px] opacity-40 -z-10" />
+      <div className="absolute bottom-[-40px] right-[-40px] w-[140px] h-[140px] sm:w-[180px] sm:h-[180px] bg-yellow-100 rounded-full blur-[70px] sm:blur-[90px] opacity-30 -z-10" />
 
-      <div className="max-w-6xl mx-auto px-6">
-        <div className="text-center mb-12">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6">
+        {/* Heading */}
+        <div className="text-center mb-10 sm:mb-14">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="text-3xl md:text-4xl font-bold text-blue-900"
+            className="text-2xl sm:text-3xl md:text-4xl font-bold text-blue-900"
           >
             What Our Clients Say
           </motion.h2>
@@ -48,20 +49,21 @@ export default function Testimonials() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.1 }}
-            className="text-gray-600 text-lg mt-2"
+            className="text-gray-600 text-sm sm:text-base md:text-lg mt-2"
           >
             Real stories from real business owners.
           </motion.p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
+        {/* Testimonial Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10">
           {testimonials.map((t, index) => (
             <motion.div
               key={index}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="bg-white shadow-lg rounded-xl p-6 flex flex-col items-center text-center hover:shadow-xl transition-shadow duration-300"
+              className="bg-white shadow-md hover:shadow-xl transition-shadow duration-300 rounded-xl p-6 sm:p-8 text-center flex flex-col items-center"
             >
               <Image
                 src={t.image}
@@ -71,9 +73,11 @@ export default function Testimonials() {
                 className="rounded-full object-cover mb-4"
                 loading="lazy"
               />
-              <p className="text-gray-700 italic mb-4">“{t.quote}”</p>
-              <h4 className="text-blue-800 font-semibold">{t.name}</h4>
-              <span className="text-gray-500 text-sm">{t.role}</span>
+              <p className="text-gray-700 italic text-sm sm:text-base mb-4">
+                “{t.quote}”
+              </p>
+              <h4 className="text-blue-800 font-semibold text-sm sm:text-base">{t.name}</h4>
+              <span className="text-gray-500 text-xs sm:text-sm">{t.role}</span>
             </motion.div>
           ))}
         </div>

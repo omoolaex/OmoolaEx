@@ -6,32 +6,32 @@ import { FaLinkedin, FaTwitter, FaInstagram } from 'react-icons/fa'
 
 const team = [
   {
-    name: 'Olu Omoola',
+    name: 'Owolabi Gbolahan',
     role: 'Founder & Lead Strategist',
-    image: '/images/team/olu.jpg',
-    bio: '10+ years of experience in IT strategy and innovation.',
+    image: '/images/team/gbolahan.png',
+    bio: '8+ years of experience in IT strategy and innovation.',
     socials: {
-      linkedin: '#',
-      twitter: '#',
-      instagram: '#',
+      linkedin: 'https://linkedin.com/in/gbolahan-owolabi-5875502a5',
+      twitter: 'https://twitter.com/owolabigbo72351',
+      instagram: 'https://instagram.com/mhizter_omoola',
     },
   },
   {
-    name: 'Adaora Ike',
+    name: 'Lasisi Abiodun',
     role: 'Creative Director',
-    image: '/images/team/adaora.jpg',
+    image: '/images/team/abiodun.jpg',
     bio: 'Expert in brand storytelling and UI/UX design.',
     socials: {
-      linkedin: '#',
+      linkedin: 'https://linkedin.com/in/lasisi-lukmon-abiodun-4a4999169/',
       twitter: '#',
       instagram: '#',
     },
   },
   {
-    name: 'Samuel Ogun',
-    role: 'Senior Developer',
-    image: '/images/team/samuel.jpg',
-    bio: 'Full-stack dev focused on scalable digital products.',
+    name: 'Priscilla Agwu',
+    role: 'Junior Developer',
+    image: '/images/team/agwu.jpg',
+    bio: 'Junior Frontend Developer.',
     socials: {
       linkedin: '#',
       twitter: '#',

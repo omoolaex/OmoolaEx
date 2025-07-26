@@ -28,18 +28,19 @@ const processSteps = [
 
 export default function OurProcess() {
   return (
-    <section className="relative py-24 bg-gradient-to-br from-white via-blue-50 to-yellow-50 overflow-hidden">
-      {/* Background blobs for visual flow */}
-      <div className="absolute top-[-60px] right-[-60px] w-[220px] h-[220px] bg-yellow-100 rounded-full blur-[100px] opacity-40 -z-10" />
-      <div className="absolute bottom-[-80px] left-[-50px] w-[200px] h-[200px] bg-blue-100 rounded-full blur-[90px] opacity-30 -z-10" />
+    <section className="relative bg-gradient-to-br from-white via-blue-50 to-yellow-50 py-12 sm:py-16 md:py-20 lg:py-24 overflow-hidden">
+      {/* Background Blobs */}
+      <div className="absolute top-[-60px] right-[-60px] w-[160px] h-[160px] sm:w-[200px] sm:h-[200px] bg-yellow-100 rounded-full blur-[80px] sm:blur-[100px] opacity-40 -z-10" />
+      <div className="absolute bottom-[-60px] left-[-50px] w-[140px] h-[140px] sm:w-[180px] sm:h-[180px] bg-blue-100 rounded-full blur-[70px] sm:blur-[90px] opacity-30 -z-10" />
 
-      <div className="max-w-6xl mx-auto px-6">
-        <div className="text-center mb-16">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6">
+        {/* Heading */}
+        <div className="text-center mb-12 sm:mb-16">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="text-3xl md:text-4xl font-bold text-blue-900"
+            className="text-2xl sm:text-3xl md:text-4xl font-bold text-blue-900"
           >
             Our Process
           </motion.h2>
@@ -47,13 +48,14 @@ export default function OurProcess() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.1 }}
-            className="text-gray-600 mt-2 text-lg"
+            className="text-gray-600 text-sm sm:text-base md:text-lg mt-2"
           >
             How we turn your ideas into impactful digital products.
           </motion.p>
         </div>
 
-        <div className="grid md:grid-cols-4 gap-10">
+        {/* Step Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-10">
           {processSteps.map((step, index) => (
             <motion.div
               key={index}
@@ -65,10 +67,10 @@ export default function OurProcess() {
               <div className="w-14 h-14 mx-auto mb-4 flex items-center justify-center bg-blue-100 rounded-full group-hover:scale-110 transition-transform duration-300">
                 {step.icon}
               </div>
-              <h3 className="text-xl font-semibold text-blue-800 group-hover:text-blue-900 transition-colors">
+              <h3 className="text-lg sm:text-xl font-semibold text-blue-800 group-hover:text-blue-900 transition-colors">
                 {step.title}
               </h3>
-              <p className="text-gray-600 mt-2 text-sm">
+              <p className="text-gray-600 mt-2 text-sm sm:text-base leading-relaxed">
                 {step.desc}
               </p>
             </motion.div>
