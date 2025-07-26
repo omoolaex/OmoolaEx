@@ -9,7 +9,7 @@ import { Menu, X } from 'lucide-react'
 export default function Navbar() {
   const pathname = usePathname()
   const [isOpen, setIsOpen] = useState(false)
-  const toggleMenu = () => setIsOpen(!isOpen)
+  const toggleMenu = () => setIsOpen(prev => !prev)
 
   const navLinks = [
     { href: '/', label: 'Home' },
@@ -20,8 +20,8 @@ export default function Navbar() {
   ]
 
   return (
-    <header className="bg-white sticky top-0 z-50 shadow-md transition-shadow duration-300">
-      <div className="container mx-auto px-4 py-4 flex items-center justify-between">
+    <header className="bg-white sticky top-0 z-50 shadow-md">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center">
           <Image
@@ -34,69 +34,83 @@ export default function Navbar() {
           />
         </Link>
 
-        {/* Desktop Navigation */}
-        <div className="hidden md:flex items-center gap-6">
+        {/* Desktop Nav */}
+        <div className="hidden lg:flex items-center gap-6">
           <nav className="flex gap-6 text-gray-700 font-medium">
-            {navLinks.map(link => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={`relative transition duration-200 hover:text-blue-600 ${
-                  pathname === link.href ? 'text-blue-600 font-semibold' : ''
-                }`}
-              >
-                {link.label}
-                {/* Underline effect */}
-                <span
-                  className={`absolute left-0 -bottom-1 w-full h-0.5 bg-blue-600 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300 ${
-                    pathname === link.href ? 'scale-x-100' : ''
-                  }`}
-                ></span>
-              </Link>
-            ))}
+            {navLinks.map(link => {
+              const isActive = pathname === link.href
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={`relative transition duration-200 hover:text-blue-600 ${
+                    isActive ? 'text-blue-600 font-semibold' : ''
+                  } group`}
+                >
+                  {link.label}
+                  <span
+                    className={`absolute left-0 -bottom-1 w-full h-0.5 bg-blue-600 transform transition-transform duration-300 origin-left ${
+                      isActive ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'
+                    }`}
+                  />
+                </Link>
+              )
+            })}
           </nav>
 
-          {/* CTA */}
+          {/* CTA Button (Desktop only) */}
           <Link
             href="/request-a-quote"
-            className="ml-6 px-5 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-all duration-200 shadow-sm"
+            className="ml-6 px-5 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-all duration-200 shadow-sm whitespace-nowrap"
           >
             Get a Free Quote
           </Link>
         </div>
 
-        {/* Mobile Menu Toggle */}
-        <div className="md:hidden">
-          <button onClick={toggleMenu} aria-label="Toggle menu">
-            {isOpen ? <X size={24} /> : <Menu size={24} />}
+        {/* Mobile/Tablet Menu Toggle */}
+        <div className="lg:hidden">
+          <button
+            onClick={toggleMenu}
+            aria-label="Toggle menu"
+            aria-expanded={isOpen}
+            className="focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
+          >
+            {isOpen ? <X size={28} /> : <Menu size={28} />}
           </button>
         </div>
       </div>
 
-      {/* Mobile Dropdown Menu */}
-      {isOpen && (
-        <div className="md:hidden bg-white border-t border-gray-100 px-4 py-4">
-          <nav className="flex flex-col gap-4 text-gray-700 font-medium">
+      {/* Mobile/Tablet Dropdown Menu */}
+      <div
+        className={`lg:hidden transition-max-height duration-300 ease-in-out overflow-hidden ${
+          isOpen ? 'max-h-[500px]' : 'max-h-0'
+        }`}
+      >
+        <div className="bg-white border-t border-gray-100 px-4 py-4 space-y-4">
+          <nav className="flex flex-col gap-3 text-gray-700 font-medium">
             {navLinks.map(link => (
               <Link
                 key={link.href}
                 href={link.href}
                 onClick={() => setIsOpen(false)}
-                className="hover:text-blue-600 transition"
+                className={`transition hover:text-blue-600 ${
+                  pathname === link.href ? 'text-blue-600 font-semibold' : ''
+                }`}
               >
                 {link.label}
               </Link>
             ))}
+            {/* CTA Button (Mobile/Tablet only) */}
             <Link
               href="/request-a-quote"
               onClick={() => setIsOpen(false)}
-              className="mt-3 inline-block text-center px-5 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition"
+              className="mt-3 block text-center px-5 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition"
             >
               Get a Free Quote
             </Link>
           </nav>
         </div>
-      )}
+      </div>
     </header>
   )
 }

@@ -37,7 +37,7 @@ export default function CareersPage() {
         location="https://omoolaex.com.ng/careers"
       />
 
-      <main>
+      <main className="flex flex-col overflow-x-hidden">
         <PageHero />
         <CareersHero />
         <WhyWorkOmoolaEx />

@@ -138,7 +138,7 @@ export default function RootLayout({ children }) {
       >
         <Analytics />
         <SpeedInsights />
-        <Navbar />
+        <Navbar className="sticky" />
         <DiscountPopup />
         <main className="flex-grow">{children}</main>
         <Footer />

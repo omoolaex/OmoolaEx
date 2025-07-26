@@ -4,8 +4,8 @@ import { useEffect } from 'react';
 import Head from 'next/head';
 
 import PageHero from '@/components/PageHero';
-import ContactFormMap from '@/components/Portfolio/Contact/ContactFormMap';
-import ContactInfo from '@/components/Portfolio/Contact/ContactInfo';
+import ContactFormMap from '@/components/Contact/ContactFormMap';
+import ContactInfo from '@/components/Contact/ContactInfo';
 
 const structuredData = {
   "@context": "https://schema.org",

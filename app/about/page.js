@@ -1,3 +1,5 @@
+// app/about/page.js
+
 import Script from 'next/script';
 import AboutHero from "@/components/AboutUs/Hero";
 import PageHero from "../../components/PageHero";
@@ -53,7 +55,7 @@ export const metadata = {
 
 export default function About() {
   return (
-    <main>
+    <main className="overflow-x-hidden relative">
       {/* 👇 STRUCTURED DATA FOR SEO */}
       <Script
         id="structured-data-about"
@@ -100,16 +102,18 @@ export default function About() {
       />
 
       {/* Page Sections */}
-      <PageHero />
-      <AboutHero />
-      <OurStory />
-      <WhyUs />
-      <WhoWeServe />
-      <OurProcess />
-      <WhatWeDo />
-      <OurTeam />
-      <Gallery />
-      <CTA />
+      <div className="flex flex-col overflow-x-hidden">
+        <PageHero />
+        <AboutHero />
+        <OurStory />
+        <WhyUs />
+        <WhoWeServe />
+        <OurProcess />
+        <WhatWeDo />
+        <OurTeam />
+        <Gallery />
+        <CTA />
+      </div>
     </main>
   );
 }

@@ -1,7 +1,14 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Laptop, BookOpen, HeartPulse, Rocket, Plane, Sparkles } from 'lucide-react'
+import {
+  Laptop,
+  BookOpen,
+  HeartPulse,
+  Rocket,
+  Plane,
+  Sparkles,
+} from 'lucide-react'
 
 const perks = [
   {
@@ -38,28 +45,31 @@ const perks = [
 
 export default function PerksAndBenefits() {
   return (
-    <section className="bg-gray-50 py-20 px-6 md:px-12 lg:px-20">
+    <section className="bg-gray-50 py-16 sm:py-20 px-4 sm:px-6 md:px-12 lg:px-20">
       <div className="max-w-7xl mx-auto text-center">
         <motion.h2
-          className="text-3xl md:text-4xl font-bold text-gray-800"
+          className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
           transition={{ duration: 0.5 }}
         >
           Perks & Benefits
         </motion.h2>
-        <p className="mt-4 text-gray-600 max-w-2xl mx-auto">
+        <p className="mt-4 text-gray-600 max-w-2xl mx-auto text-sm sm:text-base">
           We believe work should be rewarding. At OmoolaEx, we invest in our people through these core benefits:
         </p>
 
-        <div className="mt-12 grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-12 grid gap-6 sm:gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
           {perks.map((perk, index) => (
             <motion.div
               key={index}
-              className="bg-white p-6 rounded-2xl border hover:shadow-lg transition"
+              className="bg-white p-6 rounded-2xl border border-gray-200 hover:shadow-md transition-shadow focus-within:shadow-lg outline-none"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
+              tabIndex={0}
             >
               <div className="flex items-center justify-center w-12 h-12 bg-orange-100 text-orange-600 rounded-full mb-4 mx-auto">
                 <perk.icon className="w-6 h-6" />
