@@ -16,7 +16,7 @@ export default function CareersForm() {
             Ready to Launch Your Career at OmoolaEx?
           </h2>
           <p className="mt-4 text-gray-600 text-lg">
-            Whether you're a student, intern, or a jobseeker ready for your next chapter,
+            Whether you&apos;re a student, intern, or a jobseeker ready for your next chapter,
             we are excited to connect.
           </p>
         </motion.div>
