@@ -7,21 +7,21 @@ const testimonials = [
   {
     name: 'Sarah Johnson',
     role: 'CEO, Creams’n’Bakers',
-    image: '/images/testimonials/sarah.png',
+    image: '/images/testimonials/female.png',
     quote:
       'OmoolaEx brought our website to life and increased our customer engagement. Their team was professional, creative, and responsive throughout the project.',
   },
   {
     name: 'Daniel Obasi',
     role: 'CTO, DigiAdPro',
-    image: '/images/testimonials/daniel.png',
+    image: '/images/testimonials/male.png',
     quote:
       'Their ability to turn business goals into technical solutions is unmatched. OmoolaEx truly delivered beyond our expectations.',
   },
   {
     name: 'Ada Nkem',
     role: 'Marketing Lead, RealEstatePro',
-    image: '/images/testimonials/ada.png',
+    image: '/images/testimonials/female.png',
     quote:
       'From design to development, everything was handled perfectly. Our landing page now converts way better than before!',
   },

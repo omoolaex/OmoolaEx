@@ -1,37 +1,39 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 
-const blogPosts = [
-  {
-    id: 1,
-    title: 'Top 5 Web Design Trends for 2025',
-    excerpt: 'Discover the cutting-edge UI/UX trends that will define 2025 websites...',
-    image: '/blog/design-trends.jpg',
-    slug: 'web-design-trends-2025',
-    date: 'July 15, 2025',
-  },
-  {
-    id: 2,
-    title: 'Why Your Business Needs a Brand Strategy',
-    excerpt: 'Brand strategy isn’t just a logo — it’s your identity. Learn why it matters.',
-    image: '/blog/brand-strategy.jpg',
-    slug: 'business-brand-strategy',
-    date: 'July 10, 2025',
-  },
-  {
-    id: 3,
-    title: 'Securing Your Website in 2025: What to Know',
-    excerpt: 'Cybersecurity isn’t optional. Here’s how to protect your business online.',
-    image: '/blog/cybersecurity.jpg',
-    slug: 'website-security-guide',
-    date: 'July 2, 2025',
-  },
-]
-
 export default function NewsSection() {
+  const [posts, setPosts] = useState([])
+
+  useEffect(() => {
+    async function fetchLatestPosts() {
+      try {
+        const res = await fetch('https://public-api.wordpress.com/wp/v2/sites/omoolaexblog.wordpress.com/posts?per_page=3&_embed')
+        const data = await res.json()
+
+        const formatted = data.map(post => ({
+          id: post.id,
+          title: post.title.rendered,
+          excerpt: post.excerpt.rendered.replace(/<[^>]+>/g, ''), // Strip HTML
+          image: post._embedded?.['wp:featuredmedia']?.[0]?.source_url || '/images/logo.svg',
+          slug: post.slug,
+          date: new Date(post.date).toLocaleDateString('en-US', {
+            year: 'numeric', month: 'long', day: 'numeric'
+          }),
+        }))
+
+        setPosts(formatted)
+      } catch (error) {
+        console.error('Failed to fetch posts:', error)
+      }
+    }
+
+    fetchLatestPosts()
+  }, [])
+
   return (
     <section className="bg-gradient-to-b from-white via-blue-50 to-white py-12 sm:py-16 md:py-20 lg:py-24 overflow-hidden">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
@@ -57,7 +59,7 @@ export default function NewsSection() {
 
         {/* Blog Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10">
-          {blogPosts.map((post, index) => (
+          {posts.map((post, index) => (
             <motion.div
               key={post.id}
               initial={{ opacity: 0, y: 30 }}
