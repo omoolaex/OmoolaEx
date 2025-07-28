@@ -1,57 +1,97 @@
-'use client'
-
-import { useEffect, useState } from 'react'
-import { useParams } from 'next/navigation'
+import { notFound } from 'next/navigation'
 import PageHero from '@/components/PageHero'
 import BlogSidebar from '@/components/BlogSidebar'
 
-export default function BlogPost() {
-  const { slug } = useParams()
-  const [post, setPost] = useState(null)
-  const [loading, setLoading] = useState(true)
+export async function generateMetadata({ params }) {
+  const res = await fetch(`https://public-api.wordpress.com/wp/v2/sites/omoolaexblog.wordpress.com/posts?slug=${params.slug}&_embed`, {
+    next: { revalidate: 60 }
+  })
+  const data = await res.json()
 
-  useEffect(() => {
-    if (!slug) return
+  if (!data || data.length === 0) return {}
 
-    fetch(`https://public-api.wordpress.com/wp/v2/sites/omoolaexblog.wordpress.com/posts?slug=${slug}&_embed`)
-      .then(res => res.json())
-      .then(data => {
-        if (data.length > 0) {
-          setPost(data[0])
-        }
-        setLoading(false)
+  const post = data[0]
+  const featuredImage =
+    post._embedded?.['wp:featuredmedia']?.[0]?.source_url ||
+    'https://omoolaex.com.ng/images/omoolaex.jpg'
+  const description = post.excerpt.rendered.replace(/<[^>]+>/g, '').trim()
+
+  return {
+    title: `${post.title.rendered} | OmoolaEx Blog`,
+    description,
+    alternates: {
+      canonical: `https://omoolaex.com.ng/blog/${post.slug}`
+    },
+    openGraph: {
+      title: post.title.rendered,
+      description,
+      url: `https://omoolaex.com.ng/blog/${post.slug}`,
+      type: 'article',
+      images: [featuredImage]
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: post.title.rendered,
+      description,
+      images: [featuredImage]
+    },
+    other: {
+      'script[type="application/ld+json"]': JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "mainEntityOfPage": {
+          "@type": "WebPage",
+          "@id": `https://omoolaex.com.ng/blog/${post.slug}`
+        },
+        "headline": post.title.rendered,
+        "description": description,
+        "image": [featuredImage],
+        "author": {
+          "@type": "Person",
+          "name": post._embedded?.author?.[0]?.name || 'OmoolaEx'
+        },
+        "publisher": {
+          "@type": "Organization",
+          "name": "OmoolaEx",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://omoolaex.com.ng/logo.png"
+          }
+        },
+        "datePublished": post.date,
+        "dateModified": post.modified,
+        "keywords": post.tags?.join(', ') || ''
       })
-      .catch(err => {
-        console.error('Error fetching post:', err)
-        setLoading(false)
-      })
-  }, [slug])
+    }
+  }
+}
+
+export default async function BlogPost({ params }) {
+  const res = await fetch(`https://public-api.wordpress.com/wp/v2/sites/omoolaexblog.wordpress.com/posts?slug=${params.slug}&_embed`, {
+    next: { revalidate: 60 }
+  })
+  const data = await res.json()
+
+  if (!data || data.length === 0) return notFound()
+  const post = data[0]
 
   return (
     <>
-      {/* Static Header */}
+      {/* Page Header */}
       <PageHero
-        title={post ? post.title.rendered : 'Loading...'}
+        title={post.title.rendered}
         subtitle="Published article from the OmoolaEx Blog"
       />
 
-      {/* Main Blog Content Layout */}
+      {/* Main Content */}
       <section className="max-w-7xl mx-auto px-6 py-12 grid grid-cols-1 lg:grid-cols-12 gap-8">
-        {/* Left: Blog Post Content */}
         <article className="lg:col-span-8">
-          {loading ? (
-            <p className="text-gray-600">Loading post...</p>
-          ) : !post ? (
-            <p className="text-red-600">Post not found.</p>
-          ) : (
-            <div
-              className="prose max-w-none prose-blue prose-lg"
-              dangerouslySetInnerHTML={{ __html: post.content.rendered }}
-            />
-          )}
+          <div
+            className="prose max-w-none prose-blue prose-lg"
+            dangerouslySetInnerHTML={{ __html: post.content.rendered }}
+          />
         </article>
 
-        {/* Right: Sidebar (always visible) */}
         <aside className="lg:col-span-4">
           <BlogSidebar />
         </aside>
