@@ -1,46 +1,58 @@
 import { notFound } from 'next/navigation'
 import BlogGrid from '@/components/Blog/BlogGrid'
 import PageHero from '@/components/PageHero'
+import { client } from '@/sanity/client'
 
-export default async function CategoryPage(props) {
-  const { slug } = props.params
+// 1️⃣ Query the category by slug
+const CATEGORY_QUERY = `*[_type == "category" && slug.current == $slug][0]{
+  _id,
+  title,
+  slug
+}`
 
-  // Step 1: Get the category ID from the slug
-  const categoryRes = await fetch(
-    `https://public-api.wordpress.com/wp/v2/sites/omoolaexblog.wordpress.com/categories?slug=${slug}`,
-    { next: { revalidate: 60 } }
-  )
-  const categories = await categoryRes.json()
+// 2️⃣ Query posts that reference this category
+const POSTS_BY_CATEGORY_QUERY = `*[_type == "post" && $categoryId in categories[]._ref] | order(publishedAt desc){
+  _id,
+  title,
+  slug,
+  publishedAt,
+  image,
+  excerpt,
+  author->{name},
+  categories[]->{title, slug}
+}`
 
-  if (!categories || categories.length === 0) {
-    notFound() // If category doesn't exist
+export default async function CategoryPage({ params }) {
+  const { slug } = params
+
+  // 1️⃣ Fetch the category
+  const category = await client.fetch(CATEGORY_QUERY, { slug })
+
+  if (!category) {
+    return notFound()
   }
 
-  const categoryId = categories[0].id
+  // 2️⃣ Fetch posts in this category using category._id
+  const posts = await client.fetch(POSTS_BY_CATEGORY_QUERY, {
+    categoryId: category._id,
+  })
 
-  // Step 2: Fetch posts in this category
-  const postRes = await fetch(
-    `https://public-api.wordpress.com/wp/v2/sites/omoolaexblog.wordpress.com/posts?_embed&categories=${categoryId}&per_page=9`,
-    { next: { revalidate: 60 } }
+  return (
+    <>
+      <PageHero
+        title={`Category: ${category.title}`}
+        subtitle={`Explore posts under ${category.title}`}
+      />
+
+      <section className="max-w-6xl mx-auto px-4 py-16">
+        {posts.length === 0 ? (
+          <p className="text-center py-20 text-gray-600">
+            No posts found in this category.
+          </p>
+        ) : (
+          <BlogGrid posts={posts} />
+        )}
+      </section>
+    </>
   )
-  const posts = await postRes.json()
-
-return (
-  <>
-    <PageHero
-      title={`Category: ${categories[0].name}`}
-      subtitle={`Explore posts under ${categories[0].name}`}
-    />
-
-    <section className="max-w-6xl mx-auto px-4 py-16">
-      {posts.length === 0 ? (
-        <p className="text-center py-20 text-gray-600">
-          No posts found in this category.
-        </p>
-      ) : (
-        <BlogGrid posts={posts} />
-      )}
-    </section>
-  </>
-)
 }

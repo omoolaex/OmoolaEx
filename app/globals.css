@@ -1,4 +1,6 @@
 @import "tailwindcss";
+@import 'prismjs/themes/prism-tomorrow.css'; /* ✅ Prism.js theme */
+@import 'keen-slider/keen-slider.min.css';
 
 :root {
   --background: #ffffff;
@@ -28,4 +30,19 @@ body {
   overflow-x: hidden;
 }
 
-@import 'keen-slider/keen-slider.min.css';
+/* Optional: Copy button styling for code blocks */
+.copy-btn {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.copy-btn:hover {
+  background: rgba(0, 0, 0, 0.8);
+}
