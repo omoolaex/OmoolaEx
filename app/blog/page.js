@@ -35,9 +35,10 @@ export const metadata = {
   }
 }
 
-export default async function BlogPage() {
+export default function BlogPage() {
   return (
     <main className="overflow-x-hidden relative">
+      {/* Structured Data for SEO */}
       <Script
         id="structured-data-blog"
         type="application/ld+json"
@@ -47,7 +48,8 @@ export default async function BlogPage() {
             "@context": "https://schema.org",
             "@type": "Blog",
             "name": "OmoolaEx Blog",
-            "description": "Digital insights, IT tips, and branding strategies from OmoolaEx.",
+            "description":
+              "Digital insights, IT tips, and branding strategies from OmoolaEx.",
             "url": "https://omoolaex.com.ng/blog",
             "publisher": {
               "@type": "Organization",
@@ -61,11 +63,13 @@ export default async function BlogPage() {
         }}
       />
 
+      {/* Page Hero */}
       <PageHero
         title="Our Blog"
         subtitle="Insights, updates, and guides to help your business grow digitally."
       />
 
+      {/* Blog Listing */}
       <BlogClientWrapper />
     </main>
   )

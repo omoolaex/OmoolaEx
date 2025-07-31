@@ -1,10 +1,11 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import BlogGrid from './BlogGrid'
 import BlogCategoryFilter from './BlogCategoryFilter'
 import BlogPagination from './BlogPagination'
+import { client } from '@/sanity/client'
 
 export default function BlogClientWrapper() {
   const [posts, setPosts] = useState([])
@@ -14,25 +15,56 @@ export default function BlogClientWrapper() {
   const [totalPages, setTotalPages] = useState(1)
   const [loading, setLoading] = useState(true)
 
+  const POSTS_PER_PAGE = 6
+
+  // ✅ Fetch categories for filter
   const fetchCategories = async () => {
-    const res = await fetch(
-      'https://public-api.wordpress.com/wp/v2/sites/omoolaexblog.wordpress.com/categories'
-    )
-    const data = await res.json()
-    setCategories(data)
+    const query = `*[_type == "category"]{_id, title}`
+    const data = await client.fetch(query)
+    setCategories([{ _id: 'all', title: 'All' }, ...data])
   }
 
-  const fetchPosts = async (page = 1, category = 'all') => {
-    setLoading(true)
-    const baseURL = `https://public-api.wordpress.com/wp/v2/sites/omoolaexblog.wordpress.com/posts?_embed&per_page=6&page=${page}`
-    const url = category !== 'all' ? `${baseURL}&categories=${category}` : baseURL
-    const res = await fetch(url)
-    const total = parseInt(res.headers.get('X-WP-TotalPages') || '1', 10)
-    const data = await res.json()
-    setPosts(data)
-    setTotalPages(total)
-    setLoading(false)
-  }
+  // ✅ Fetch posts with excerpt and pagination
+  const fetchPosts = useCallback(
+    async (page = 1, categoryId = 'all') => {
+      setLoading(true)
+      const start = (page - 1) * POSTS_PER_PAGE
+      const end = start + POSTS_PER_PAGE
+
+      const query = `*[_type == "post" ${
+        categoryId !== 'all' ? '&& references($categoryId)' : ''
+      }] | order(publishedAt desc) [$start...$end] {
+        _id,
+        title,
+        "slug": slug.current,
+        publishedAt,
+        image,
+        author,
+        excerpt, // ✅ Fetch excerpt
+        "categories": categories[]->{_id, title}
+      }`
+
+      const params = {
+        start,
+        end,
+        categoryId: categoryId !== 'all' ? categoryId : undefined,
+      }
+
+      const data = await client.fetch(query, params)
+
+      // ✅ Count total posts for pagination
+      const countQuery = `count(*[_type=="post" ${
+        categoryId !== 'all' ? '&& references($categoryId)' : ''
+      }])`
+      const total = await client.fetch(countQuery, params)
+
+      console.log('Fetched posts:', data) // ✅ Debugging excerpt
+      setPosts(data)
+      setTotalPages(Math.ceil(total / POSTS_PER_PAGE))
+      setLoading(false)
+    },
+    []
+  )
 
   useEffect(() => {
     fetchCategories()
@@ -40,10 +72,11 @@ export default function BlogClientWrapper() {
 
   useEffect(() => {
     fetchPosts(currentPage, selectedCategoryId)
-  }, [currentPage, selectedCategoryId])
+  }, [currentPage, selectedCategoryId, fetchPosts])
 
   return (
     <section className="max-w-6xl mx-auto px-4 py-16">
+      {/* Category Filter */}
       <motion.div
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
@@ -59,6 +92,7 @@ export default function BlogClientWrapper() {
         />
       </motion.div>
 
+      {/* Posts Grid or Loader */}
       <AnimatePresence mode="wait">
         {loading ? (
           <motion.div
@@ -89,6 +123,8 @@ export default function BlogClientWrapper() {
             transition={{ duration: 0.5 }}
           >
             <BlogGrid posts={posts} />
+
+            {/* Pagination */}
             <motion.div
               className="mt-10"
               initial={{ opacity: 0, y: 10 }}

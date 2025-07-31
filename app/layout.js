@@ -8,6 +8,7 @@ import Footer from "@/components/Footer";
 import DiscountPopup from "@/components/DiscountPopup";
 import CookieConsent from "@/components/CookieConsent";
 import { GA_TRACKING_ID } from "../lib/ga";
+import StyledComponentsRegistry from "@/lib/styledComponentsRegistry";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -136,13 +137,15 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}
       >
-        <Analytics />
-        <SpeedInsights />
-        <Navbar className="sticky" />
-        <DiscountPopup />
-        <main className="flex-grow">{children}</main>
-        <Footer />
-        <CookieConsent />
+        <StyledComponentsRegistry>
+          <Analytics />
+          <SpeedInsights />
+          <Navbar className="sticky" />
+          <DiscountPopup />
+          <main className="flex-grow">{children}</main>
+          <Footer />
+          <CookieConsent />
+        </StyledComponentsRegistry>
       </body>
     </html>
   );
