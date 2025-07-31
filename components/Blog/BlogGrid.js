@@ -16,21 +16,21 @@ export default function BlogGrid({ posts }) {
           key={post._id}
           className="bg-white rounded-xl shadow hover:shadow-lg transition overflow-hidden flex flex-col"
         >
-          {/* Featured Image */}
+          {/* ✅ Featured Image */}
           {post.image && (
-            <Link href={`/blog/${post.slug.current}`}>
-            <Image
-              src={urlFor(post.image).width(600).height(400).url()}
-              alt={post.title}
-              width={600}
-              height={400}
-              className="w-full h-48 object-cover"
-              loading="lazy"
-            />
+            <Link href={`/blog/${post.slug}`}>
+              <Image
+                src={urlFor(post.image).width(600).height(400).url()}
+                alt={post.title}
+                width={600}
+                height={400}
+                className="w-full h-48 object-cover"
+                loading="lazy"
+              />
             </Link>
           )}
 
-          {/* Content */}
+          {/* ✅ Content */}
           <div className="p-4 flex flex-col flex-grow">
             {/* Categories */}
             <div className="flex flex-wrap gap-2 mb-2">
@@ -46,7 +46,7 @@ export default function BlogGrid({ posts }) {
 
             {/* Title */}
             <h2 className="text-lg font-semibold mb-1 line-clamp-2">
-              <Link href={`/blog/${post.slug.current}`}>
+              <Link href={`/blog/${post.slug}`}>
                 <span className="hover:underline">{post.title}</span>
               </Link>
             </h2>
