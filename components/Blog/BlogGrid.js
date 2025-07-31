@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import imageUrlBuilder from '@sanity/image-url'
 import { client } from '@/sanity/client'
 
@@ -18,12 +19,14 @@ export default function BlogGrid({ posts }) {
           {/* Featured Image */}
           {post.image && (
             <Link href={`/blog/${post.slug.current}`}>
-              <img
-                src={urlFor(post.image).width(600).height(400).url()}
-                alt={post.title}
-                className="w-full h-48 object-cover"
-                loading="lazy"
-              />
+            <Image
+              src={urlFor(post.image).width(600).height(400).url()}
+              alt={post.title}
+              width={600}
+              height={400}
+              className="w-full h-48 object-cover"
+              loading="lazy"
+            />
             </Link>
           )}
 

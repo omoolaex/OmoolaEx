@@ -1,4 +1,5 @@
 import { notFound } from 'next/navigation'
+import Image from 'next/image'
 import PageHero from '@/components/PageHero'
 import BlogSidebar from '../../../components/BlogSidebar'
 import { client } from '@/sanity/client'
@@ -56,10 +57,13 @@ export default async function BlogPost({ params }) {
         <article className="lg:col-span-8">
           {/* Featured image */}
           {featuredImage && (
-            <img
+            <Image
               src={featuredImage}
               alt={post.title}
+              width={800}
+              height={450}
               className="rounded-xl mb-6 w-full object-cover"
+              priority
             />
           )}
 

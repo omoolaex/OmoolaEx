@@ -1,5 +1,6 @@
 import imageUrlBuilder from '@sanity/image-url'
 import { client } from '@/sanity/client'
+import Image from 'next/image'
 
 const builder = imageUrlBuilder(client)
 function urlFor(source) {
@@ -9,11 +10,13 @@ function urlFor(source) {
 const PortableTextComponents = {
   types: {
     image: ({ value }) => (
-      <img
-        src={urlFor(value).width(800).url()}
-        alt={value.alt || 'Blog image'}
-        className="rounded-xl my-6 w-full object-cover"
-      />
+        <Image
+          src={urlFor(value).width(800).url()}
+          alt={value.alt || 'Blog image'}
+          width={800}
+          height={450}
+          className="rounded-xl my-6 w-full object-cover"
+        />
     ),
   },
   marks: {
