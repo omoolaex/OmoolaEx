@@ -24,7 +24,7 @@ export const metadata = {
     siteName: "OmoolaEx",
     images: [
       {
-        url: "https://omoolaex.com.ng/images/og-blog.jpg",
+        url: "https://omoolaex.com.ng/images/omoolaex.jpg",
         width: 1200,
         height: 630,
         alt: "OmoolaEx Blog",
@@ -37,7 +37,7 @@ export const metadata = {
     title: "OmoolaEx Blog | Tips, Insights & Updates",
     description:
       "Discover expert insights, web design tips, IT consulting advice, and digital strategies from OmoolaEx to grow your business.",
-    images: ["https://omoolaex.com.ng/images/og-blog.jpg"],
+    images: ["https://omoolaex.com.ng/images/omoolaex.jpg"],
   },
 };
 
