@@ -1,23 +1,32 @@
 import Image from "next/image";
+import { urlFor } from "@/sanity/image"; // ✅ Import urlFor
 
 export const PortableTextComponents = {
   types: {
-    image: ({ value }) => (
-      <Image
-        src={urlFor(value).width(800).url()}
-        alt={value.alt || "Blog image"}
-        width={800}
-        height={500}
-        className="rounded-lg my-6"
-      />
-    ),
+    image: ({ value }) => {
+      if (!value?.asset?._ref) return null; // ✅ Safe check for missing images
+
+      const imageUrl = urlFor(value).width(800).url();
+
+      return (
+        <Image
+          src={imageUrl}
+          alt={value.alt || "Blog image"}
+          width={800}
+          height={500}
+          className="rounded-lg my-6"
+          sizes="(max-width: 768px) 100vw, 800px"
+          priority={false} // Only set true for above-the-fold
+        />
+      );
+    },
   },
   marks: {
     strong: ({ children }) => <strong className="font-bold">{children}</strong>,
     em: ({ children }) => <em className="italic">{children}</em>,
     link: ({ children, value }) => (
       <a
-        href={value.href}
+        href={value?.href || "#"}
         target="_blank"
         rel="noopener noreferrer"
         className="text-blue-600 hover:underline"
