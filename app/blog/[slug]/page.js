@@ -125,11 +125,14 @@ export default async function BlogPostPage({ params }) {
       </p>
 
       {post.image && (
-        <img
-          src={urlFor(post.image).width(800).url()}
-          alt={post.title}
-          className="w-full mb-6 rounded-lg"
-        />
+      <Image
+        src={urlFor(post.image).width(800).url()}
+        alt={post.title}
+        width={800}
+        height={500}  // approximate aspect ratio
+        className="w-full mb-6 rounded-lg"
+        priority // for LCP optimization on top image
+      />
       )}
 
       {/* Blog Body */}

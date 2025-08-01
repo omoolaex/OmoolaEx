@@ -1,10 +1,14 @@
+import Image from "next/image";
+
 export const PortableTextComponents = {
   types: {
     image: ({ value }) => (
-      <img
-        src={value.asset ? value.asset.url : ""}
-        alt={value.alt || ""}
-        className="my-6 rounded-lg w-full"
+      <Image
+        src={urlFor(value).width(800).url()}
+        alt={value.alt || "Blog image"}
+        width={800}
+        height={500}
+        className="rounded-lg my-6"
       />
     ),
   },
