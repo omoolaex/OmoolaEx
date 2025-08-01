@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation'
 import BlogGrid from '@/components/Blog/BlogGrid'
 import PageHero from '@/components/PageHero'
-import { client } from '@/sanity/client'
+import { client } from '@/lib/sanity.client'
 
 // 1️⃣ Query the category by slug
 const CATEGORY_QUERY = `*[_type == "category" && slug.current == $slug][0]{

@@ -1,13 +1,16 @@
-import Head from 'next/head'
-import Services from '../components/Home/Services'
-import Hero from '../components/Home/Hero'
-import About from '../components/Home/About'
-import Portfolio from '../components/Home/Portfolio'
-import Testimonials from '../components/Home/Testimonials'
-import OurProcess from '../components/Home/OurProcess'
-import OurTechnologies from '../components/Home/OurTechnologies'
-import CTASection from '../components/Home/CTA'
-import NewsSection from '@/components/Home/news'
+import Head from "next/head";
+import { client } from "@/sanity/client";
+import { latestPostsQuery } from "@/lib/queries";
+
+import Services from "../components/Home/Services";
+import Hero from "../components/Home/Hero";
+import About from "../components/Home/About";
+import Portfolio from "../components/Home/Portfolio";
+import Testimonials from "../components/Home/Testimonials";
+import OurProcess from "../components/Home/OurProcess";
+import OurTechnologies from "../components/Home/OurTechnologies";
+import CTASection from "../components/Home/CTA";
+import NewsSection from "@/components/Home/news";
 
 const structuredData = {
   "@context": "https://schema.org",
@@ -23,12 +26,13 @@ const structuredData = {
     "https://www.tiktok.com/@omoolaex",
     "https://www.linkedin.com/company/omoolaex-it-consulting-company"
   ],
-  "description": "OmoolaEx is a creative IT consulting company offering web design, branding, cybersecurity, and digital strategy services in Nigeria.",
+  "description":
+    "OmoolaEx is a creative IT consulting company offering web design, branding, cybersecurity, and digital strategy services in Nigeria.",
   "founder": {
     "@type": "Person",
     "name": "Owolabi Gbolahan"
   }
-}
+};
 
 const websiteStructuredData = {
   "@context": "https://schema.org",
@@ -39,9 +43,12 @@ const websiteStructuredData = {
     "target": "https://omoolaex.com.ng/search?q={search_term_string}",
     "query-input": "required name=search_term_string"
   }
-}
+};
 
-export default function Home() {
+// ✅ Make Home an async Server Component
+export default async function Home() {
+  const latestPosts = await client.fetch(latestPostsQuery);
+
   return (
     <main>
       <Head>
@@ -60,8 +67,8 @@ export default function Home() {
       <Testimonials />
       <OurProcess />
       <OurTechnologies />
-      <NewsSection />
+      <NewsSection posts={latestPosts} />
       <CTASection />
     </main>
-  )
+  );
 }
