@@ -3,20 +3,24 @@ import { urlFor } from "@/sanity/image";
 import Image from "next/image";
 
 export default function BlogCard({ post }) {
+  const imageUrl = post.image
+    ? urlFor(post.image).width(600).height(400).url()
+    : "/images/og-default.jpg"; // fallback image
+
   return (
     <article className="border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200 bg-white flex flex-col">
       {/* Featured Image with Overlay */}
       {post.image && (
-        <div className="relative">
+        <div className="relative aspect-video">
           <Link href={`/blog/${post.slug.current}`}>
-          <Image
-            src={imageUrl}
-            alt={title}
-            fill
-            className="object-cover"
-            sizes="(max-width: 768px) 100vw, 33vw"
-            priority={false} // Only true for above-the-fold images
-          />
+            <Image
+              src={imageUrl}
+              alt={post.title}
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, 33vw"
+              priority={false} // Only true for above-the-fold images
+            />
           </Link>
 
           {/* Overlay: Categories + Views */}
@@ -31,9 +35,7 @@ export default function BlogCard({ post }) {
                 </span>
               ))}
             </div>
-            <span className="flex items-center gap-1">
-              👁 {post.views || 0}
-            </span>
+            <span className="flex items-center gap-1">👁 {post.views || 0}</span>
           </div>
         </div>
       )}
@@ -50,7 +52,8 @@ export default function BlogCard({ post }) {
 
         {/* Author + Date */}
         <p className="text-xs text-gray-500 mt-auto">
-          By {post.author} • {new Date(post.publishedAt).toLocaleDateString()}
+          By {post.author || "OmoolaEx Team"} •{" "}
+          {new Date(post.publishedAt).toLocaleDateString()}
         </p>
       </div>
     </article>
