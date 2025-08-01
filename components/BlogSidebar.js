@@ -1,52 +1,35 @@
-'use client'
-
-import { useEffect, useState } from 'react'
+// components/Blog/BlogSidebar.js
 import Link from 'next/link'
 import { client } from '@/sanity/client'
 
-export default function BlogSidebar() {
-  const [recentPosts, setRecentPosts] = useState([])
-  const [categories, setCategories] = useState([])
-  const [tags, setTags] = useState([])
-
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        // Fetch 5 recent posts
-        const posts = await client.fetch(`
-          *[_type == "post"] | order(publishedAt desc)[0...5]{
-            _id,
-            title,
-            "slug": slug.current
-          }
-        `)
-        setRecentPosts(posts)
-
-        // Fetch categories
-        const cats = await client.fetch(`
-          *[_type == "category"]{
-            _id,
-            title,
-            "slug": slug.current
-          }
-        `)
-        setCategories(cats)
-
-        // Fetch tags (optional if you have tag schema)
-        const fetchedTags = await client.fetch(`
-          *[_type == "tag"]{
-            _id,
-            title
-          }
-        `)
-        setTags(fetchedTags)
-      } catch (error) {
-        console.error(error)
-      }
+export default async function BlogSidebar({ currentSlug }) {
+  // ✅ Fetch recent posts excluding the current one
+  const recentPosts = await client.fetch(
+    `
+    *[_type == "post" && slug.current != $currentSlug] 
+    | order(publishedAt desc)[0...5]{
+      _id,
+      title,
+      "slug": slug.current
     }
+    `,
+    { currentSlug }
+  )
 
-    fetchData()
-  }, [])
+  const categories = await client.fetch(`
+    *[_type == "category"]{
+      _id,
+      title,
+      "slug": slug.current
+    }
+  `)
+
+  const tags = await client.fetch(`
+    *[_type == "tag"]{
+      _id,
+      title
+    }
+  `)
 
   return (
     <div className="sticky top-28 space-y-10">
@@ -115,7 +98,9 @@ export default function BlogSidebar() {
       {/* Newsletter */}
       <section className="bg-blue-50 p-4 rounded">
         <h4 className="font-bold text-blue-800 mb-2">Subscribe to Our Blog</h4>
-        <p className="text-sm text-gray-600 mb-3">Stay updated with the latest insights</p>
+        <p className="text-sm text-gray-600 mb-3">
+          Stay updated with the latest insights
+        </p>
         <input
           type="email"
           placeholder="Enter your email"

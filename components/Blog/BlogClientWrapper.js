@@ -17,48 +17,44 @@ export default function BlogClientWrapper() {
 
   const POSTS_PER_PAGE = 6
 
-  // ✅ Fetch categories for filter
+  // ✅ Fetch categories
   const fetchCategories = async () => {
     const query = `*[_type == "category"]{_id, title}`
     const data = await client.fetch(query)
     setCategories([{ _id: 'all', title: 'All' }, ...data])
   }
 
-  // ✅ Fetch posts with excerpt and pagination
+  // ✅ Fetch posts with pagination
   const fetchPosts = useCallback(
     async (page = 1, categoryId = 'all') => {
       setLoading(true)
       const start = (page - 1) * POSTS_PER_PAGE
       const end = start + POSTS_PER_PAGE
 
-      const query = `*[_type == "post" ${
-        categoryId !== 'all' ? '&& references($categoryId)' : ''
-      }] | order(publishedAt desc) [$start...$end] {
-        _id,
-        title,
-        "slug": slug.current,
-        publishedAt,
-        image,
-        author,
-        excerpt, // ✅ Fetch excerpt
-        "categories": categories[]->{_id, title}
-      }`
+      // ✅ Build dynamic query
+      const categoryFilter =
+        categoryId !== 'all' ? `&& references("${categoryId}")` : ''
 
-      const params = {
-        start,
-        end,
-        categoryId: categoryId !== 'all' ? categoryId : undefined,
-      }
+      const query = `
+        *[_type == "post" ${categoryFilter}]
+        | order(publishedAt desc) [${start}...${end}] {
+          _id,
+          title,
+          "slug": slug.current,
+          publishedAt,
+          image,
+          author,
+          excerpt,
+          "categories": categories[]->{_id, title}
+        }
+      `
 
-      const data = await client.fetch(query, params)
+      const data = await client.fetch(query)
 
-      // ✅ Count total posts for pagination
-      const countQuery = `count(*[_type=="post" ${
-        categoryId !== 'all' ? '&& references($categoryId)' : ''
-      }])`
-      const total = await client.fetch(countQuery, params)
+      // ✅ Count total posts
+      const countQuery = `count(*[_type=="post" ${categoryFilter}])`
+      const total = await client.fetch(countQuery)
 
-      console.log('Fetched posts:', data) // ✅ Debugging excerpt
       setPosts(data)
       setTotalPages(Math.ceil(total / POSTS_PER_PAGE))
       setLoading(false)
@@ -92,7 +88,7 @@ export default function BlogClientWrapper() {
         />
       </motion.div>
 
-      {/* Posts Grid or Loader */}
+      {/* Posts Grid */}
       <AnimatePresence mode="wait">
         {loading ? (
           <motion.div
