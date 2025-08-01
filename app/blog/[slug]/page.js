@@ -6,6 +6,7 @@ import { PortableTextComponents } from "@/components/Blog/PortableTextComponents
 import SocialShare from "@/components/Blog/SocialShare";
 import BlogViewTracker from "@/components/Blog/BlogViewTracker"; // ✅ for views count
 import Link from "next/link";
+import Image from "next/image";
 
 /* -------------------------------
    1️⃣ Generate Static Paths
