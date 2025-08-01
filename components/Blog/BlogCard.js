@@ -8,11 +8,14 @@ export default function BlogCard({ post }) {
       {post.image && (
         <div className="relative">
           <Link href={`/blog/${post.slug.current}`}>
-            <img
-              src={urlFor(post.image).width(600).height(350).url()}
-              alt={post.title}
-              className="w-full aspect-[16/9] object-cover"
-            />
+          <Image
+            src={imageUrl}
+            alt={title}
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, 33vw"
+            priority={false} // Only true for above-the-fold images
+          />
           </Link>
 
           {/* Overlay: Categories + Views */}
