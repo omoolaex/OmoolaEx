@@ -1,12 +1,33 @@
+// components/Home/NewsSection.js
+"use client";
+
 import Link from "next/link";
 import BlogGrid from "../Blog/BlogGrid";
+import { motion } from "framer-motion";
 
 export default function NewsSection({ posts }) {
   if (!posts || posts.length === 0) return null;
 
   return (
     <section className="container mx-auto py-16 px-6">
-      <h2 className="text-3xl font-bold text-center mb-8">Latest News</h2>
+      <div className="text-center mb-12 sm:mb-16">
+        <motion.h2
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="text-2xl sm:text-3xl md:text-4xl font-bold text-blue-900"
+        >
+          News & Insights
+        </motion.h2>
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.1 }}
+          className="text-gray-600 text-sm sm:text-base md:text-lg mt-2"
+        >
+          Get the latest updates about tech, business, and innovation from our blog.
+        </motion.p>
+      </div>
 
       <BlogGrid posts={posts} />
 
