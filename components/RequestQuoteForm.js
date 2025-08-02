@@ -16,19 +16,63 @@ export default function RequestQuoteForm({ onSuccess }) {
     file: null,
   });
 
-  const handleChange = (e) => {
-    const { name, value, files } = e.target;
-    setForm((prev) => ({
-      ...prev,
-      [name]: files ? files[0] : value,
-    }));
-  };
+const handleChange = (e) => {
+  const { name, value, files } = e.target;
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(form); // TODO: Integrate with email or backend service
-    if (onSuccess) onSuccess();
-  };
+  // Handle file validation
+  if (files && files[0]) {
+    const file = files[0];
+
+    // Max size: 10 MB
+    if (file.size > 10 * 1024 * 1024) {
+      alert("❌ File size exceeds 10 MB limit.");
+      return;
+    }
+
+    setForm((prev) => ({ ...prev, [name]: file }));
+  } else {
+    setForm((prev) => ({ ...prev, [name]: value }));
+  }
+};
+
+const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  const formData = new FormData();
+  Object.entries(form).forEach(([key, value]) => {
+    formData.append(key, value);
+  });
+
+  try {
+    const res = await fetch("/api/request-quote", {
+      method: "POST",
+      body: formData, // No JSON here, FormData includes files
+    });
+
+    const result = await res.json();
+    if (result.success) {
+      alert("✅ Request submitted successfully!");
+      if (onSuccess) onSuccess();
+      setForm({
+        name: "",
+        email: "",
+        phone: "",
+        company: "",
+        type: "",
+        budget: "",
+        timeline: "",
+        message: "",
+        contactMethod: "Email",
+        file: null,
+      });
+    } else {
+      alert("❌ Failed to submit. Please try again.");
+    }
+  } catch (error) {
+    console.error(error);
+    alert("❌ Something went wrong.");
+  }
+};
 
   return (
     <form
@@ -176,6 +220,7 @@ export default function RequestQuoteForm({ onSuccess }) {
             name="file"
             onChange={handleChange}
             className="w-full border px-4 py-2 rounded-lg file:cursor-pointer"
+            accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" // Optional: restrict file types
           />
         </div>
         <div>
