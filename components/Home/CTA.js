@@ -1,18 +1,61 @@
 'use client'
 
+import { useState } from 'react'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 
 export default function CTASection() {
+  const [form, setForm] = useState({ name: '', email: '', message: '' })
+  const [loading, setLoading] = useState(false)
+
+  const handleChange = (e) => {
+    const { name, value } = e.target
+    setForm((prev) => ({ ...prev, [name]: value }))
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    setLoading(true)
+
+    try {
+      // Prepare FormData
+      const formData = new FormData()
+      formData.append('name', form.name)
+      formData.append('email', form.email)
+      formData.append('message', form.message)
+      formData.append('phone', 'N/A')
+      formData.append('company', 'N/A')
+      formData.append('type', 'CTA Section Inquiry')
+      formData.append('budget', 'N/A')
+      formData.append('timeline', 'N/A')
+      formData.append('contactMethod', 'Any')
+
+      const res = await fetch('/api/request-quote', {
+        method: 'POST',
+        body: formData, // Do not set Content-Type manually
+      })
+
+      const result = await res.json()
+      if (result.success) {
+        alert('✅ Your message has been sent!')
+        setForm({ name: '', email: '', message: '' })
+      } else {
+        alert('❌ Failed to send. Please try again.')
+      }
+    } catch (error) {
+      console.error(error)
+      alert('❌ Something went wrong.')
+    }
+    setLoading(false)
+  }
+
   return (
     <section className="relative bg-gradient-to-b from-[#f8fbff] via-white to-white py-16 sm:py-20 md:py-24 overflow-hidden">
       {/* Decorative Elements */}
       <div className="absolute inset-0 pointer-events-none z-0">
-        {/* Radial gradient circles */}
         <div className="absolute -top-40 -left-20 w-[300px] h-[300px] sm:w-[400px] sm:h-[400px] bg-blue-100 opacity-30 rounded-full blur-[100px]" />
         <div className="absolute bottom-0 right-0 w-[240px] h-[240px] sm:w-[300px] sm:h-[300px] bg-purple-100 opacity-20 rounded-full blur-[120px]" />
 
-        {/* SVG grid pattern */}
         <svg
           className="absolute bottom-0 left-0 w-full h-full opacity-10"
           xmlns="http://www.w3.org/2000/svg"
@@ -46,7 +89,8 @@ export default function CTASection() {
         </motion.div>
 
         {/* Right: Form */}
-        <motion.div
+        <motion.form
+          onSubmit={handleSubmit}
           initial={{ opacity: 0, x: 30 }}
           whileInView={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.6, delay: 0.1 }}
@@ -58,30 +102,42 @@ export default function CTASection() {
           <p className="text-gray-600 mb-5 sm:mb-6 text-sm sm:text-base">
             Fill the form below and we’ll get back to you shortly.
           </p>
-          <form className="space-y-4">
+
+          <div className="space-y-4">
             <input
+              name="name"
+              value={form.name}
+              onChange={handleChange}
               type="text"
               placeholder="Your Name"
               className="w-full px-4 py-3 text-sm sm:text-base border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600 transition duration-200"
             />
             <input
+              name="email"
+              value={form.email}
+              onChange={handleChange}
               type="email"
               placeholder="Your Email"
               className="w-full px-4 py-3 text-sm sm:text-base border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600 transition duration-200"
             />
             <textarea
+              name="message"
+              value={form.message}
+              onChange={handleChange}
               placeholder="Tell us about your project..."
               rows={4}
               className="w-full px-4 py-3 text-sm sm:text-base border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600 transition duration-200"
             />
-            <button
-              type="submit"
-              className="w-full bg-blue-900 text-white py-3 rounded-md hover:bg-blue-800 hover:scale-[1.02] transition duration-200 font-semibold"
-            >
-              Send Message
-            </button>
-          </form>
-        </motion.div>
+          </div>
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="mt-4 w-full bg-blue-900 text-white py-3 rounded-md hover:bg-blue-800 hover:scale-[1.02] transition duration-200 font-semibold"
+          >
+            {loading ? 'Sending...' : 'Send Message'}
+          </button>
+        </motion.form>
       </div>
     </section>
   )

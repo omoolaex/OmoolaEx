@@ -43,7 +43,7 @@ export default function Careers() {
   }
 
   return (
-    <section className="bg-white py-16 px-4 sm:px-6 md:px-12 lg:px-20" aria-label="Careers">
+    <section id="careers" className="bg-white py-16 px-4 sm:px-6 md:px-12 lg:px-20" aria-label="Careers">
       <div className="max-w-6xl mx-auto">
         <motion.h2
           className="text-3xl sm:text-4xl font-bold text-center text-gray-900"
