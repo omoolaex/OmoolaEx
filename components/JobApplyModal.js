@@ -13,21 +13,65 @@ export default function JobApplyModal({ show, onClose, jobTitle }) {
     resume: null,
     coverLetter: '',
   })
+  const [loading, setLoading] = useState(false)
 
   const backdropRef = useRef(null)
 
   const handleChange = (e) => {
     const { name, value, files } = e.target
-    setFormData({
-      ...formData,
+    setFormData((prev) => ({
+      ...prev,
       [name]: files ? files[0] : value,
-    })
+    }))
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    console.log('Submitting application:', formData)
-    onClose()
+    setLoading(true)
+
+    try {
+      // Prepare multipart/form-data
+      const payload = new FormData()
+      payload.append('name', formData.name)
+      payload.append('email', formData.email)
+      payload.append('phone', formData.phone)
+      payload.append('company', formData.linkedin || 'N/A') // storing LinkedIn as company
+      payload.append('type', 'Job Application')
+      payload.append('budget', formData.position || jobTitle || 'N/A') // using budget for role/position
+      payload.append('timeline', 'N/A')
+      payload.append('contactMethod', 'Any')
+      payload.append('message', `Cover Letter:\n${formData.coverLetter || 'N/A'}`)
+
+      if (formData.resume) {
+        payload.append('resume', formData.resume)
+      }
+
+      const res = await fetch('/api/request-quote', {
+        method: 'POST',
+        body: payload,
+      })
+
+      const result = await res.json()
+      if (result.success) {
+        alert('✅ Application submitted successfully!')
+        setFormData({
+          name: '',
+          email: '',
+          phone: '',
+          position: jobTitle || '',
+          linkedin: '',
+          resume: null,
+          coverLetter: '',
+        })
+        onClose()
+      } else {
+        alert('❌ Failed to submit. Please try again.')
+      }
+    } catch (error) {
+      console.error(error)
+      alert('❌ Something went wrong while submitting.')
+    }
+    setLoading(false)
   }
 
   const handleOutsideClick = (e) => {
@@ -85,6 +129,7 @@ export default function JobApplyModal({ show, onClose, jobTitle }) {
                 type="text"
                 name="name"
                 placeholder="Full Name"
+                value={formData.name}
                 onChange={handleChange}
                 required
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg"
@@ -93,6 +138,7 @@ export default function JobApplyModal({ show, onClose, jobTitle }) {
                 type="email"
                 name="email"
                 placeholder="Email Address"
+                value={formData.email}
                 onChange={handleChange}
                 required
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg"
@@ -101,6 +147,7 @@ export default function JobApplyModal({ show, onClose, jobTitle }) {
                 type="text"
                 name="phone"
                 placeholder="Phone Number"
+                value={formData.phone}
                 onChange={handleChange}
                 required
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg"
@@ -109,6 +156,7 @@ export default function JobApplyModal({ show, onClose, jobTitle }) {
                 type="text"
                 name="linkedin"
                 placeholder="LinkedIn or Portfolio URL"
+                value={formData.linkedin}
                 onChange={handleChange}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg"
               />
@@ -132,16 +180,18 @@ export default function JobApplyModal({ show, onClose, jobTitle }) {
                 name="coverLetter"
                 placeholder="Why do you want to join OmoolaEx?"
                 rows="4"
+                value={formData.coverLetter}
                 onChange={handleChange}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg"
               ></textarea>
 
-            <button
-            type="submit"
-            className="w-full bg-gradient-to-r from-blue-600 to-blue-400 hover:from-blue-700 hover:to-blue-500 text-white font-semibold py-3 rounded-lg transition cursor-pointer"
-            >
-            Submit Application →
-            </button>
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full bg-gradient-to-r from-blue-600 to-blue-400 hover:from-blue-700 hover:to-blue-500 text-white font-semibold py-3 rounded-lg transition cursor-pointer"
+              >
+                {loading ? 'Submitting...' : 'Submit Application →'}
+              </button>
             </form>
           </motion.div>
         </motion.div>

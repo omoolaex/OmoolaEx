@@ -16,63 +16,83 @@ export default function RequestQuoteForm({ onSuccess }) {
     file: null,
   });
 
-const handleChange = (e) => {
-  const { name, value, files } = e.target;
+  const [loading, setLoading] = useState(false);
 
-  // Handle file validation
-  if (files && files[0]) {
-    const file = files[0];
+  const handleChange = (e) => {
+    const { name, value, files } = e.target;
 
-    // Max size: 10 MB
-    if (file.size > 10 * 1024 * 1024) {
-      alert("❌ File size exceeds 10 MB limit.");
-      return;
+    // Handle file input
+    if (files && files[0]) {
+      const file = files[0];
+
+      // Validate file type
+      const allowedTypes = [
+        'application/pdf',
+        'application/msword',
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        'image/jpeg',
+        'image/png',
+      ];
+      if (!allowedTypes.includes(file.type)) {
+        alert('❌ Only PDF, DOC, DOCX, JPG, and PNG files are allowed.');
+        return;
+      }
+
+      // Validate file size (max 10MB)
+      if (file.size > 10 * 1024 * 1024) {
+        alert('❌ File size exceeds 10MB.');
+        return;
+      }
+
+      setForm((prev) => ({ ...prev, [name]: file }));
+    } else {
+      setForm((prev) => ({ ...prev, [name]: value }));
     }
+  };
 
-    setForm((prev) => ({ ...prev, [name]: file }));
-  } else {
-    setForm((prev) => ({ ...prev, [name]: value }));
-  }
-};
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
-
-  const formData = new FormData();
-  Object.entries(form).forEach(([key, value]) => {
-    formData.append(key, value);
-  });
-
-  try {
-    const res = await fetch("/api/request-quote", {
-      method: "POST",
-      body: formData, // No JSON here, FormData includes files
+    const formData = new FormData();
+    Object.entries(form).forEach(([key, value]) => {
+      formData.append(key, value || '');
     });
 
-    const result = await res.json();
-    if (result.success) {
-      alert("✅ Request submitted successfully!");
-      if (onSuccess) onSuccess();
-      setForm({
-        name: "",
-        email: "",
-        phone: "",
-        company: "",
-        type: "",
-        budget: "",
-        timeline: "",
-        message: "",
-        contactMethod: "Email",
-        file: null,
+    try {
+      const res = await fetch('/api/request-quote', {
+        method: 'POST',
+        body: formData, // Includes files
       });
-    } else {
-      alert("❌ Failed to submit. Please try again.");
+
+      const result = await res.json();
+      if (result.success) {
+        alert('✅ Request submitted successfully!');
+        if (onSuccess) onSuccess();
+
+        // Reset form
+        setForm({
+          name: '',
+          email: '',
+          phone: '',
+          company: '',
+          type: '',
+          budget: '',
+          timeline: '',
+          message: '',
+          contactMethod: 'Email',
+          file: null,
+        });
+      } else {
+        alert('❌ Submission failed. Please try again.');
+      }
+    } catch (error) {
+      console.error(error);
+      alert('❌ Something went wrong while submitting.');
     }
-  } catch (error) {
-    console.error(error);
-    alert("❌ Something went wrong.");
-  }
-};
+
+    setLoading(false);
+  };
 
   return (
     <form
@@ -85,7 +105,7 @@ const handleSubmit = async (e) => {
           Request a Quote
         </h2>
         <p className="text-gray-600 mt-2">
-          Kindly provide us with details about your project or service request.
+          Provide details about your project or service request and we’ll get back to you.
         </p>
       </div>
 
@@ -220,7 +240,7 @@ const handleSubmit = async (e) => {
             name="file"
             onChange={handleChange}
             className="w-full border px-4 py-2 rounded-lg file:cursor-pointer"
-            accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" // Optional: restrict file types
+            accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
           />
         </div>
         <div>
@@ -245,7 +265,7 @@ const handleSubmit = async (e) => {
 
       {/* Consent */}
       <div className="flex items-start gap-2 text-sm text-gray-700">
-        <input type="checkbox" required />
+        <input type="checkbox" required className="mt-1 accent-blue-600" />
         <p>
           I agree to be contacted and accept the{' '}
           <a href="/privacy-policy" className="text-blue-600 underline hover:text-blue-800">
@@ -259,9 +279,14 @@ const handleSubmit = async (e) => {
       <div>
         <button
           type="submit"
-          className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-all"
+          disabled={loading}
+          className={`w-full py-3 rounded-lg font-semibold transition-all ${
+            loading
+              ? 'bg-gray-400 text-white cursor-not-allowed'
+              : 'bg-blue-600 text-white hover:bg-blue-700'
+          }`}
         >
-          Submit Request
+          {loading ? 'Submitting...' : 'Submit Request'}
         </button>
       </div>
     </form>

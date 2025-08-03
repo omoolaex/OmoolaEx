@@ -2,21 +2,46 @@ import nodemailer from "nodemailer";
 
 export async function POST(req) {
   try {
-    const formData = await req.formData();
+    let data = {};
+    let attachments = [];
 
-    const data = {
-      name: formData.get("name"),
-      email: formData.get("email"),
-      phone: formData.get("phone"),
-      company: formData.get("company"),
-      type: formData.get("type"),
-      budget: formData.get("budget"),
-      timeline: formData.get("timeline"),
-      message: formData.get("message"),
-      contactMethod: formData.get("contactMethod"),
-    };
+    // Determine if request is JSON or multipart/form-data
+    const contentType = req.headers.get("content-type") || "";
 
-    const file = formData.get("file"); // This will be a File object if uploaded
+    if (contentType.includes("application/json")) {
+      // Handle JSON requests (Contact Form, CTA Section)
+      data = await req.json();
+    } else if (contentType.includes("multipart/form-data")) {
+      // Handle FormData (Job Applications or Careers Form with file)
+      const formData = await req.formData();
+
+      data = {
+        name: formData.get("name") || "N/A",
+        email: formData.get("email") || "N/A",
+        phone: formData.get("phone") || "N/A",
+        company: formData.get("company") || "N/A",
+        type: formData.get("type") || "General Inquiry",
+        budget: formData.get("budget") || "N/A",
+        timeline: formData.get("timeline") || "N/A",
+        message: formData.get("message") || "",
+        contactMethod: formData.get("contactMethod") || "Any",
+      };
+
+      // Handle file attachment if any
+      const resume = formData.get("resume") || formData.get("file");
+      if (resume && typeof resume === "object" && resume.name) {
+        const arrayBuffer = await resume.arrayBuffer();
+        attachments.push({
+          filename: resume.name,
+          content: Buffer.from(arrayBuffer),
+        });
+      }
+    } else {
+      return new Response(
+        JSON.stringify({ success: false, error: "Unsupported Content-Type" }),
+        { status: 400 }
+      );
+    }
 
     // Configure Nodemailer
     const transporter = nodemailer.createTransport({
@@ -27,40 +52,37 @@ export async function POST(req) {
       },
     });
 
-    // Prepare attachments if file exists
-    const attachments = [];
-    if (file && file.name) {
-      const arrayBuffer = await file.arrayBuffer();
-      attachments.push({
-        filename: file.name,
-        content: Buffer.from(arrayBuffer),
-      });
-    }
+    // Compose email content dynamically
+    const emailText = `
+New Submission from OmoolaEx Website
 
-    // Send email
-    await transporter.sendMail({
-      from: `"OmoolaEx" <${process.env.EMAIL_USER}>`,
-      to: "info@omoolaex.com.ng",
-      subject: `New Quote Request from ${data.name}`,
-      text: `
 Name: ${data.name}
 Email: ${data.email}
 Phone: ${data.phone}
-Company: ${data.company}
-Project Type: ${data.type}
+Company/LinkedIn: ${data.company}
+Form Type: ${data.type}
 Budget: ${data.budget}
 Timeline: ${data.timeline}
-Contact Method: ${data.contactMethod}
+Preferred Contact: ${data.contactMethod}
 
-Message:
-${data.message}
-      `,
+Message / Cover Letter:
+${data.message || "No message provided"}
+    `;
+
+    await transporter.sendMail({
+      from: `"OmoolaEx" <${process.env.EMAIL_USER}>`,
+      to: "info@omoolaex.com.ng",
+      subject: `New Submission: ${data.type || "Inquiry"} from ${data.name}`,
+      text: emailText,
       attachments,
     });
 
     return new Response(JSON.stringify({ success: true }), { status: 200 });
   } catch (err) {
-    console.error(err);
-    return new Response(JSON.stringify({ success: false, error: err.message }), { status: 500 });
+    console.error("❌ Email send error:", err);
+    return new Response(
+      JSON.stringify({ success: false, error: err.message }),
+      { status: 500 }
+    );
   }
 }
