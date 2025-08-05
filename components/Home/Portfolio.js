@@ -1,30 +1,50 @@
-'use client'
+'use client';
 
-import Image from 'next/image'
-import { motion } from 'framer-motion'
+import { useState, useEffect } from 'react';
+import Image from 'next/image';
+import { motion } from 'framer-motion';
+import { client } from '@/sanity/client';
+import imageUrlBuilder from '@sanity/image-url';
 
-const portfolioItems = [
-  {
-    title: 'Creams’n’Bakers Website',
-    description: 'E-commerce showcase with WhatsApp integration for orders.',
-    image: '/images/portfolio/creamsnbakers.png',
-    link: 'https://creamsnbakers.com',
-  },
-  {
-    title: 'DigiAdPro Dashboard',
-    description: 'Admin panel for campaign management and analytics.',
-    image: '/images/portfolio/digiadpro.png',
-    link: 'https://digiadpro.com',
-  },
-  {
-    title: 'RealEstatePro Landing Page',
-    description: 'Conversion-focused one-pager for property listings.',
-    image: '/images/portfolio/realestatepro.png',
-    link: 'https://realestatepro.africa',
-  },
-]
+const builder = imageUrlBuilder(client);
+const urlFor = (source) => builder.image(source).url();
 
-export default function Portfolio() {
+export default function HomePortfolio() {
+  const [portfolioItems, setPortfolioItems] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [activeCategory, setActiveCategory] = useState('all');
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchData() {
+      const query = `*[_type == "portfolio"] | order(_createdAt desc)[0...6]{
+        title,
+        slug,
+        featuredImage,
+        liveWebsite,
+        "category": category->title
+      }`;
+
+      const data = await client.fetch(query);
+      setPortfolioItems(data);
+
+      // Extract unique categories
+      const uniqueCategories = [
+        'all',
+        ...new Set(data.map((item) => item.category).filter(Boolean)),
+      ];
+      setCategories(uniqueCategories);
+      setLoading(false);
+    }
+
+    fetchData();
+  }, []);
+
+  const filteredItems =
+    activeCategory === 'all'
+      ? portfolioItems
+      : portfolioItems.filter((item) => item.category === activeCategory);
+
   return (
     <section className="relative bg-gradient-to-br from-yellow-50 via-white to-blue-50 py-12 sm:py-16 md:py-20 lg:py-24 overflow-hidden">
       {/* Background Blobs */}
@@ -37,6 +57,7 @@ export default function Portfolio() {
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
             transition={{ duration: 0.6 }}
             className="text-2xl sm:text-3xl md:text-4xl font-bold text-blue-900"
           >
@@ -45,6 +66,7 @@ export default function Portfolio() {
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
             transition={{ duration: 0.8, delay: 0.1 }}
             className="text-gray-600 text-sm sm:text-base md:text-lg mt-2"
           >
@@ -52,38 +74,75 @@ export default function Portfolio() {
           </motion.p>
         </div>
 
-        {/* Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {portfolioItems.map((item, index) => (
-            <motion.a
-              key={index}
-              href={item.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="group block overflow-hidden rounded-xl shadow-md hover:shadow-xl transition duration-300 bg-white"
-            >
-              {/* Image */}
-              <div className="relative h-52 sm:h-56 md:h-64 w-full">
-                <Image
-                  src={item.image}
-                  alt={item.title}
-                  fill
-                  className="object-cover transition-transform duration-300 group-hover:scale-105"
-                />
-              </div>
+        {/* Category Filters */}
+        {categories.length > 1 && (
+          <div className="flex flex-wrap justify-center gap-3 sm:gap-4 mb-8 sm:mb-12">
+            {categories.map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setActiveCategory(cat)}
+                className={`px-4 py-2 text-sm sm:text-base rounded-full border transition ${
+                  activeCategory === cat
+                    ? 'bg-blue-600 text-white border-blue-600'
+                    : 'bg-white text-gray-600 hover:border-blue-400 border-gray-200'
+                }`}
+              >
+                {cat === 'all'
+                  ? 'All'
+                  : cat.replace(/\b\w/g, (l) => l.toUpperCase())}
+              </button>
+            ))}
+          </div>
+        )}
 
-              {/* Text Block */}
-              <div className="p-4 sm:p-5">
-                <h3 className="text-base sm:text-lg font-semibold text-blue-800 mb-1">
-                  {item.title}
-                </h3>
-                <p className="text-gray-600 text-sm sm:text-base">{item.description}</p>
-              </div>
-            </motion.a>
-          ))}
+        {/* Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+          {loading &&
+            [...Array(3)].map((_, i) => (
+              <div
+                key={i}
+                className="h-52 sm:h-56 md:h-64 w-full rounded-xl bg-gray-200 animate-pulse"
+              />
+            ))}
+
+          {!loading &&
+            filteredItems.map((item, index) => (
+              <motion.a
+                key={item.slug?.current || index}
+                href={item.liveWebsite || '#'}
+                target="_blank"
+                rel="noopener noreferrer"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                className="group block overflow-hidden rounded-xl shadow-md hover:shadow-xl transition duration-300 bg-white focus:outline-none focus:ring-2 focus:ring-blue-400"
+              >
+                {/* Image */}
+                <div className="relative h-52 sm:h-56 md:h-64 w-full">
+                  {item.featuredImage && (
+                    <Image
+                      src={urlFor(item.featuredImage)}
+                      alt={item.title}
+                      fill
+                      className="object-cover transition-transform duration-300 group-hover:scale-105"
+                      placeholder="blur"
+                      blurDataURL="/images/placeholder.png"
+                    />
+                  )}
+                </div>
+
+                {/* Text Block */}
+                <div className="p-4 sm:p-5">
+                  <h3 className="text-base sm:text-lg font-semibold text-blue-800 mb-1">
+                    {item.title}
+                  </h3>
+                  <p className="text-gray-600 text-sm sm:text-base line-clamp-2">
+                    {item.category || 'Click to view project'}
+                  </p>
+                </div>
+              </motion.a>
+            ))}
         </div>
 
         {/* CTA */}
@@ -97,5 +156,5 @@ export default function Portfolio() {
         </div>
       </div>
     </section>
-  )
+  );
 }
