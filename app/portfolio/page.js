@@ -1,41 +1,58 @@
 import Head from 'next/head';
 import PageHero from '@/components/PageHero';
 import PortfolioCTA from '@/components/Portfolio/PortfolioCTA';
-import PortfolioGrid from '@/components/Portfolio/PortfolioGrid';
-import PageViewTracker from '@/components/Analytics/PageViewTracker';
+import PortfolioContainer from '@/components/Portfolio/PortfolioContainer';
+import PortfolioPageClient from '@/components/Portfolio/PortfolioPageClient';
 
 export const metadata = {
   title: 'Our Portfolio | OmoolaEx | Our Projects Showcase',
-  description: 'Explore our portfolio of successful web development...',
-  // rest unchanged
+  description:
+    'Explore OmoolaEx portfolio showcasing web development, mobile apps, software solutions, branding, and IT projects for businesses across industries.',
+  keywords:
+    'OmoolaEx portfolio, web development showcase, software projects, IT solutions',
+  openGraph: {
+    title: 'Our Portfolio | OmoolaEx',
+    description:
+      'Explore OmoolaEx portfolio showcasing web development, mobile apps, software solutions, branding, and IT projects.',
+    url: 'https://omoolaex.com.ng/portfolio',
+    type: 'website',
+  },
 };
 
-const structuredData = {
-  "@context": "https://schema.org",
-  "@type": "CollectionPage",
-  "name": "Our Portfolio | OmoolaEx",
-  // rest unchanged
-};
-
-export default function Portfolio() {
+export default function PortfolioPage() {
   return (
     <>
       <Head>
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'CollectionPage',
+              name: 'Our Portfolio | OmoolaEx',
+              description:
+                'Explore OmoolaEx portfolio showcasing web development, mobile apps, software solutions, branding, and IT projects for businesses across industries.',
+              url: 'https://omoolaex.com.ng/portfolio',
+              publisher: {
+                '@type': 'Organization',
+                name: 'OmoolaEx',
+                url: 'https://omoolaex.com.ng',
+                logo: {
+                  '@type': 'ImageObject',
+                  url: 'https://omoolaex.com.ng/logo.png',
+                },
+              },
+            }),
+          }}
         />
       </Head>
 
-      <PageViewTracker
-        title="Our Portfolio | OmoolaEx"
-        path="/portfolio"
-        location="https://omoolaex.com.ng/portfolio"
-      />
-
       <main>
-        <PageHero />
-        <PortfolioGrid />
+        <PageHero
+          title="Our Portfolio"
+          subtitle="Showcasing our successful projects across web, software, and IT solutions"
+        />
+        <PortfolioPageClient /> {/* ✅ Client-only logic here */}
         <PortfolioCTA />
       </main>
     </>
