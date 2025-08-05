@@ -7,7 +7,8 @@ import { client } from '@/sanity/client';
 import imageUrlBuilder from '@sanity/image-url';
 
 const builder = imageUrlBuilder(client);
-const urlFor = (source) => builder.image(source).url();
+const urlFor = (source) =>
+  builder.image(source).width(600).height(400).fit('crop').auto('format').url();
 
 export default function HomePortfolio() {
   const [portfolioItems, setPortfolioItems] = useState([]);
@@ -17,7 +18,7 @@ export default function HomePortfolio() {
 
   useEffect(() => {
     async function fetchData() {
-      const query = `*[_type == "portfolio"] | order(_createdAt desc)[0...6]{
+      const query = `*[_type == "portfolio"] | order(_createdAt desc)[0...20]{
         title,
         slug,
         featuredImage,
@@ -44,6 +45,9 @@ export default function HomePortfolio() {
     activeCategory === 'all'
       ? portfolioItems
       : portfolioItems.filter((item) => item.category === activeCategory);
+
+  // ✅ Always show only 3 items for grid
+  const displayItems = filteredItems.slice(0, 3);
 
   return (
     <section className="relative bg-gradient-to-br from-yellow-50 via-white to-blue-50 py-12 sm:py-16 md:py-20 lg:py-24 overflow-hidden">
@@ -106,7 +110,7 @@ export default function HomePortfolio() {
             ))}
 
           {!loading &&
-            filteredItems.map((item, index) => (
+            displayItems.map((item, index) => (
               <motion.a
                 key={item.slug?.current || index}
                 href={item.liveWebsite || '#'}
@@ -126,6 +130,7 @@ export default function HomePortfolio() {
                       alt={item.title}
                       fill
                       className="object-cover transition-transform duration-300 group-hover:scale-105"
+                      sizes="(max-width: 1024px) 100vw, 33vw"
                       placeholder="blur"
                       blurDataURL="/images/placeholder.png"
                     />
@@ -142,6 +147,16 @@ export default function HomePortfolio() {
                   </p>
                 </div>
               </motion.a>
+            ))}
+
+          {/* Optional placeholder for consistent 3-grid layout */}
+          {!loading &&
+            displayItems.length < 3 &&
+            [...Array(3 - displayItems.length)].map((_, i) => (
+              <div
+                key={`placeholder-${i}`}
+                className="hidden lg:block rounded-xl bg-gray-100"
+              />
             ))}
         </div>
 
