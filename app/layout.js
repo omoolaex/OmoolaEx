@@ -1,8 +1,8 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
-import { Analytics } from "@vercel/analytics/next"
-import { SpeedInsights } from "@vercel/speed-insights/next"
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import Navbar from "@/components/NavBar";
 import Footer from "@/components/Footer";
 import DiscountPopup from "@/components/DiscountPopup";
@@ -22,54 +22,54 @@ const geistMono = Geist_Mono({
 
 export const metadata = {
   alternates: {
-    canonical: 'https://omoolaex.com.ng',
+    canonical: "https://omoolaex.com.ng",
   },
-  title: 'OmoolaEx | Web Development, Branding & IT Consulting in Lagos, Nigeria',
+  title: "OmoolaEx | Web Development, Branding & IT Consulting in Lagos, Nigeria",
   description:
-    'OmoolaEx offers expert web development, responsive website design, branding, and IT consulting services in Lagos, Nigeria. Grow your business online with our digital solutions tailored for startups, SMEs, and enterprises.',
+    "OmoolaEx offers expert web development, responsive website design, branding, and IT consulting services in Lagos, Nigeria. Grow your business online with our digital solutions tailored for startups, SMEs, and enterprises.",
   keywords: [
-    'OmoolaEx',
-    'Web Development Lagos',
-    'Web Design Nigeria',
-    'IT Consulting Lagos',
-    'Branding Services Lagos',
-    'Digital Agency Nigeria',
-    'SEO Lagos',
-    'Responsive Website Design',
-    'WordPress Developer Nigeria',
-    'Business Website Lagos',
-    'Custom Web Solutions',
-    'Lagos Tech Company',
-    'UI UX Design Lagos',
-    'Ecommerce Development Nigeria',
+    "OmoolaEx",
+    "Web Development Lagos",
+    "Web Design Nigeria",
+    "IT Consulting Lagos",
+    "Branding Services Lagos",
+    "Digital Agency Nigeria",
+    "SEO Lagos",
+    "Responsive Website Design",
+    "WordPress Developer Nigeria",
+    "Business Website Lagos",
+    "Custom Web Solutions",
+    "Lagos Tech Company",
+    "UI UX Design Lagos",
+    "Ecommerce Development Nigeria",
   ],
   openGraph: {
-    title: 'OmoolaEx | Web Development, Branding & IT Consulting in Lagos, Nigeria',
+    title: "OmoolaEx | Web Development, Branding & IT Consulting in Lagos, Nigeria",
     description:
-      'OmoolaEx provides professional web development, branding, and IT consulting services in Lagos, Nigeria. Boost your business with modern, SEO-optimized websites and digital solutions.',
-    url: 'https://omoolaex.com.ng',
-    siteName: 'OmoolaEx',
+      "OmoolaEx provides professional web development, branding, and IT consulting services in Lagos, Nigeria. Boost your business with modern, SEO-optimized websites and digital solutions.",
+    url: "https://omoolaex.com.ng",
+    siteName: "OmoolaEx",
     images: [
       {
-        url: 'https://omoolaex.com.ng/images/omoolaex.jpg',
+        url: "https://omoolaex.com.ng/images/omoolaex.jpg",
         width: 1200,
         height: 630,
-        alt: 'OmoolaEx – Web Development, Branding & IT Consulting in Lagos',
+        alt: "OmoolaEx – Web Development, Branding & IT Consulting in Lagos",
       },
     ],
-    type: 'website',
+    type: "website",
   },
-  robots: 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1',
+  robots: "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1",
   icons: {
-    icon: '/site-icon.ico',
+    icon: "/site-icon.ico",
   },
   twitter: {
-    card: 'summary_large_image',
-    title: 'OmoolaEx | Web Development, Branding & IT Consulting in Lagos, Nigeria',
+    card: "summary_large_image",
+    title: "OmoolaEx | Web Development, Branding & IT Consulting in Lagos, Nigeria",
     description:
-      'Get modern, SEO-optimized websites, branding, and IT consulting from OmoolaEx in Lagos, Nigeria. Empower your business online.',
-    images: ['https://omoolaex.com.ng/images/omoolaex.jpg'],
-    site: '@omoolaex',
+      "Get modern, SEO-optimized websites, branding, and IT consulting from OmoolaEx in Lagos, Nigeria. Empower your business online.",
+    images: ["https://omoolaex.com.ng/images/omoolaex.jpg"],
+    site: "@omoolaex",
   },
 };
 
@@ -85,7 +85,7 @@ const structuredData = {
     "https://twitter.com/omoolaex",
     "https://www.youtube.com/@omoolaex",
     "https://www.tiktok.com/@omoolaex",
-    "https://www.linkedin.com/company/omoolaex-it-consulting-company"
+    "https://www.linkedin.com/company/omoolaex-it-consulting-company",
   ],
   contactPoint: {
     "@type": "ContactPoint",
@@ -100,6 +100,23 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
+        {/* ✅ Search Console HTML Tag */}
+        <meta
+          name="google-site-verification"
+          content="f8UAWQDAokSA_8RVGOPAinyV895VBHIKbpPxbQkhMX4"
+        />
+
+        {/* ✅ Google Tag Manager Script */}
+        <Script id="gtm-script" strategy="afterInteractive">
+          {`
+            (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+            'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+            })(window,document,'script','dataLayer','GTM-THBBB5GM');
+          `}
+        </Script>
+
         {/* ✅ Google Analytics 4 */}
         {GA_TRACKING_ID && (
           <>
@@ -137,6 +154,16 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}
       >
+        {/* ✅ Google Tag Manager NoScript */}
+        <noscript>
+          <iframe
+            src="https://www.googletagmanager.com/ns.html?id=GTM-THBBB5GM"
+            height="0"
+            width="0"
+            style={{ display: "none", visibility: "hidden" }}
+          ></iframe>
+        </noscript>
+
         <StyledComponentsRegistry>
           <Analytics />
           <SpeedInsights />
