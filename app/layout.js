@@ -10,15 +10,8 @@ import CookieConsent from "@/components/CookieConsent";
 import { GA_TRACKING_ID } from "../lib/ga";
 import StyledComponentsRegistry from "@/lib/styledComponentsRegistry";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
+const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
 
 export const metadata = {
   alternates: {
@@ -106,8 +99,8 @@ export default function RootLayout({ children }) {
           content="f8UAWQDAokSA_8RVGOPAinyV895VBHIKbpPxbQkhMX4"
         />
 
-        {/* ✅ Google Tag Manager Script */}
-        <Script id="gtm-script" strategy="afterInteractive">
+        {/* ✅ Google Tag Manager Script (must be high in head) */}
+        <Script id="gtm-head" strategy="beforeInteractive">
           {`
             (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
             new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -117,16 +110,16 @@ export default function RootLayout({ children }) {
           `}
         </Script>
 
-        {/* ✅ Google Analytics 4 */}
+        {/* ✅ Google Analytics 4 (must be in head) */}
         {GA_TRACKING_ID && (
           <>
             <Script
-              strategy="afterInteractive"
+              strategy="beforeInteractive"
               src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`}
             />
             <Script
               id="gtag-init"
-              strategy="afterInteractive"
+              strategy="beforeInteractive"
               dangerouslySetInnerHTML={{
                 __html: `
                   window.dataLayer = window.dataLayer || [];
@@ -141,20 +134,16 @@ export default function RootLayout({ children }) {
           </>
         )}
 
-        {/* ✅ Structured Data for SEO */}
+        {/* ✅ Structured Data */}
         <Script
           id="structured-data"
           type="application/ld+json"
           strategy="afterInteractive"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(structuredData),
-          }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
         />
       </head>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}
-      >
-        {/* ✅ Google Tag Manager NoScript */}
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}>
+        {/* ✅ GTM NoScript immediately after body */}
         <noscript>
           <iframe
             src="https://www.googletagmanager.com/ns.html?id=GTM-THBBB5GM"
