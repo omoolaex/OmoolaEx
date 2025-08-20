@@ -5,7 +5,7 @@ import Image from "next/image";
 export default function BlogCard({ post }) {
   const imageUrl = post.image
     ? urlFor(post.image).width(600).height(400).url()
-    : "/images/og-default.jpg"; // fallback image
+    : "/images/og-default.jpg";
 
   return (
     <article className="border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200 bg-white flex flex-col">
