@@ -8,6 +8,11 @@ import { motion } from "framer-motion";
 export default function NewsSection({ posts }) {
   if (!posts || posts.length === 0) return null;
 
+  // ensure only latest 3
+  const latestPosts = posts
+    .sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt))
+    .slice(0, 3);
+
   return (
     <section className="container mx-auto py-16 px-6">
       <div className="text-center mb-12 sm:mb-16">
@@ -29,7 +34,8 @@ export default function NewsSection({ posts }) {
         </motion.p>
       </div>
 
-      <BlogGrid posts={posts} />
+      {/* Show only 3 latest */}
+      <BlogGrid posts={latestPosts} />
 
       <div className="text-center mt-10">
         <Link
