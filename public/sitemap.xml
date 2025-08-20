@@ -1,18 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <sitemap>
-    <loc>https://omoolaex.com.ng/sitemap-0.xml</loc>
-    <lastmod>2025-08-20</lastmod>
-    <changefreq>weekly</changefreq>
-  </sitemap>
-  <sitemap>
-    <loc>https://omoolaex.com.ng/api/sitemap-blogs</loc>
-    <lastmod>2025-08-20</lastmod>
-    <changefreq>daily</changefreq>
-  </sitemap>
-  <sitemap>
-    <loc>https://omoolaex.com.ng/api/sitemap-portfolio</loc>
-    <lastmod>2025-08-20</lastmod>
-    <changefreq>daily</changefreq>
-  </sitemap>
+<sitemap><loc>https://omoolaex.com.ng/sitemap-0.xml</loc></sitemap>
 </sitemapindex>
