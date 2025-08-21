@@ -1,9 +1,5 @@
-'use client';
-
-import React from 'react';
-import Head from 'next/head';
-
-const faqData = [
+// No "use client" — purely server-side / shared data
+export const faqStructuredData = [
   {
     question: 'What services does OmoolaEx offer?',
     answer:
@@ -29,28 +25,44 @@ const faqData = [
     answer:
       'Absolutely. We specialize in website redesigns that improve user experience, performance, and branding.',
   },
+  {
+    question: 'What does OmoolaEx do?',
+    answer:
+      'OmoolaEx is a professional IT Consulting and Digital Solutions company helping businesses grow through innovative web, brand, and tech services.',
+  },
+  {
+    question: 'Who are your services for?',
+    answer:
+      'We work with small to mid-sized businesses, startups, entrepreneurs, and organizations seeking quality digital transformation.',
+  },
+  {
+    question: 'What web technologies do you specialize in?',
+    answer:
+      'We specialize in WordPress, React/Next.js, and modern tech stacks tailored to project needs.',
+  },
+  {
+    question: 'Can I request a custom solution?',
+    answer:
+      'Absolutely. All our services are tailored to your business needs — from simple landing pages to complex IT systems.',
+  },
+  {
+    question: 'Do you offer revisions?',
+    answer:
+      'Yes. We offer structured revision rounds as part of each project package.',
+  },
+  {
+    question: 'Will you maintain my website after launch?',
+    answer:
+      'Yes, we offer optional maintenance and support plans after launch.',
+  },
+  {
+    question: 'How do I communicate with the team?',
+    answer:
+      'We use email, WhatsApp, and scheduled calls to stay connected throughout your project.',
+  },
+  {
+    question: 'Can you train my team on how to use the solutions you build?',
+    answer:
+      'Yes. We offer training and documentation to ensure you or your staff can manage your solution confidently.',
+  },
 ];
-
-export default function FaqStructuredData() {
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    mainEntity: faqData.map((faq) => ({
-      '@type': 'Question',
-      name: faq.question,
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: faq.answer,
-      },
-    })),
-  };
-
-  return (
-    <Head>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
-    </Head>
-  );
-}

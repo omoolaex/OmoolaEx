@@ -2,6 +2,7 @@ import Link from "next/link";
 import { client } from "@/sanity/client";
 import PageHero from "@/components/PageHero";
 import BlogGrid from "@/components/Blog/BlogGrid";
+import PageViewTracker from "@/components/Analytics/PageViewTracker";
 import {
   paginatedPostsQuery,
   allCategoriesQuery,
@@ -11,38 +12,7 @@ import {
 
 const POSTS_PER_PAGE = 12;
 
-// SEO Metadata
-export const metadata = {
-  title: "OmoolaEx Blog | Tips, Insights & Updates",
-  description:
-    "Discover expert insights, web design tips, IT consulting advice, and digital strategies from OmoolaEx to grow your business.",
-  openGraph: {
-    title: "OmoolaEx Blog | Tips, Insights & Updates",
-    description:
-      "Discover expert insights, web design tips, IT consulting advice, and digital strategies from OmoolaEx to grow your business.",
-    url: "https://omoolaex.com.ng/blog",
-    siteName: "OmoolaEx",
-    images: [
-      {
-        url: "https://omoolaex.com.ng/images/omoolaex.jpg",
-        width: 1200,
-        height: 630,
-        alt: "OmoolaEx Blog",
-      },
-    ],
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "OmoolaEx Blog | Tips, Insights & Updates",
-    description:
-      "Discover expert insights, web design tips, IT consulting advice, and digital strategies from OmoolaEx to grow your business.",
-    images: ["https://omoolaex.com.ng/images/omoolaex.jpg"],
-  },
-};
-
 export default async function BlogPage({ searchParams: searchParamsPromise }) {
-  // ✅ Await the searchParams first
   const searchParams = await searchParamsPromise;
 
   const page = parseInt(searchParams.page || 1);
@@ -70,18 +40,28 @@ export default async function BlogPage({ searchParams: searchParamsPromise }) {
 
   const totalPages = Math.ceil(totalPosts / POSTS_PER_PAGE);
 
-  // JSON-LD Structured Data for SEO
+  const siteUrl =
+    process.env.NEXT_PUBLIC_SITE_URL ||
+    (process.env.NODE_ENV === "production"
+      ? "https://omoolaex.com.ng"
+      : "http://localhost:3000");
+
+  const pageUrl = categorySlug
+    ? `${siteUrl}/blog?category=${categorySlug}&page=${page}`
+    : `${siteUrl}/blog${page > 1 ? `?page=${page}` : ""}`;
+
+  // JSON-LD Structured Data for Blog & Breadcrumb
   const blogStructuredData = {
     "@context": "https://schema.org",
     "@type": "Blog",
     name: "OmoolaEx Blog",
-    url: "https://omoolaex.com.ng/blog",
+    url: `${siteUrl}/blog`,
     description:
       "Discover expert insights, web design tips, IT consulting advice, and digital strategies from OmoolaEx to grow your business.",
     blogPost: posts.map((post) => ({
       "@type": "BlogPosting",
       headline: post.title,
-      url: `https://omoolaex.com.ng/blog/${post.slug.current}`,
+      url: `${siteUrl}/blog/${post.slug.current}`,
       datePublished: post.publishedAt,
       author: {
         "@type": "Person",
@@ -90,14 +70,42 @@ export default async function BlogPage({ searchParams: searchParamsPromise }) {
     })),
   };
 
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: siteUrl },
+      { "@type": "ListItem", position: 2, name: "Blog", item: `${siteUrl}/blog` },
+      ...(categorySlug
+        ? [
+            {
+              "@type": "ListItem",
+              position: 3,
+              name: categories.find((c) => c.slug.current === categorySlug)?.title,
+              item: `${siteUrl}/blog?category=${categorySlug}`,
+            },
+          ]
+        : []),
+    ],
+  };
+
   return (
     <>
+      {/* ✅ JSON-LD */}
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(blogStructuredData) }}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify([blogStructuredData, breadcrumbSchema]),
+        }}
       />
 
-      <PageHero title="Our Blog" subtitle="Insights, tips, and updates from OmoolaEx" />
+      {/* ✅ Track GA pageviews */}
+      <PageViewTracker url={pageUrl} />
+
+      <PageHero
+        title="Our Blog"
+        subtitle="Insights, tips, and updates from OmoolaEx"
+      />
 
       <main className="container mx-auto min-h-screen p-8">
         {/* Categories Filter */}
@@ -145,6 +153,13 @@ export default async function BlogPage({ searchParams: searchParamsPromise }) {
                 <Link
                   key={pageNumber}
                   href={url}
+                  rel={
+                    pageNumber === page - 1
+                      ? "prev"
+                      : pageNumber === page + 1
+                      ? "next"
+                      : undefined
+                  }
                   className={`px-3 py-1 border rounded ${
                     page === pageNumber ? "bg-blue-600 text-white" : "bg-white"
                   }`}

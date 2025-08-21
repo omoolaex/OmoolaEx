@@ -1,5 +1,6 @@
 import PageHero from '@/components/PageHero';
 import CalendlyWidget from './CalendlyWidget';
+import PageViewTracker from '@/components/Analytics/PageViewTracker';
 
 export const metadata = {
   title: 'Book a Free Consultation | OmoolaEx | Web Development & IT Consulting in Lagos, Nigeria',
@@ -14,9 +15,7 @@ export const metadata = {
     'Tech Solutions',
     'OmoolaEx',
   ],
-  alternates: {
-    canonical: 'https://omoolaex.com.ng/bookings',
-  },
+  alternates: { canonical: 'https://omoolaex.com.ng/bookings' },
   openGraph: {
     title: 'Book a Free Consultation | OmoolaEx',
     description:
@@ -44,45 +43,66 @@ export const metadata = {
 };
 
 export default function BookingsPage() {
-  // Structured Data for SEO
-  const bookingSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'WebPage',
-    name: 'Book a Consultation | OmoolaEx',
-    url: 'https://omoolaex.com.ng/bookings',
-    description:
-      'Book a free consultation with OmoolaEx for IT consulting, web development, and branding services.',
-    publisher: {
-      '@type': 'Organization',
-      name: 'OmoolaEx',
-      url: 'https://omoolaex.com.ng',
-      logo: {
-        '@type': 'ImageObject',
-        url: 'https://omoolaex.com.ng/images/omoolaex.jpg',
-      },
-    },
-    mainEntity: {
-      '@type': 'Service',
-      name: 'Consultation Booking',
+  const siteUrl =
+    process.env.NEXT_PUBLIC_SITE_URL ||
+    (process.env.NODE_ENV === 'production'
+      ? 'https://omoolaex.com.ng'
+      : 'http://localhost:3000');
+
+  const pageUrl = `${siteUrl}/bookings`;
+
+  // Structured Data for WebPage + Breadcrumb
+  const structuredData = [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'WebPage',
+      name: 'Book a Free Consultation | OmoolaEx',
+      url: pageUrl,
       description:
-        'Free 30-minute consultation with OmoolaEx to discuss IT and digital business growth.',
-      provider: {
+        'Book a free consultation with OmoolaEx for IT consulting, web development, branding, and digital solutions.',
+      publisher: {
         '@type': 'Organization',
         name: 'OmoolaEx',
+        url: siteUrl,
+        logo: { '@type': 'ImageObject', url: `${siteUrl}/images/omoolaex.jpg` },
       },
-      areaServed: 'Nigeria',
+      mainEntity: {
+        '@type': 'Service',
+        name: 'Consultation Booking',
+        description:
+          'Free 30-minute consultation with OmoolaEx to discuss IT and digital business growth.',
+        provider: { '@type': 'Organization', name: 'OmoolaEx' },
+        areaServed: 'Nigeria',
+      },
     },
-  };
+    {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home', item: siteUrl },
+        { '@type': 'ListItem', position: 2, name: 'Bookings', item: pageUrl },
+      ],
+    },
+  ];
 
   return (
     <main className="overflow-x-hidden relative">
-      {/* Structured Data */}
+      {/* JSON-LD Structured Data */}
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(bookingSchema) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
 
-      <PageHero />
+      {/* Pageview Tracking */}
+      <PageViewTracker url={pageUrl} />
+
+      {/* Hero Section */}
+      <PageHero
+        title="Book a Free Consultation"
+        subtitle="Schedule your preferred date and time to discuss web development, branding, IT consulting, or digital growth strategies."
+      />
+
+      {/* Calendly Widget */}
       <CalendlyWidget />
     </main>
   );
