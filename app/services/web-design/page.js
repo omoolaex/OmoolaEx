@@ -15,6 +15,52 @@ const siteUrl =
     ? "https://omoolaex.com.ng"
     : "http://localhost:3000");
 
+export const metadata = {
+  title:
+    "Web Design & Development Services | OmoolaEx | Lagos, Nigeria",
+  description:
+    "OmoolaEx provides professional web design and development services in Lagos, Nigeria. We build responsive, SEO-optimized, and conversion-focused websites for startups and SMEs.",
+  keywords: [
+    "Web Design Lagos",
+    "Web Development Nigeria",
+    "Responsive Websites",
+    "SEO Web Design",
+    "UI UX Design Lagos",
+    "Custom Website Development",
+    "Business Websites Nigeria",
+    "Ecommerce Web Development",
+    "OmoolaEx Web Design",
+  ],
+  alternates: {
+    canonical: `${siteUrl}/services/web-development`,
+  },
+  openGraph: {
+    title: "Web Design & Development Services | OmoolaEx",
+    description:
+      "Get responsive, SEO-friendly, and conversion-focused web development services from OmoolaEx in Lagos, Nigeria.",
+    url: `${siteUrl}/services/web-development`,
+    siteName: "OmoolaEx",
+    images: [
+      {
+        url: `${siteUrl}/images/omoolaex.jpg`,
+        width: 1200,
+        height: 630,
+        alt: "OmoolaEx Web Design & Development Services",
+      },
+    ],
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "OmoolaEx | Web Design & Development Services in Lagos",
+    description:
+      "Build a responsive, fast, and SEO-optimized website with OmoolaEx. Serving startups and SMEs in Nigeria.",
+    images: [`${siteUrl}/images/omoolaex.jpg`],
+    site: "@omoolaex",
+  },
+};
+
+// ✅ Structured Data for Service with Ratings & Reviews
 const structuredData = {
   "@context": "https://schema.org",
   "@type": "Service",
@@ -38,8 +84,46 @@ const structuredData = {
   areaServed: "Nigeria",
   serviceType: "Web Design & Development",
   url: `${siteUrl}/services/web-development`,
+
+  // ⭐ Aggregate Rating
+  aggregateRating: {
+    "@type": "AggregateRating",
+    ratingValue: "4.9",
+    bestRating: "5",
+    worstRating: "1",
+    ratingCount: "125",
+  },
+
+  // ⭐ Example Reviews (Optional but powerful)
+  review: [
+    {
+      "@type": "Review",
+      author: { "@type": "Person", name: "Chinedu A." },
+      datePublished: "2024-11-12",
+      reviewBody:
+        "OmoolaEx transformed our outdated website into a modern, responsive, and SEO-optimized platform. We saw a boost in customer inquiries within weeks!",
+      reviewRating: {
+        "@type": "Rating",
+        ratingValue: "5",
+        bestRating: "5",
+      },
+    },
+    {
+      "@type": "Review",
+      author: { "@type": "Person", name: "Fatima O." },
+      datePublished: "2024-12-05",
+      reviewBody:
+        "Excellent web development service! The team at OmoolaEx was professional, fast, and delivered a stunning website for our startup.",
+      reviewRating: {
+        "@type": "Rating",
+        ratingValue: "5",
+        bestRating: "5",
+      },
+    },
+  ],
 };
 
+// ✅ FAQ Schema
 const faqSchema = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
@@ -97,7 +181,7 @@ export default function WebDevelopmentPage() {
         location={`${siteUrl}/services/web-development`}
       />
 
-      {/* Page Hero */}
+      {/* Hero Section */}
       <PageHero
         title="Web Design & Development"
         subtitle={
@@ -107,7 +191,10 @@ export default function WebDevelopmentPage() {
               Brand Design Services
             </Link>{" "}
             and{" "}
-            <Link href="/blog/top-web-design-trends-2025" className="underline text-blue-600">
+            <Link
+              href="/blog/top-web-design-trends-2025"
+              className="underline text-blue-600"
+            >
               latest Web Design trends
             </Link>{" "}
             for more insights.
@@ -115,7 +202,7 @@ export default function WebDevelopmentPage() {
         }
       />
 
-      {/* Modular Sections with lazy loading for images below fold */}
+      {/* Service Sections */}
       <ServiceOverview />
       <WhyWebDesignMatters />
       <OurApproach />

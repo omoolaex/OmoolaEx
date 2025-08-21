@@ -24,7 +24,7 @@ export const metadata = {
     type: 'website',
     images: [
       {
-        url: 'https://omoolaex.com.ng/images/omoolaex-careers.jpg',
+        url: 'https://omoolaex.com.ng/images/omoolaex.jpg',
         width: 1200,
         height: 630,
         alt: 'OmoolaEx Careers Page',
@@ -36,7 +36,7 @@ export const metadata = {
     title: 'Careers Opportunities at OmoolaEx',
     description:
       'Join OmoolaEx and advance your career in IT, web development, branding, and digital solutions.',
-    images: ['https://omoolaex.com.ng/images/omoolaex-careers.jpg'],
+    images: ['https://omoolaex.com.ng/images/omoolaex.jpg'],
     site: '@omoolaex',
   },
 };
