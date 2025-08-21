@@ -1,3 +1,5 @@
+// File: app/api/request-quote/route.js (or route.ts if using TS)
+
 import nodemailer from "nodemailer";
 
 export async function POST(req) {
@@ -5,14 +7,14 @@ export async function POST(req) {
     let data = {};
     let attachments = [];
 
-    // Determine if request is JSON or multipart/form-data
+    // Detect content type
     const contentType = req.headers.get("content-type") || "";
 
     if (contentType.includes("application/json")) {
-      // Handle JSON requests (Contact Form, CTA Section)
+      // ✅ Handle JSON request (Contact / CTA)
       data = await req.json();
     } else if (contentType.includes("multipart/form-data")) {
-      // Handle FormData (Job Applications or Careers Form with file)
+      // ✅ Handle FormData (Request Quote / Careers)
       const formData = await req.formData();
 
       data = {
@@ -25,15 +27,16 @@ export async function POST(req) {
         timeline: formData.get("timeline") || "N/A",
         message: formData.get("message") || "",
         contactMethod: formData.get("contactMethod") || "Any",
+        discount: formData.get("discount") || "",
       };
 
-      // Handle file attachment if any
-      const resume = formData.get("resume") || formData.get("file");
-      if (resume && typeof resume === "object" && resume.name) {
-        const arrayBuffer = await resume.arrayBuffer();
+      // ✅ File Handling (resume or project file)
+      const uploadedFile = formData.get("resume") || formData.get("file");
+      if (uploadedFile && typeof uploadedFile === "object" && uploadedFile.name) {
+        const buffer = Buffer.from(await uploadedFile.arrayBuffer());
         attachments.push({
-          filename: resume.name,
-          content: Buffer.from(arrayBuffer),
+          filename: uploadedFile.name,
+          content: buffer,
         });
       }
     } else {
@@ -43,35 +46,37 @@ export async function POST(req) {
       );
     }
 
-    // Configure Nodemailer
+    // ✅ Configure Nodemailer
     const transporter = nodemailer.createTransport({
-      service: "Gmail",
+      service: "gmail", // lowercase "gmail"
       auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS,
       },
     });
 
-    // Compose email content dynamically
+    // ✅ Email body
     const emailText = `
-New Submission from OmoolaEx Website
+📩 New Submission from OmoolaEx Website
 
-Name: ${data.name}
-Email: ${data.email}
-Phone: ${data.phone}
-Company/LinkedIn: ${data.company}
-Form Type: ${data.type}
-Budget: ${data.budget}
-Timeline: ${data.timeline}
-Preferred Contact: ${data.contactMethod}
+👤 Name: ${data.name}
+📧 Email: ${data.email}
+📱 Phone: ${data.phone}
+🏢 Company/LinkedIn: ${data.company}
+📌 Form Type: ${data.type}
+💰 Budget: ${data.budget}
+⏳ Timeline: ${data.timeline}
+☎️ Preferred Contact: ${data.contactMethod}
+🎉 Discount Applied: ${data.discount ? data.discount : "No discount applied"}
 
-Message / Cover Letter:
+📝 Message / Cover Letter:
 ${data.message || "No message provided"}
     `;
 
+    // ✅ Send Email
     await transporter.sendMail({
       from: `"OmoolaEx" <${process.env.EMAIL_USER}>`,
-      to: "info@omoolaex.com.ng",
+      to: "info@omoolaex.com.ng", // Your business email
       subject: `New Submission: ${data.type || "Inquiry"} from ${data.name}`,
       text: emailText,
       attachments,
