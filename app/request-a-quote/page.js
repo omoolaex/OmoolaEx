@@ -2,6 +2,7 @@
 
 import Script from "next/script";
 import PageHero from "@/components/PageHero";
+import { Suspense } from "react";
 import RequestQuoteForm from "@/components/RequestQuoteForm";
 import PageViewTracker from "@/components/Analytics/PageViewTracker";
 
@@ -103,7 +104,9 @@ export default function RequestQuote() {
         subtitle="Let’s bring your digital vision to life. Tell us what you need, and we’ll handle the rest."
       />
       <div className="max-w-4xl mx-auto px-4 py-12">
-        <RequestQuoteForm />
+        <Suspense>
+          <RequestQuoteForm />
+        </Suspense>
       </div>
     </main>
   );
