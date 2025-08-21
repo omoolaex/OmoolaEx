@@ -132,7 +132,7 @@ export default function HomePortfolio() {
                       className="object-cover transition-transform duration-300 group-hover:scale-105"
                       sizes="(max-width: 1024px) 100vw, 33vw"
                       placeholder="blur"
-                      blurDataURL="/images/placeholder.png"
+                      blurDataURL="/images/omoolaex.jpg"
                     />
                   )}
                 </div>

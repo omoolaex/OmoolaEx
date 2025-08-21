@@ -17,7 +17,7 @@ const siteUrl = "https://omoolaex.com.ng";
 const siteName = "OmoolaEx";
 const siteDescription =
   "OmoolaEx is a creative IT consulting company in Nigeria offering web design, branding, cybersecurity, and digital strategy services to help businesses grow online.";
-const siteImage = "https://omoolaex.com.ng/images/og-image.png";
+const siteImage = "https://omoolaex.com.ng/images/omoolaex.jpg";
 
 const structuredData = {
   "@context": "https://schema.org",
