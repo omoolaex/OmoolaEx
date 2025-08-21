@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import { useState, useEffect, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import Image from 'next/image';
-import { X, ChevronLeft, ChevronRight } from 'lucide-react';
-import { PortableText } from '@portabletext/react';
-import PortfolioSnapshots from './PortfolioSnapshots';
+import { useState, useEffect, useCallback } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
+import { X, ChevronLeft, ChevronRight } from "lucide-react";
+import { PortableText } from "@portabletext/react";
+import PortfolioSnapshots from "./PortfolioSnapshots";
 
 export default function PortfolioModal({ project, onClose }) {
   const [viewIndex, setViewIndex] = useState(null); // null = not in lightbox
@@ -24,16 +24,16 @@ export default function PortfolioModal({ project, onClose }) {
   useEffect(() => {
     const handleKey = (e) => {
       if (viewIndex !== null) {
-        if (e.key === 'ArrowRight') nextImage();
-        if (e.key === 'ArrowLeft') prevImage();
+        if (e.key === "ArrowRight") nextImage();
+        if (e.key === "ArrowLeft") prevImage();
       }
-      if (e.key === 'Escape') {
+      if (e.key === "Escape") {
         if (viewIndex !== null) setViewIndex(null);
         else onClose();
       }
     };
-    window.addEventListener('keydown', handleKey);
-    return () => window.removeEventListener('keydown', handleKey);
+    window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
   }, [viewIndex, nextImage, prevImage, onClose]);
 
   if (!project) return null; // ✅ Hooks are called before this return
@@ -41,14 +41,15 @@ export default function PortfolioModal({ project, onClose }) {
   return (
     <AnimatePresence>
       <motion.div
-        className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center px-2 sm:px-4 overflow-y-auto"
+        className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center px-2 sm:px-4"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         onClick={onClose}
       >
         <motion.div
-          className="bg-white rounded-xl w-full max-w-4xl relative p-4 sm:p-6 my-10 shadow-xl"
+          className="bg-white rounded-xl w-full max-w-4xl relative p-4 sm:p-6 shadow-xl 
+                     max-h-[80vh] overflow-y-auto"
           initial={{ scale: 0.95, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.95, opacity: 0 }}
@@ -57,14 +58,14 @@ export default function PortfolioModal({ project, onClose }) {
           {/* Close Button */}
           <button
             onClick={onClose}
-            className="absolute top-3 right-3 p-2 rounded-full bg-white/80 backdrop-blur-md shadow hover:bg-white text-gray-600 hover:text-black"
+            className="absolute top-2 right-2 z-20 p-2 rounded-full bg-white/80 text-black backdrop-blur-md shadow hover:bg-white hover:text-black"
           >
             <X size={20} />
           </button>
 
           {/* Featured Image */}
           {project.featuredImage && (
-            <div className="relative w-full h-48 sm:h-64 md:h-72 lg:h-80 mb-4 sm:mb-6 rounded-lg overflow-hidden">
+            <div className="relative w-full h-40 sm:h-56 md:h-64 lg:h-72 mb-4 sm:mb-6 rounded-lg overflow-hidden">
               <Image
                 src={project.featuredImage}
                 alt={project.title}
@@ -77,7 +78,7 @@ export default function PortfolioModal({ project, onClose }) {
           )}
 
           {/* Project Title */}
-          <h2 className="text-xl sm:text-2xl font-semibold mb-3">
+          <h2 className="text-lg sm:text-2xl font-semibold mb-3">
             {project.title}
           </h2>
 
@@ -88,7 +89,7 @@ export default function PortfolioModal({ project, onClose }) {
             </div>
           )}
 
-          {/* Project Snapshots with click-to-view */}
+          {/* Project Snapshots */}
           {snapshots.length > 0 && (
             <PortfolioSnapshots
               snapshots={snapshots}
@@ -99,7 +100,9 @@ export default function PortfolioModal({ project, onClose }) {
           {/* Tech Stack */}
           {project.techStack?.length > 0 && (
             <div className="mt-6">
-              <h3 className="text-lg font-semibold mb-2">Technology Stack</h3>
+              <h3 className="text-base sm:text-lg font-semibold mb-2">
+                Technology Stack
+              </h3>
               <ul className="flex flex-wrap gap-2">
                 {project.techStack.map((tech, idx) => (
                   <li

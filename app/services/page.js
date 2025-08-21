@@ -1,98 +1,109 @@
-import Script from 'next/script';
-import PageHero from '@/components/PageHero';
-import ServicesCTA from '@/components/Services/ServicesCTA';
-import ServicesGrid from '@/components/Services/ServicesGrid';
-import WhyChooseUs from '@/components/Services/WhyChooseUs';
+// app/services/page.js
+
+import Script from "next/script";
+import PageHero from "@/components/PageHero";
+import ServicesCTA from "@/components/Services/ServicesCTA";
+import ServicesGrid from "@/components/Services/ServicesGrid";
+import WhyChooseUs from "@/components/Services/WhyChooseUs";
+import PageViewTracker from "@/components/Analytics/PageViewTracker";
+
+const siteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL ||
+  (process.env.NODE_ENV === "production"
+    ? "https://omoolaex.com.ng"
+    : "http://localhost:3000");
 
 export const metadata = {
-  title: 'Our Services | OmoolaEx | Web Development Experts & Digital Agency in Lagos, Nigeria',
+  title:
+    "Our Services | OmoolaEx | Web Development, IT Consulting & Branding Experts in Lagos, Nigeria",
   description:
-    'Discover OmoolaEx, a forward-thinking digital agency based in Lagos, Nigeria. We specialize in web development, branding, and IT consulting services tailored to startups and SMEs.',
+    "OmoolaEx offers web development, branding, IT consulting, and digital solutions for startups and SMEs in Nigeria. Grow your business online with our expert services.",
   keywords: [
-    'Web Development',
-    'Software Development',
-    'Brand Design',
-    'IT Consulting',
-    'Networking',
-    'Cybersecurity',
-    'IT Training',
-    'Mobile App Development',
-    'IT Outsourcing',
+    "Web Development Lagos",
+    "IT Consulting Nigeria",
+    "Brand Design Lagos",
+    "Digital Agency Nigeria",
+    "Cybersecurity",
+    "Software Development",
+    "Mobile App Development",
+    "IT Outsourcing",
+    "IT Training",
   ],
-  alternates: {
-    canonical: 'https://omoolaex.com.ng/services',
-  },
+  alternates: { canonical: `${siteUrl}/services` },
   openGraph: {
-    title: 'Our Services | OmoolaEx',
+    title: "Our Services | OmoolaEx",
     description:
-      'Explore OmoolaEx services including web development, branding, IT consulting, and digital solutions. We help startups and SMEs grow online across Nigeria.',
-    url: 'https://omoolaex.com.ng/services',
-    siteName: 'OmoolaEx',
+      "Explore OmoolaEx services including web development, branding, IT consulting, and digital solutions to help startups and SMEs grow online.",
+    url: `${siteUrl}/services`,
+    siteName: "OmoolaEx",
+    type: "website",
     images: [
       {
-        url: 'https://omoolaex.com.ng/images/omoolaex.jpg',
+        url: `${siteUrl}/images/omoolaex.jpg`,
         width: 1200,
         height: 630,
-        alt: 'OmoolaEx Services Page Preview',
+        alt: "OmoolaEx Services Page",
       },
     ],
-    type: 'website',
   },
   twitter: {
-    card: 'summary_large_image',
-    title: 'OmoolaEx Services',
+    card: "summary_large_image",
+    title: "OmoolaEx Services",
     description:
-      'Discover how OmoolaEx empowers startups and SMEs through innovative web development, branding, and digital consulting services.',
-    images: ['https://omoolaex.com.ng/images/omoolaex.jpg'],
-    site: '@omoolaex',
+      "Empowering startups and SMEs through innovative web development, branding, and IT consulting services.",
+    images: [`${siteUrl}/images/omoolaex.jpg`],
+    site: "@omoolaex",
   },
 };
 
 const servicesSchema = {
   "@context": "https://schema.org",
   "@type": "WebPage",
-  "name": "Our Services | OmoolaEx",
-  "url": "https://omoolaex.com.ng/services",
-  "description":
-    "Explore our web development, branding, and IT consulting services tailored to your business goals. OmoolaEx helps startups and SMEs grow online.",
-  "publisher": {
+  name: "Our Services | OmoolaEx",
+  url: `${siteUrl}/services`,
+  description:
+    "OmoolaEx provides web development, branding, and IT consulting services tailored for startups and SMEs in Nigeria.",
+  publisher: {
     "@type": "Organization",
-    "name": "OmoolaEx",
-    "url": "https://omoolaex.com.ng",
-    "logo": {
+    name: "OmoolaEx",
+    url: siteUrl,
+    logo: {
       "@type": "ImageObject",
-      "url": "https://omoolaex.com.ng/images/omoolaex.jpg"
-    }
+      url: `${siteUrl}/images/omoolaex.jpg`,
+    },
   },
-  "mainEntity": [
+  mainEntity: [
     {
       "@type": "Service",
-      "name": "Web Design & Development",
-      "description": "Responsive websites built for performance, SEO, and user experience.",
-      "areaServed": "Nigeria",
-      "provider": { "@type": "Organization", "name": "OmoolaEx" }
+      name: "Web Design & Development",
+      description:
+        "Responsive websites built for performance, SEO, and user experience.",
+      areaServed: "Nigeria",
+      provider: { "@type": "Organization", name: "OmoolaEx" },
     },
     {
       "@type": "Service",
-      "name": "Brand Design & Strategy",
-      "description": "Unique brand identities created for startups and SMEs using modern design tools.",
-      "areaServed": "Nigeria",
-      "provider": { "@type": "Organization", "name": "OmoolaEx" }
+      name: "Brand Design & Strategy",
+      description:
+        "Unique brand identities created for startups and SMEs using modern design tools.",
+      areaServed: "Nigeria",
+      provider: { "@type": "Organization", name: "OmoolaEx" },
     },
     {
       "@type": "Service",
-      "name": "IT Consulting & Digital Solutions",
-      "description": "Custom IT services including cybersecurity, software development, and digital marketing.",
-      "areaServed": "Nigeria",
-      "provider": { "@type": "Organization", "name": "OmoolaEx" }
-    }
-  ]
+      name: "IT Consulting & Digital Solutions",
+      description:
+        "Custom IT services including cybersecurity, software development, and digital marketing.",
+      areaServed: "Nigeria",
+      provider: { "@type": "Organization", name: "OmoolaEx" },
+    },
+  ],
 };
 
 export default function Services() {
   return (
     <main className="overflow-x-hidden relative">
-      {/* Structured Data for SEO */}
+      {/* ✅ Structured Data */}
       <Script
         id="structured-data-services"
         type="application/ld+json"
@@ -108,34 +119,43 @@ export default function Services() {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "Organization",
-            "name": "OmoolaEx",
-            "url": "https://omoolaex.com.ng",
-            "logo": "https://omoolaex.com.ng/images/omoolaex.jpg",
-            "sameAs": [
+            name: "OmoolaEx",
+            url: siteUrl,
+            logo: `${siteUrl}/images/omoolaex.jpg`,
+            sameAs: [
               "https://www.facebook.com/OmoolaEx",
               "https://www.instagram.com/omoolaex_",
               "https://twitter.com/omoolaex",
               "https://www.youtube.com/@omoolaex",
               "https://www.tiktok.com/@omoolaex",
-              "https://www.linkedin.com/company/omoolaex-it-consulting-company"
+              "https://www.linkedin.com/company/omoolaex-it-consulting-company",
             ],
-            "contactPoint": {
+            contactPoint: {
               "@type": "ContactPoint",
-              "telephone": "+2347089217123",
-              "contactType": "Customer Support",
-              "areaServed": "NG",
-              "availableLanguage": ["English"]
-            }
+              telephone: "+2347089217123",
+              contactType: "Customer Support",
+              areaServed: "NG",
+              availableLanguage: ["English"],
+            },
           }),
         }}
       />
 
-      <div>
-        <PageHero />
-        <ServicesGrid />
-        <WhyChooseUs />
-        <ServicesCTA />
-      </div>
+      {/* ✅ Track Pageviews */}
+      <PageViewTracker
+        title="OmoolaEx Services | Web Development, IT Consulting & Branding"
+        path="/services"
+        location={`${siteUrl}/services`}
+      />
+
+      {/* Page Content */}
+      <PageHero
+        title="Our Services"
+        subtitle="Innovative web development, branding, and IT consulting services for startups and SMEs."
+      />
+      <ServicesGrid />
+      <WhyChooseUs />
+      <ServicesCTA />
     </main>
   );
 }

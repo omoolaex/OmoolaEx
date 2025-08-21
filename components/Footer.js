@@ -91,7 +91,7 @@ export default function Footer() {
             <li><Link href="#">Hosting</Link></li>
             <li><Link href="#">WebMail Management</Link></li>
             <li><Link href="#">Tools</Link></li>
-            <li><Link href="#">Library</Link></li>
+            <li><Link href="library">Library</Link></li>
             <li><Link href="/faqs">FAQs</Link></li>
             <li><Link href="/blog">Blog</Link></li>
           </ul>

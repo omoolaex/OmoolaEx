@@ -11,27 +11,31 @@ import WhatWeDo from "@/components/AboutUs/WhatWeDo";
 import OurTeam from "@/components/AboutUs/OurTeam";
 import Gallery from "@/components/AboutUs/gallery";
 import CTA from "@/components/AboutUs/cta";
+import PageViewTracker from '@/components/Analytics/PageViewTracker';
 
 export const metadata = {
-  title: 'About Us | OmoolaEx | Web Development Experts & Digital Agency in Lagos, Nigeria',
-  description: 'Discover OmoolaEx, a forward-thinking digital agency in Lagos offering web development, branding, and IT consulting services tailored to startups and SMEs.',
+  title: 'About Us | OmoolaEx | Web Development & IT Consulting Experts in Lagos, Nigeria',
+  description:
+    'Learn about OmoolaEx, a forward-thinking IT consulting and digital agency in Lagos. We specialize in web design, branding, cybersecurity, and digital strategy for startups and SMEs.',
   keywords: [
     'About OmoolaEx',
     'OmoolaEx Team',
     'Digital Agency Lagos',
     'Web Development Experts',
     'Brand Strategy Nigeria',
-    'Tech Company Lagos',
-    'IT Consulting Nigeria',
-    'UI UX Design Team',
+    'IT Consulting Lagos',
+    'UI UX Design Nigeria',
     'Startup Solutions Lagos',
+    'Cybersecurity Consulting',
+    'Business Growth Nigeria'
   ],
   alternates: {
     canonical: 'https://omoolaex.com.ng/about',
   },
   openGraph: {
-    title: 'About Us | OmoolaEx',
-    description: 'Get to know OmoolaEx – who we are, what we do, and how we help businesses succeed online. Meet our team and explore our process.',
+    title: 'About OmoolaEx | Web Development & IT Consulting Experts',
+    description:
+      'Meet OmoolaEx – a digital agency in Lagos, Nigeria helping startups and businesses with IT consulting, web development, branding, and digital solutions.',
     url: 'https://omoolaex.com.ng/about',
     siteName: 'OmoolaEx',
     images: [
@@ -46,8 +50,9 @@ export const metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'About OmoolaEx',
-    description: 'Learn about the people and process behind OmoolaEx – a digital agency for startups and SMEs.',
+    title: 'About OmoolaEx | Digital Agency in Lagos',
+    description:
+      'Discover the team and process behind OmoolaEx – your trusted partner in IT consulting, branding, and web development in Nigeria.',
     images: ['https://omoolaex.com.ng/images/omoolaex.jpg'],
     site: '@omoolaex',
   },
@@ -56,7 +61,7 @@ export const metadata = {
 export default function About() {
   return (
     <main className="overflow-x-hidden relative">
-      {/* 👇 STRUCTURED DATA FOR SEO */}
+      {/* ✅ STRUCTURED DATA FOR SEO */}
       <Script
         id="structured-data-about"
         type="application/ld+json"
@@ -66,7 +71,8 @@ export default function About() {
             "@context": "https://schema.org",
             "@type": "AboutPage",
             "name": "About OmoolaEx",
-            "description": "Learn about OmoolaEx, our mission, values, and the team behind our digital solutions.",
+            "description":
+              "Learn about OmoolaEx, our mission, values, team, and the innovative IT consulting and digital services we provide to businesses in Nigeria.",
             "url": "https://omoolaex.com.ng/about",
           }),
         }}
@@ -81,7 +87,7 @@ export default function About() {
             "@type": "Organization",
             "name": "OmoolaEx",
             "url": "https://omoolaex.com.ng",
-            "logo": "https://omoolaex.com.ng/images/omoolaex.jpg",
+            "logo": "https://omoolaex.com.ng/images/logo.svg",
             "sameAs": [
               "https://www.facebook.com/OmoolaEx",
               "https://www.instagram.com/omoolaex_",
@@ -96,12 +102,28 @@ export default function About() {
               "contactType": "Customer Support",
               "areaServed": "NG",
               "availableLanguage": ["English"]
+            },
+            "founder": {
+              "@type": "Person",
+              "name": "Owolabi Gbolahan"
+            },
+            "address": {
+              "@type": "PostalAddress",
+              "addressLocality": "Lagos",
+              "addressCountry": "NG"
             }
           }),
         }}
       />
 
-      {/* Page Sections */}
+      {/* ✅ Analytics pageview tracking */}
+      <PageViewTracker
+        title="About OmoolaEx - Digital Agency in Lagos"
+        path="/about"
+        location="https://omoolaex.com.ng/about"
+      />
+
+      {/* ✅ Page Sections */}
       <div className="flex flex-col overflow-x-hidden">
         <PageHero />
         <AboutHero />
