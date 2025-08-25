@@ -74,7 +74,7 @@ export default function Footer() {
         <div>
           <h4 className="font-semibold text-2xl text-black mb-4">Services</h4>
           <ul className="space-y-2 text-gray-700">
-            <li><Link href="#">Web Development</Link></li>
+            <li><Link href="/services/web-design">Web Development</Link></li>
             <li><Link href="#">Software Development</Link></li>
             <li><Link href="#">IT Consulting & Outsourcing</Link></li>
             <li><Link href="#">Brand Management</Link></li>
@@ -91,7 +91,7 @@ export default function Footer() {
             <li><Link href="#">Hosting</Link></li>
             <li><Link href="#">WebMail Management</Link></li>
             <li><Link href="#">Tools</Link></li>
-            <li><Link href="library">Library</Link></li>
+            <li><Link href="/library">Library</Link></li>
             <li><Link href="/faqs">FAQs</Link></li>
             <li><Link href="/blog">Blog</Link></li>
           </ul>

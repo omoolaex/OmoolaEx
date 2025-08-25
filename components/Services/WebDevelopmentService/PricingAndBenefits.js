@@ -13,7 +13,7 @@ export default function PricingAndBenefits() {
       price: "₦150,000",
       tagline: "Perfect for small businesses & personal brands",
       features: [
-        "3–5 custom responsive pages",
+        "5-7 custom responsive pages",
         "Basic SEO setup for visibility",
         "Mobile-first, fast-loading design",
         "Contact form & social media integration",
@@ -25,11 +25,11 @@ export default function PricingAndBenefits() {
       price: "₦300,000",
       tagline: "Ideal for growing businesses & startups",
       features: [
-        "Up to 10 pages with tailored UI/UX design",
+        "Up to 12 pages with tailored UI/UX design",
         "SEO-friendly structure + on-page optimization",
         "Blog / News section for content marketing",
         "Performance & security optimization",
-        "3-month priority support & updates",
+        "2-month priority support & updates",
       ],
       highlight: true,
     },
