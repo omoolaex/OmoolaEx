@@ -89,7 +89,7 @@ export default function Footer() {
           <h4 className="font-semibold text-2xl text-black mb-4">Resources</h4>
           <ul className="space-y-2 text-gray-700">
             <li><Link href="#">Hosting</Link></li>
-            <li><Link href="#">WebMail Management</Link></li>
+            <li><Link href="/webmail-management">WebMail Management</Link></li>
             <li><Link href="#">Tools</Link></li>
             <li><Link href="/library">Library</Link></li>
             <li><Link href="/faqs">FAQs</Link></li>

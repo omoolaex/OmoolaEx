@@ -14,60 +14,57 @@ export default function DiscountPopup() {
   // Set expiry date
   const expiryDate = new Date("2025-09-15T23:59:59");
 
-  useEffect(() => {
-    const lastDismissed = localStorage.getItem("discountPopupDismissedAt");
+useEffect(() => {
+  // check if dismissed in the last X hours (say 24h)
+  const dismissedAt = localStorage.getItem("discountPopupDismissedAt");
+  if (dismissedAt) {
+    const dismissedTime = new Date(dismissedAt).getTime();
+    const now = new Date().getTime();
 
-    if (lastDismissed) {
-      const lastTime = new Date(lastDismissed);
-      const now = new Date();
-
-      if (
-        lastTime.getDate() === now.getDate() &&
-        lastTime.getMonth() === now.getMonth() &&
-        lastTime.getFullYear() === now.getFullYear()
-      ) {
-        setHasShown(true);
-        return;
-      }
+    // e.g. prevent showing again for 24 hours
+    const oneDay = 24 * 60 * 60 * 1000;
+    if (now - dismissedTime < oneDay) {
+      return; // 🚫 don't show again yet
     }
+  }
 
-    const timer = setTimeout(() => {
-      if (!hasShown) {
-        setIsOpen(true);
-        setHasShown(true);
-        localStorage.setItem("discountPopupDismissedAt", new Date().toISOString());
-      }
-    }, 10000);
+  const timer = setTimeout(() => {
+    if (!hasShown) {
+      setIsOpen(true);
+      setHasShown(true);
+      localStorage.setItem("discountPopupDismissedAt", new Date().toISOString());
+    }
+  }, 10000);
 
-    const handleMouseLeave = (e) => {
-      if (e.clientY <= 0 && !hasShown) {
-        setIsOpen(true);
-        setHasShown(true);
-        localStorage.setItem("discountPopupDismissedAt", new Date().toISOString());
-      }
-    };
+  const handleMouseLeave = (e) => {
+    if (e.clientY <= 0 && !hasShown) {
+      setIsOpen(true);
+      setHasShown(true);
+      localStorage.setItem("discountPopupDismissedAt", new Date().toISOString());
+    }
+  };
 
-    const handleScroll = () => {
-      if (
-        window.scrollY >
-          document.documentElement.scrollHeight / 2 - window.innerHeight &&
-        !hasShown
-      ) {
-        setIsOpen(true);
-        setHasShown(true);
-        localStorage.setItem("discountPopupDismissedAt", new Date().toISOString());
-      }
-    };
+  const handleScroll = () => {
+    if (
+      window.scrollY >
+        document.documentElement.scrollHeight / 2 - window.innerHeight &&
+      !hasShown
+    ) {
+      setIsOpen(true);
+      setHasShown(true);
+      localStorage.setItem("discountPopupDismissedAt", new Date().toISOString());
+    }
+  };
 
-    document.addEventListener("mouseleave", handleMouseLeave);
-    window.addEventListener("scroll", handleScroll);
+  document.addEventListener("mouseleave", handleMouseLeave);
+  window.addEventListener("scroll", handleScroll);
 
-    return () => {
-      clearTimeout(timer);
-      document.removeEventListener("mouseleave", handleMouseLeave);
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, [hasShown]);
+  return () => {
+    clearTimeout(timer);
+    document.removeEventListener("mouseleave", handleMouseLeave);
+    window.removeEventListener("scroll", handleScroll);
+  };
+}, [hasShown]);
 
   // Countdown logic
   useEffect(() => {
