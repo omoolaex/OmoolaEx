@@ -34,7 +34,7 @@ export default function ServiceOverview() {
           </p>
           <div className="flex justify-center lg:justify-start">
             <a
-              href="#contact" // can be replaced with modal trigger
+              href="/request-a-quote" // can be replaced with modal trigger
               className="inline-block bg-blue-600 text-white font-semibold px-6 py-3 rounded-xl shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-300"
             >
               Get Started

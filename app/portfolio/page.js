@@ -1,79 +1,109 @@
-import Script from 'next/script';
-import PageHero from '@/components/PageHero';
-import PortfolioCTA from '@/components/Portfolio/PortfolioCTA';
-import PortfolioPageClient from '@/components/Portfolio/PortfolioPageClient';
-import PageViewTracker from '@/components/Analytics/PageViewTracker';
+import Script from "next/script";
+import PageHero from "@/components/PageHero";
+import PortfolioCTA from "@/components/Portfolio/PortfolioCTA";
+import PortfolioContainer from "@/components/Portfolio/PortfolioContainer";
+import PageViewTracker from "@/components/Analytics/PageViewTracker";
+import { client } from "@/sanity/client";
 
 const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL ||
-  (process.env.NODE_ENV === 'production'
-    ? 'https://omoolaex.com.ng'
-    : 'http://localhost:3000');
+  (process.env.NODE_ENV === "production"
+    ? "https://omoolaex.com.ng"
+    : "http://localhost:3000");
 
 export const metadata = {
-  title: 'Our Portfolio | OmoolaEx | Projects Showcase',
+  title: "Our Portfolio | OmoolaEx | Projects Showcase",
   description:
-    'Explore OmoolaEx portfolio showcasing web development, mobile apps, software solutions, branding, and IT projects for businesses across industries.',
+    "Explore OmoolaEx portfolio showcasing web development, mobile apps, software solutions, branding, and IT projects for businesses across industries.",
   keywords: [
-    'OmoolaEx portfolio',
-    'web development projects',
-    'software solutions',
-    'branding showcase',
-    'IT consulting projects',
+    "OmoolaEx portfolio",
+    "web development projects",
+    "software solutions",
+    "branding showcase",
+    "IT consulting projects",
   ],
   alternates: { canonical: `${siteUrl}/portfolio` },
   openGraph: {
-    title: 'Our Portfolio | OmoolaEx',
+    title: "Our Portfolio | OmoolaEx",
     description:
-      'Explore OmoolaEx portfolio showcasing web development, mobile apps, software solutions, branding, and IT projects.',
+      "Explore OmoolaEx portfolio showcasing web development, mobile apps, software solutions, branding, and IT projects.",
     url: `${siteUrl}/portfolio`,
-    siteName: 'OmoolaEx',
-    type: 'website',
+    siteName: "OmoolaEx",
+    type: "website",
     images: [
       {
         url: `${siteUrl}/images/omoolaex.jpg`,
         width: 1200,
         height: 630,
-        alt: 'OmoolaEx Portfolio',
+        alt: "OmoolaEx Portfolio",
       },
     ],
   },
   twitter: {
-    card: 'summary_large_image',
-    title: 'Our Portfolio | OmoolaEx',
+    card: "summary_large_image",
+    title: "Our Portfolio | OmoolaEx",
     description:
-      'Check out OmoolaEx portfolio showcasing web development, branding, IT consulting, and software solutions.',
+      "Check out OmoolaEx portfolio showcasing web development, branding, IT consulting, and software solutions.",
     images: [`${siteUrl}/images/omoolaex.jpg`],
-    site: '@omoolaex',
+    site: "@omoolaex",
   },
 };
 
 const structuredData = {
-  '@context': 'https://schema.org',
-  '@type': 'CollectionPage',
-  name: 'OmoolaEx Portfolio',
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  name: "OmoolaEx Portfolio",
   description:
-    'Explore OmoolaEx portfolio showcasing web development, mobile apps, software solutions, branding, and IT projects for businesses across industries.',
+    "Explore OmoolaEx portfolio showcasing web development, mobile apps, software solutions, branding, and IT projects for businesses across industries.",
   url: `${siteUrl}/portfolio`,
   publisher: {
-    '@type': 'Organization',
-    name: 'OmoolaEx',
+    "@type": "Organization",
+    name: "OmoolaEx",
     url: siteUrl,
     logo: {
-      '@type': 'ImageObject',
+      "@type": "ImageObject",
       url: `${siteUrl}/images/logo.png`,
     },
   },
   breadcrumb: {
-    '@type': 'BreadcrumbList',
+    "@type": "BreadcrumbList",
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Home', item: siteUrl },
-      { '@type': 'ListItem', position: 2, name: 'Portfolio', item: `${siteUrl}/portfolio` },
+      { "@type": "ListItem", position: 1, name: "Home", item: siteUrl },
+      { "@type": "ListItem", position: 2, name: "Portfolio", item: `${siteUrl}/portfolio` },
     ],
   },
 };
 
-export default function PortfolioPage() {
+// ✅ server-side fetch
+async function getPortfolioData() {
+  const projects = await client.fetch(`*[_type == "portfolio"] | order(_createdAt desc){
+    _id,
+    title,
+    "slug": slug.current,
+    "featuredImage": featuredImage.asset->url,
+    projectOverview,
+    category->{ _id, title, "slug": slug.current },
+    projectSnapshots[]{ asset->{url} },
+    keyFeatures,
+    challenges,
+    ourSolution,
+    impactResults,
+    techStack,
+    liveWebsite
+  }`);
+
+  const categories = await client.fetch(`*[_type == "portfolioCategory"] | order(title asc){
+    _id,
+    title,
+    "slug": slug.current
+  }`);
+
+  return { projects, categories };
+}
+
+export default async function PortfolioPage() {
+  const { projects, categories } = await getPortfolioData();
+
   return (
     <main className="overflow-x-hidden relative">
       {/* ✅ Structured Data */}
@@ -91,12 +121,14 @@ export default function PortfolioPage() {
         location={`${siteUrl}/portfolio`}
       />
 
-      {/* Page Content */}
       <PageHero
         title="Our Portfolio"
         subtitle="Showcasing our successful projects across web, software, and IT solutions"
       />
-      <PortfolioPageClient /> {/* Client-only dynamic portfolio logic */}
+
+      {/* ✅ Pass fetched data down */}
+      <PortfolioContainer projects={projects} categories={categories} />
+
       <PortfolioCTA />
     </main>
   );
