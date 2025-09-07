@@ -91,7 +91,7 @@ export default function WhyWebDesignMatters() {
             Ready to build a stunning website that drives results?
           </h3>
           <a
-            href="#contact" // 🔗 replace with modal if needed
+            href="/request-a-quote" // 🔗 replace with modal if needed
             className="inline-block bg-white text-blue-600 font-semibold px-6 py-3 rounded-xl shadow-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-300"
           >
             Get Started

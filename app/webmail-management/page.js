@@ -87,7 +87,7 @@ function PrimaryButton({ href = "#consult", children, ariaLabel }) {
     <Link
       href={href}
       aria-label={ariaLabel ?? "Request a free consultation"}
-      className="inline-flex items-center justify-center rounded-2xl border border-transparent px-4 py-2 text-sm font-medium shadow-sm transition hover:opacity-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 bg-black text-white focus-visible:ring-black"
+      className="inline-flex items-center justify-center rounded-2xl border border-transparent px-4 py-2 text-sm font-medium shadow-sm transition hover:opacity-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 bg-blue-600 text-white focus-visible:ring-black"
     >
       {children}
     </Link>
