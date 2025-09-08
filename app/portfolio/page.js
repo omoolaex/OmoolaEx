@@ -90,13 +90,19 @@ async function getPortfolioData() {
     impactResults,
     techStack,
     liveWebsite
-  }`);
+  }`,
+    {},
+    { next: { revalidate: 60 } } // 👈 always fresh, disables cache
+  );
 
   const categories = await client.fetch(`*[_type == "portfolioCategory"] | order(title asc){
     _id,
     title,
     "slug": slug.current
-  }`);
+  }`,
+    {},
+    { next: { revalidate: 60 } }
+);
 
   return { projects, categories };
 }
