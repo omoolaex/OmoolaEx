@@ -5,25 +5,25 @@ import { Briefcase, HeartHandshake, Rocket, Users } from 'lucide-react'
 
 const reasons = [
   {
-    icon: <Rocket className="w-8 h-8 text-orange-500" />,
+    icon: <Rocket className="w-8 h-8 text-blue-500" />,
     title: 'Grow Fast',
     description:
       'We invest in your growth through mentorship, trainings, and real challenges that accelerate your career.',
   },
   {
-    icon: <Users className="w-8 h-8 text-orange-500" />,
+    icon: <Users className="w-8 h-8 text-blue-500" />,
     title: 'Collaborative Team',
     description:
       'Work alongside brilliant minds in a culture where everyone’s voice is valued and heard.',
   },
   {
-    icon: <Briefcase className="w-8 h-8 text-orange-500" />,
+    icon: <Briefcase className="w-8 h-8 text-blue-500" />,
     title: 'Real Impact',
     description:
       'Be part of meaningful projects that empower businesses and communities with technology.',
   },
   {
-    icon: <HeartHandshake className="w-8 h-8 text-orange-500" />,
+    icon: <HeartHandshake className="w-8 h-8 text-blue-500" />,
     title: 'People-First Culture',
     description:
       'We respect your work-life balance, wellness, and aspirations — and support you every step of the way.',
@@ -38,12 +38,12 @@ export default function WhyWorkOmoolaEx() {
     >
       {/* Floating Background Glow */}
       <motion.div
-        className="absolute -top-20 -left-10 w-60 h-60 bg-orange-100 rounded-full opacity-30 blur-3xl"
+        className="absolute -top-20 -left-10 w-60 h-60 bg-blue-100 rounded-full opacity-30 blur-3xl"
         animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
         transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
       />
       <motion.div
-        className="absolute bottom-0 right-0 w-80 h-80 bg-orange-100 rounded-full opacity-20 blur-2xl"
+        className="absolute bottom-0 right-0 w-80 h-80 bg-blue-100 rounded-full opacity-20 blur-2xl"
         animate={{ scale: [1.1, 1.3, 1.1], opacity: [0.2, 0.4, 0.2] }}
         transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut' }}
       />
@@ -86,7 +86,7 @@ export default function WhyWorkOmoolaEx() {
               >
                 {item.icon}
               </motion.div>
-              <h3 className="text-lg sm:text-xl font-semibold text-gray-800 mb-2 group-hover:text-orange-600 transition-colors">
+              <h3 className="text-lg sm:text-xl font-semibold text-gray-800 mb-2 group-hover:text-blue-600 transition-colors">
                 {item.title}
               </h3>
               <p className="text-sm sm:text-base text-gray-600">{item.description}</p>

@@ -19,8 +19,8 @@ const contactItems = [
   {
     icon: <FaMapMarkerAlt size={24} />,
     title: 'Address',
-    value: '26D, Olowu Street, Ikeja, Lagos, Nigeria',
-    link: 'https://goo.gl/maps/example',
+    value: 'Regent Palace, 8 R.T.S. Apena Cl, Oriyomi St, off Olowu Street, Opebi, Ikeja 100271, Lagos',
+    link: 'https://maps.app.goo.gl/kjsptGnVo9yPVMSSA',
   },
 ]
 
