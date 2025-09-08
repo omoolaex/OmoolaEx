@@ -92,7 +92,7 @@ async function getPortfolioData() {
     liveWebsite
   }`,
     {},
-    { next: { revalidate: 60 } } // 👈 always fresh, disables cache
+    { next: { revalidate: 60 } }
   );
 
   const categories = await client.fetch(`*[_type == "portfolioCategory"] | order(title asc){

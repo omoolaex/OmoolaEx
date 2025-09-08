@@ -4,8 +4,8 @@ import Image from 'next/image'
 import { motion } from 'framer-motion'
 
 const technologies = [
-  { name: 'CSS3', image: '/images/technologies/next.png' },
-  { name: 'JavaScript', image: '/images/technologies/node.png' },
+  { name: 'Next.js', image: '/images/technologies/next.png' },
+  { name: 'Node.js', image: '/images/technologies/node.png' },
   { name: 'React', image: '/images/technologies/React.png' },
   { name: 'Angular', image: '/images/technologies/angular.png' },
   { name: 'WordPress', image: '/images/technologies/wordpress.png' },
