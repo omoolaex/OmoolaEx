@@ -52,17 +52,17 @@ export default function Hero() {
               className="group inline-flex items-center justify-center px-6 sm:px-8 py-3 rounded-full text-white font-semibold backdrop-blur-lg bg-gradient-to-r from-blue-500/70 to-blue-700/70 border border-white/30 shadow-[0_8px_32px_rgba(31,38,135,0.37)] hover:shadow-[0_12px_40px_rgba(31,38,135,0.45)] hover:scale-105 transition-all duration-300 text-sm sm:text-base whitespace-nowrap"
             >
               Get a Free Quote
-              <span className="ml-2 transform transition-transform duration-300 group-hover:translate-x-1">
-                →
-              </span>
             </Link>
 
             {/* Secondary Button */}
             <Link
               href="/bookings"
-              className="group inline-flex items-center justify-center px-6 sm:px-8 py-3 rounded-full font-semibold text-blue-700 bg-white/50 backdrop-blur-md border border-blue-400/40 hover:bg-blue-50 hover:scale-105 transition-all duration-300 text-sm sm:text-base whitespace-nowrap"
+              className="group inline-flex items-center justify-center px-6 sm:px-8 py-3 font-semibold text-blue-700 bg-white/50 backdrop-blur-md hover:bg-blue-50 hover:scale-105 transition-all duration-300 text-sm sm:text-base whitespace-nowrap"
             >
               Book a Free Consultation
+              <span className="ml-2 transform transition-transform duration-300 group-hover:translate-x-1">
+                →
+              </span>
             </Link>
           </div>
         </motion.div>
