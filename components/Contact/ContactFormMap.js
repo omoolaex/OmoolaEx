@@ -81,7 +81,7 @@ export default function ContactMapForm() {
           {/* === MAP === */}
           <div className="relative z-10 h-[400px] sm:h-[500px] md:h-[550px] lg:h-[700px] w-full lg:flex-[1.5] rounded-[1rem] overflow-hidden">
             <iframe
-              src="https://www.google.com/maps/embed?pb=!1m23!1m12!1m3!1d63414.382875904455!2d3.302495291416431!3d6.597241874618649!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m8!3e6!4m0!4m5!1s0x103b922679c1e587%3A0xcf6fc79939b93046!2s26D%20Olowu%20St%2C%20Allen%2C%20Ikeja%20101233%2C%20Lagos!3m2!1d6.597147!2d3.3436421!5e0!3m2!1sen!2sng!4v1753379284848!5m2!1sen!2sng"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3963.406698754516!2d3.3408954739752383!3d6.596270722315501!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x103b922679c1e587%3A0xcf6fc79939b93046!2sOmoolaEX%20-%20Web%20Development%20%26%20IT%20Consulting%20Agency%20in%20Lagos%2C%20Nigeria!5e0!3m2!1sen!2sng!4v1757345367274!5m2!1sen!2sng"
               className="absolute top-0 left-0 w-full h-full object-cover"
               allowFullScreen=""
               loading="lazy"
@@ -98,7 +98,7 @@ export default function ContactMapForm() {
             className="bg-white rounded-tl-[3rem] shadow-md p-6 sm:p-8 w-full lg:max-w-[500px] lg:-ml-32 z-20"
           >
             <h3 className="text-2xl font-semibold text-gray-800 mb-6 text-center lg:text-left">
-              Connect With Your Next Great Hire Today!
+              Connect With Us On Your Next Project Today!
             </h3>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
@@ -139,7 +139,7 @@ export default function ContactMapForm() {
 
             <button
               type="submit" disabled={loading}
-              className="bg-gradient-to-r from-yellow-400 to-orange-500 hover:to-orange-600 transition text-white font-bold py-3 px-6 rounded-lg w-full"
+              className="bg-gradient-to-r from-blue-400 to-blue-500 hover:to-blue-600 transition text-white font-bold py-3 px-6 rounded-lg w-full"
             >
               {loading ? 'Sending...' : 'GET CONSULTATION →'}
             </button>

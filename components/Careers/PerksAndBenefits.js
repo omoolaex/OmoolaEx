@@ -71,7 +71,7 @@ export default function PerksAndBenefits() {
               transition={{ delay: index * 0.1 }}
               tabIndex={0}
             >
-              <div className="flex items-center justify-center w-12 h-12 bg-orange-100 text-orange-600 rounded-full mb-4 mx-auto">
+              <div className="flex items-center justify-center w-12 h-12 bg-blue-100 text-blue-600 rounded-full mb-4 mx-auto">
                 <perk.icon className="w-6 h-6" />
               </div>
               <h3 className="text-lg font-semibold text-gray-800">{perk.title}</h3>

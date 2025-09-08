@@ -46,7 +46,7 @@ export default function CareersHero() {
         >
           <Link
             href="#careers"
-            className="inline-block bg-gradient-to-r from-yellow-400 to-orange-500 hover:to-orange-600 text-white text-base sm:text-lg font-semibold px-6 sm:px-8 py-3 sm:py-4 rounded-lg shadow-md transition"
+            className="inline-block bg-gradient-to-r from-blue-400 to-blue-500 hover:to-blue-600 text-white text-base sm:text-lg font-semibold px-6 sm:px-8 py-3 sm:py-4 rounded-lg shadow-md transition"
           >
             View Open Positions
           </Link>

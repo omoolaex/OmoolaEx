@@ -40,7 +40,8 @@ export default function Footer() {
               <MapPin size={16} />
               <span>
                 <strong>OmoolaEx IT Consulting.</strong> <br />
-                26D, Olowu Street, Ikeja<br />
+                Rgnt Palace, 8 R.T.S. Apena Cl, Oriyomi St,<br />
+                Off Olowu Street, Opebi, Ikeja 100271,<br />
                 Lagos, Nigeria.
               </span>
             </div>
@@ -77,7 +78,7 @@ export default function Footer() {
             <li><Link href="/services/web-design">Web Development</Link></li>
             <li><Link href="#">Software Development</Link></li>
             <li><Link href="#">IT Consulting & Outsourcing</Link></li>
-            <li><Link href="#">Brand Management</Link></li>
+            <li><Link href="/services/branding">Brand Management</Link></li>
             <li><Link href="#">Digital Marketing</Link></li>
             <li><Link href="#">Cybersecurity & Networking</Link></li>
             <li><Link href="#">Training & Mentorships</Link></li>

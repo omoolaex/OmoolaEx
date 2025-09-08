@@ -227,7 +227,7 @@ export default function CareersForm() {
           <button
             type="submit"
             disabled={loading}
-            className="mt-6 bg-gradient-to-r from-yellow-400 to-orange-500 hover:to-orange-600 text-white font-bold py-3 px-6 rounded-lg w-full transition"
+            className="mt-6 bg-gradient-to-r from-blue-400 to-blue-500 hover:to-blue-600 text-white font-bold py-3 px-6 rounded-lg w-full transition"
           >
             {loading ? 'Submitting...' : 'Submit Application →'}
           </button>
