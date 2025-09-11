@@ -20,7 +20,7 @@ const contactItems = [
     icon: <FaMapMarkerAlt size={24} />,
     title: 'Address',
     value: 'Regent Palace, 8 R.T.S. Apena Cl, Oriyomi St, off Olowu Street, Opebi, Ikeja 100271, Lagos',
-    link: 'https://maps.app.goo.gl/kjsptGnVo9yPVMSSA',
+    link: 'https://maps.app.goo.gl/yRGZ5sgvVJsn8ozw6',
   },
 ]
 
