@@ -32,13 +32,13 @@ export const metadata = {
     "OmoolaEx Web Design",
   ],
   alternates: {
-    canonical: `${siteUrl}/services/web-development`,
+    canonical: `${siteUrl}/services/web-design`,
   },
   openGraph: {
     title: "Web Design & Development Services | OmoolaEx",
     description:
       "Get responsive, SEO-friendly, and conversion-focused web development services from OmoolaEx in Lagos, Nigeria.",
-    url: `${siteUrl}/services/web-development`,
+    url: `${siteUrl}/services/web-design`,
     siteName: "OmoolaEx",
     images: [
       {
@@ -83,7 +83,7 @@ const structuredData = {
   },
   areaServed: "Nigeria",
   serviceType: "Web Design & Development",
-  url: `${siteUrl}/services/web-development`,
+  url: `${siteUrl}/services/web-design`,
 
   // ⭐ Aggregate Rating
   aggregateRating: {
@@ -160,7 +160,7 @@ export default function WebDevelopmentPage() {
     <main className="overflow-x-hidden relative">
       {/* ✅ Structured Data for Service */}
       <Script
-        id="structured-data-web-development"
+        id="structured-data-web-design"
         type="application/ld+json"
         strategy="afterInteractive"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
@@ -177,8 +177,8 @@ export default function WebDevelopmentPage() {
       {/* ✅ Track Pageviews */}
       <PageViewTracker
         title="Web Design & Development Services | OmoolaEx"
-        path="/services/web-development"
-        location={`${siteUrl}/services/web-development`}
+        path="/services/web-design"
+        location={`${siteUrl}/services/web-design`}
       />
 
       {/* Hero Section */}

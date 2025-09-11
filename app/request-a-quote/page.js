@@ -1,4 +1,4 @@
-// app/request-quote/page.js
+// app/request-a-quote/page.js
 
 import Script from "next/script";
 import PageHero from "@/components/PageHero";
@@ -24,12 +24,12 @@ export const metadata = {
     "Digital agency quote Nigeria",
     "Website design quote",
   ],
-  alternates: { canonical: `${siteUrl}/request-quote` },
+  alternates: { canonical: `${siteUrl}/request-a-quote` },
   openGraph: {
     title: "Request a Free Quote | OmoolaEx",
     description:
       "Get a personalized project quote for web development, IT consulting, or branding with OmoolaEx.",
-    url: `${siteUrl}/request-quote`,
+    url: `${siteUrl}/request-a-quote`,
     siteName: "OmoolaEx",
     type: "website",
     images: [
@@ -55,7 +55,7 @@ const structuredData = {
   "@context": "https://schema.org",
   "@type": "WebPage",
   name: "Request a Free Quote | OmoolaEx",
-  url: `${siteUrl}/request-quote`,
+  url: `${siteUrl}/request-a-quote`,
   description:
     "Submit your project requirements to OmoolaEx and receive a tailored quote for web development, IT consulting, or branding services.",
   mainEntity: {
@@ -85,7 +85,7 @@ export default function RequestQuote() {
     <main className="overflow-x-hidden relative">
       {/* Structured Data */}
       <Script
-        id="structured-data-request-quote"
+        id="structured-data-request-a-quote"
         type="application/ld+json"
         strategy="afterInteractive"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
@@ -94,8 +94,8 @@ export default function RequestQuote() {
       {/* Track Pageviews */}
       <PageViewTracker
         title="Request a Free Quote | OmoolaEx"
-        path="/request-quote"
-        location={`${siteUrl}/request-quote`}
+        path="/request-a-quote"
+        location={`${siteUrl}/request-a-quote`}
       />
 
       {/* Page Content */}
