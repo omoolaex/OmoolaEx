@@ -141,6 +141,8 @@ export default function RootLayout({ children }) {
           strategy="afterInteractive"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
         />
+
+        <script src="https://analytics.ahrefs.com/analytics.js" data-key="CoV3WdOBMx/5LHIhEDzKnw" async></script>
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}>
         {/* ✅ GTM NoScript immediately after body */}
