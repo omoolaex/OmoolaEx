@@ -21,12 +21,12 @@ export const metadata = {
     "brand identity",
     "brand strategy",
   ],
-  alternates: { canonical: `${siteUrl}/brand-management` },
+  alternates: { canonical: `${siteUrl}/services/branding` },
   openGraph: {
     title: "Brand Management Services | OmoolaEx",
     description:
       "Shape your brand to resonate, scale, and last. OmoolaEx offers brand strategy, identity, messaging, and rollout services.",
-    url: `${siteUrl}/brand-management`,
+    url: `${siteUrl}/services/branding`,
     siteName: "OmoolaEx",
     type: "website",
     images: [
@@ -65,7 +65,7 @@ const structuredData = {
     "OmoolaEx helps businesses and individuals shape brand perception with strategy, identity, messaging, and rollout services.",
   serviceType: "Brand Management",
   areaServed: { "@type": "Place", name: "Nigeria" },
-  url: `${siteUrl}/brand-management`,
+  url: `${siteUrl}/services/branding`,
 };
 
 export default function BrandManagementPage() {
@@ -82,8 +82,8 @@ export default function BrandManagementPage() {
       {/* ✅ Pageview Tracker */}
       <PageViewTracker
         title="Brand Management Services | OmoolaEx"
-        path="/brand-management"
-        location={`${siteUrl}/brand-management`}
+        path="/services/branding"
+        location={`${siteUrl}/services/branding`}
       />
 
       {/* 🚀 Hero Section */}

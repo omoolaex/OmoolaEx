@@ -21,12 +21,12 @@ export const metadata = {
     "IT consulting privacy",
     "digital agency privacy",
   ],
-  alternates: { canonical: `${siteUrl}/privacy` },
+  alternates: { canonical: `${siteUrl}/privacy-policy` },
   openGraph: {
     title: "Privacy Policy | OmoolaEx",
     description:
       "Understand how OmoolaEx collects, uses, and protects your personal data and ensures your privacy.",
-    url: `${siteUrl}/privacy`,
+    url: `${siteUrl}/privacy-policy`,
     siteName: "OmoolaEx",
     type: "website",
     images: [
@@ -52,7 +52,7 @@ const structuredData = {
   "@context": "https://schema.org",
   "@type": "WebPage",
   name: "Privacy Policy | OmoolaEx",
-  url: `${siteUrl}/privacy`,
+  url: `${siteUrl}/privacy-policy`,
   description:
     "Learn how OmoolaEx collects, uses, and safeguards your personal information. Our commitment to privacy and data protection.",
   publisher: {
@@ -71,7 +71,7 @@ export default function PrivacyPage() {
     <main className="overflow-x-hidden relative">
       {/* ✅ Structured Data */}
       <Script
-        id="structured-data-privacy"
+        id="structured-data-privacy-policy"
         type="application/ld+json"
         strategy="afterInteractive"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
@@ -80,8 +80,8 @@ export default function PrivacyPage() {
       {/* ✅ Track Pageviews */}
       <PageViewTracker
         title="Privacy Policy | OmoolaEx"
-        path="/privacy"
-        location={`${siteUrl}/privacy`}
+        path="/privacy-policy"
+        location={`${siteUrl}/privacy-policy`}
       />
 
       {/* Page Content */}
