@@ -1,7 +1,10 @@
 import LibraryPageClient from "./LibraryPageClient";
 import { client } from "@/sanity/client";
 
-// ✅ Use generateMetadata for flexibility
+// ✅ ISR: Regenerate the page every hour (3600 seconds)
+export const revalidate = 3600;
+
+// ✅ Metadata for SEO, social sharing, and canonical
 export async function generateMetadata() {
   const siteUrl =
     process.env.NEXT_PUBLIC_SITE_URL ||
@@ -10,8 +13,7 @@ export async function generateMetadata() {
       : "http://localhost:3000");
 
   return {
-    title:
-      "Library | Free Resources, Guides & IT Insights | OmoolaEx Nigeria",
+    title: "Library | Free Resources, Guides & IT Insights | OmoolaEx Nigeria",
     description:
       "Access OmoolaEx’s free library of resources including eBooks, guides, templates, and IT insights to help startups and SMEs grow in Nigeria.",
     keywords: [
@@ -25,9 +27,7 @@ export async function generateMetadata() {
       "Cybersecurity Insights",
       "Digital Strategy Nigeria",
     ],
-    alternates: {
-      canonical: `${siteUrl}/library`,
-    },
+    alternates: { canonical: `${siteUrl}/library` },
     openGraph: {
       title: "OmoolaEx Library | Free IT & Business Resources",
       description:
@@ -55,6 +55,7 @@ export async function generateMetadata() {
   };
 }
 
+// ✅ Server component fetching resources from Sanity
 export default async function LibraryPageServer() {
   let resources = [];
 
@@ -66,10 +67,16 @@ export default async function LibraryPageServer() {
         description,
         category,
         type,
-        "fileUrl": file.asset->url,
+        "file": file.asset->,
         slug
       }
     `);
+
+    // Ensure every resource has a fileUrl for download/preview
+    resources = resources.map((res) => ({
+      ...res,
+      fileUrl: res.file?.url || res.fileUrl || null,
+    }));
 
     console.log("Fetched resources:", resources);
   } catch (err) {

@@ -1,182 +1,124 @@
-"use client";
+"use client"
 
-import { useState, useEffect } from "react";
-import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
-import { useRouter } from "next/navigation";
+import { useEffect, useState, useRef } from "react"
+import Image from "next/image"
+import Link from "next/link"
 
-export default function DiscountPopup() {
-  const [isOpen, setIsOpen] = useState(false);
-  const [hasShown, setHasShown] = useState(false);
-  const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
-  const router = useRouter();
+export default function ConsultationPopup() {
+  const [show, setShow] = useState(false)
+  const [animate, setAnimate] = useState(false) // for fade-in
+  const modalRef = useRef(null)
 
-  // Set expiry date
-  const expiryDate = new Date("2025-09-15T23:59:59");
+  useEffect(() => {
+    // Check dismissal in localStorage
+    const dismissed = localStorage.getItem("consultationPopupDismissed")
+    if (dismissed) {
+      const expiry = new Date(JSON.parse(dismissed))
+      if (expiry > new Date()) return // still valid
+    }
 
-useEffect(() => {
-  // check if dismissed in the last X hours (say 24h)
-  const dismissedAt = localStorage.getItem("discountPopupDismissedAt");
-  if (dismissedAt) {
-    const dismissedTime = new Date(dismissedAt).getTime();
-    const now = new Date().getTime();
+    // Timer trigger (5–10s random)
+    const timer = setTimeout(() => setShow(true), 5000 + Math.random() * 5000)
 
-    // e.g. prevent showing again for 24 hours
-    const oneDay = 24 * 60 * 60 * 1000;
-    if (now - dismissedTime < oneDay) {
-      return; // 🚫 don't show again yet
+    // Scroll trigger
+    const onScroll = () => {
+      const scrolled =
+        (window.scrollY + window.innerHeight) / document.body.scrollHeight
+      if (scrolled >= 0.4) {
+        setShow(true)
+        window.removeEventListener("scroll", onScroll)
+      }
+    }
+    window.addEventListener("scroll", onScroll)
+
+    return () => {
+      clearTimeout(timer)
+      window.removeEventListener("scroll", onScroll)
+    }
+  }, [])
+
+  // Trigger animation after mount
+  useEffect(() => {
+    if (show) {
+      const frame = requestAnimationFrame(() => setAnimate(true))
+      return () => cancelAnimationFrame(frame)
+    } else {
+      setAnimate(false)
+    }
+  }, [show])
+
+  const dismiss = () => {
+    setAnimate(false)
+    setTimeout(() => {
+      setShow(false)
+      const expiry = new Date()
+      expiry.setDate(expiry.getDate() + 7) // 7 days ahead
+      localStorage.setItem("consultationPopupDismissed", JSON.stringify(expiry))
+    }, 200) // wait for fade-out
+  }
+
+  const handleBackdropClick = (e) => {
+    if (modalRef.current && !modalRef.current.contains(e.target)) {
+      dismiss()
     }
   }
 
-  const timer = setTimeout(() => {
-    if (!hasShown) {
-      setIsOpen(true);
-      setHasShown(true);
-      localStorage.setItem("discountPopupDismissedAt", new Date().toISOString());
-    }
-  }, 10000);
-
-  const handleMouseLeave = (e) => {
-    if (e.clientY <= 0 && !hasShown) {
-      setIsOpen(true);
-      setHasShown(true);
-      localStorage.setItem("discountPopupDismissedAt", new Date().toISOString());
-    }
-  };
-
-  const handleScroll = () => {
-    if (
-      window.scrollY >
-        document.documentElement.scrollHeight / 2 - window.innerHeight &&
-      !hasShown
-    ) {
-      setIsOpen(true);
-      setHasShown(true);
-      localStorage.setItem("discountPopupDismissedAt", new Date().toISOString());
-    }
-  };
-
-  document.addEventListener("mouseleave", handleMouseLeave);
-  window.addEventListener("scroll", handleScroll);
-
-  return () => {
-    clearTimeout(timer);
-    document.removeEventListener("mouseleave", handleMouseLeave);
-    window.removeEventListener("scroll", handleScroll);
-  };
-}, [hasShown]);
-
-  // Countdown logic
-  useEffect(() => {
-    const updateCountdown = () => {
-      const now = new Date();
-      const difference = expiryDate.getTime() - now.getTime();
-
-      if (difference <= 0) {
-        setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
-        return;
-      }
-
-      const days = Math.floor(difference / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((difference / (1000 * 60 * 60)) % 24);
-      const minutes = Math.floor((difference / (1000 * 60)) % 60);
-      const seconds = Math.floor((difference / 1000) % 60);
-
-      setTimeLeft({ days, hours, minutes, seconds });
-    };
-
-    updateCountdown();
-    const countdownInterval = setInterval(updateCountdown, 1000);
-
-    return () => clearInterval(countdownInterval);
-  }, []);
-
-  const handleClose = () => {
-    setIsOpen(false);
-    localStorage.setItem("discountPopupDismissedAt", new Date().toISOString());
-  };
-
-  const handleClaim = () => {
-    handleClose();
-    router.push("/request-a-quote?discount=20OFF");
-  };
+  if (!show) return null
 
   return (
-    <AnimatePresence>
-      {isOpen && (
-        <motion.div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
+    <div
+      className={`fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm px-4 transition-opacity duration-300 ${
+        animate ? "opacity-100" : "opacity-0"
+      }`}
+      onClick={handleBackdropClick}
+    >
+      <div
+        ref={modalRef}
+        className={`relative w-full max-w-md transform rounded-2xl bg-white shadow-lg transition-all duration-300 ${
+          animate ? "scale-100 opacity-100" : "scale-95 opacity-0"
+        }`}
+      >
+        {/* Close button */}
+        <button
+          onClick={dismiss}
+          className="absolute right-4 top-4 text-white hover:text-gray-700"
         >
-          <motion.div
-            className="bg-white rounded-2xl shadow-2xl max-w-3xl w-full mx-4 overflow-hidden flex flex-col md:flex-row relative"
-            initial={{ scale: 0.8, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0.8, opacity: 0 }}
-            transition={{ duration: 0.3 }}
+          ✕
+        </button>
+
+        {/* Image banner */}
+        <div className="overflow-hidden rounded-t-2xl">
+          <Image
+            src="/images/popups/popup-collaboration.png"
+            alt="Collaboration"
+            width={600}
+            height={200}
+            className="h-48 w-full object-cover"
+          />
+        </div>
+
+        {/* Content */}
+        <div className="p-6 text-left">
+          <h2 className="mb-2 text-lg font-bold text-blue-700 sm:text-3xl">
+            Strong digital foundations, without boundaries
+          </h2>
+          <p className="mb-4 text-sm text-gray-700 sm:text-base">
+            Start your OmoolaEx journey today with a free consultation.
+          </p>
+
+          <Link
+            href="/bookings"
+            onClick={dismiss}
+            className="block w-full rounded-lg text-center bg-blue-600 px-4 py-2 font-semibold text-white hover:bg-blue-800"
           >
-            {/* Left Side Image */}
-            <div className="w-full md:w-1/2 flex items-center justify-center bg-gray-100">
-              <Image
-                src="/images/discount-offer.png"
-                alt="Discount Offer"
-                width={600}
-                height={600}
-                className="object-contain"
-                priority
-              />
-            </div>
+            Book a Free Consult
+          </Link>
 
-            {/* Right Side Content */}
-            <div className="p-6 md:p-8 flex flex-col justify-center text-center md:text-left relative">
-              <button
-                onClick={handleClose}
-                className="absolute top-4 right-4 text-gray-500 hover:text-gray-800"
-              >
-                ✕
-              </button>
-
-              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
-                🎉 Limited Time Offer!
-              </h2>
-              <p className="text-gray-600 mb-6">
-                Get{" "}
-                <span className="font-semibold text-indigo-600">20% OFF</span>{" "}
-                on all our services. Don’t miss out—offer ends soon!
-              </p>
-
-              {/* Countdown Timer */}
-              <div className="flex justify-center md:justify-start gap-4 mb-6">
-                {["Days", "Hours", "Min", "Sec"].map((label, i) => {
-                  const values = [
-                    timeLeft.days,
-                    timeLeft.hours,
-                    timeLeft.minutes,
-                    timeLeft.seconds,
-                  ];
-                  return (
-                    <div key={label} className="text-center">
-                      <span className="block text-2xl font-bold text-gray-900">
-                        {values[i]}
-                      </span>
-                      <span className="text-sm text-gray-500">{label}</span>
-                    </div>
-                  );
-                })}
-              </div>
-
-              <button
-                onClick={handleClaim}
-                className="bg-indigo-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-indigo-700 transition"
-              >
-                Claim Your Discount
-              </button>
-            </div>
-          </motion.div>
-        </motion.div>
-      )}
-    </AnimatePresence>
-  );
+          <p className="mt-3 text-xs text-gray-500 text-center">
+            No pressure. Just clear guidance.
+          </p>
+        </div>
+      </div>
+    </div>
+  )
 }

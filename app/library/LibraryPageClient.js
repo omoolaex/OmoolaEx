@@ -41,6 +41,7 @@ export default function LibraryPageClient({ resources = [] }) {
     return matchesSearch && matchesCategory && matchesType;
   });
 
+  // Generate structured data JSON-LD
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
@@ -65,12 +66,15 @@ export default function LibraryPageClient({ resources = [] }) {
     })),
   };
 
+  const rssLink = `${siteUrl}/api/rss/resources`; // dynamic RSS feed link
+
   const handleDownloadClick = (res) => {
-    if (!res.file?.asset?.url) {
+    const fileUrl = res.file?.asset?.url || res.fileUrl;
+    if (!fileUrl) {
       alert("Download URL not available.");
       return;
     }
-    setSelectedResource(res);
+    setSelectedResource({ ...res, fileUrl });
     setLeadModalOpen(true);
     setSubmitted(false);
     setLeadName("");
@@ -82,7 +86,7 @@ export default function LibraryPageClient({ resources = [] }) {
 
   const handleLeadSubmit = async (e) => {
     e.preventDefault();
-    if (!leadName || !leadEmail || !selectedResource?.file?.asset?.url) return;
+    if (!leadName || !leadEmail || !selectedResource?.fileUrl) return;
     setLoading(true);
 
     try {
@@ -95,17 +99,15 @@ export default function LibraryPageClient({ resources = [] }) {
           organization: leadOrganization,
           role: leadRole,
           resource: selectedResource.title,
-          downloadUrl: selectedResource.file.asset.url,
+          downloadUrl: selectedResource.fileUrl,
         }),
       });
 
-      // ✅ Parse as JSON safely
       const data = await response.json();
 
       if (data.success) {
         setSubmitted(true);
-        // Open the download in a new tab
-        window.open(selectedResource.file.asset.url, "_blank");
+        window.open(selectedResource.fileUrl, "_blank");
       } else {
         console.error("Lead submission failed:", data.error);
         alert(data.error || "Failed to submit lead. Please try again.");
@@ -139,16 +141,26 @@ export default function LibraryPageClient({ resources = [] }) {
       <PageHero />
 
       {/* Page Header */}
-      <section className="text-center mb-8 mt-8 px-4">
-        <h1 className="text-4xl md:text-5xl font-bold mb-4">Resource Library</h1>
-        <p className="text-lg md:text-xl text-gray-600">
+      <section className="text-center mb-4 mt-8 px-4">
+        <h1 className="text-4xl md:text-5xl font-bold mb-2">Resource Library</h1>
+        <p className="text-lg md:text-xl text-gray-600 mb-2">
           Explore guides, workbooks, templates, and more for Founders, Career
           Builders, and Students.
         </p>
+
+        {/* RSS Feed Link */}
+        <a
+          href={rssLink}
+          className="text-blue-600 hover:underline text-sm md:text-base"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Subscribe via RSS
+        </a>
       </section>
 
       {/* Filters */}
-      <section className="flex flex-col sm:flex-row justify-center gap-4 mb-8 mt-8 px-4">
+      <section className="flex flex-col sm:flex-row justify-center gap-4 mb-8 mt-4 px-4">
         <input
           type="text"
           placeholder="Search resources..."
@@ -194,7 +206,7 @@ export default function LibraryPageClient({ resources = [] }) {
             <p className="text-gray-700 text-sm sm:text-base mb-4">{res.description}</p>
             <div className="flex flex-col sm:flex-row gap-2">
               <button
-                onClick={() => setPreviewFile(res.file?.asset?.url)}
+                onClick={() => setPreviewFile(res.file?.asset?.url || res.fileUrl)}
                 className="px-5 py-2 bg-gray-200 text-gray-800 rounded-full hover:bg-gray-300 transition"
               >
                 Preview
@@ -270,10 +282,7 @@ export default function LibraryPageClient({ resources = [] }) {
                   Thank you! Your download should start automatically. Check your email for the link as well.
                 </p>
               ) : (
-                <form
-                  onSubmit={handleLeadSubmit}
-                  className="flex flex-col gap-4"
-                >
+                <form onSubmit={handleLeadSubmit} className="flex flex-col gap-4">
                   <input
                     type="text"
                     placeholder="Full Name"
@@ -307,9 +316,7 @@ export default function LibraryPageClient({ resources = [] }) {
                   <button
                     type="submit"
                     className={`px-5 py-3 text-white rounded-full text-lg transition ${
-                      loading
-                        ? "bg-gray-400 cursor-not-allowed"
-                        : "bg-blue-600 hover:bg-blue-700"
+                      loading ? "bg-gray-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"
                     }`}
                     disabled={loading}
                   >
