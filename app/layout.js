@@ -143,6 +143,9 @@ export default function RootLayout({ children }) {
         />
 
         <script src="https://analytics.ahrefs.com/analytics.js" data-key="CoV3WdOBMx/5LHIhEDzKnw" async></script>
+
+        <link rel="alternate" type="application/rss+xml" title="OmoolaEx Blog" href="/api/rss.xml" />
+        <link rel="alternate" type="application/rss+xml" title="OmoolaEx Resource Library RSS Feed" href="/api/rss/resources"/>
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}>
         {/* ✅ GTM NoScript immediately after body */}
