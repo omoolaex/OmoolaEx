@@ -1,81 +1,100 @@
-import Head from 'next/head';
-import PageHero from '@/components/PageHero';
-import CareersHero from '@/components/Careers/CareersHero';
-import WhyWorkOmoolaEx from '@/components/Careers/WhyWorkOmoolaEx';
-import Careers from '@/components/Careers/Careers';
-import PerksAndBenefits from '@/components/Careers/PerksAndBenefits';
-import HowWeWork from '@/components/Careers/HowWeWork';
-import CareersForm from '@/components/Careers/CareersForm';
-import PageViewTracker from '@/components/Analytics/PageViewTracker';
-
-export const metadata = {
-  title: 'Careers Opportunities at OmoolaEx | Join Our Innovative Team',
-  description:
-    'Explore job opportunities and grow your career at OmoolaEx. Work on innovative web development, branding, IT consulting, and digital solutions projects.',
-  keywords:
-    'OmoolaEx careers, IT jobs Nigeria, web development jobs, tech jobs Lagos, branding careers, digital agency careers, IT consulting careers',
-  alternates: { canonical: 'https://omoolaex.com.ng/careers' },
-  openGraph: {
-    title: 'Careers Opportunities at OmoolaEx',
-    description:
-      'Join OmoolaEx and advance your career in IT, web development, branding, and digital solutions. Explore current job openings.',
-    url: 'https://omoolaex.com.ng/careers',
-    siteName: 'OmoolaEx',
-    type: 'website',
-    images: [
-      {
-        url: 'https://omoolaex.com.ng/images/omoolaex.jpg',
-        width: 1200,
-        height: 630,
-        alt: 'OmoolaEx Careers Page',
-      },
-    ],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Careers Opportunities at OmoolaEx',
-    description:
-      'Join OmoolaEx and advance your career in IT, web development, branding, and digital solutions.',
-    images: ['https://omoolaex.com.ng/images/omoolaex.jpg'],
-    site: '@omoolaex',
-  },
-};
+import Head from 'next/head'
+import PageHero from '@/components/PageHero'
+import CareersHero from '@/components/Careers/CareersHero'
+import WhyWorkOmoolaEx from '@/components/Careers/WhyWorkOmoolaEx'
+import Careers, { jobs as jobListings } from '@/components/Careers/Careers'
+import PerksAndBenefits from '@/components/Careers/PerksAndBenefits'
+import HowWeWork from '@/components/Careers/HowWeWork'
+import CareersForm from '@/components/Careers/CareersForm'
+import PageViewTracker from '@/components/Analytics/PageViewTracker'
 
 const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL ||
   (process.env.NODE_ENV === 'production'
     ? 'https://omoolaex.com.ng'
-    : 'http://localhost:3000');
+    : 'http://localhost:3000')
 
-const structuredData = [
-  {
-    '@context': 'https://schema.org',
-    '@type': 'WebPage',
-    name: 'Careers Opportunities at OmoolaEx',
-    url: `${siteUrl}/careers`,
-    description:
-      'Explore job opportunities and grow your career at OmoolaEx. Work on innovative web development, branding, IT consulting, and digital solutions projects.',
-    publisher: {
-      '@type': 'Organization',
-      name: 'OmoolaEx',
-      url: siteUrl,
-      logo: {
-        '@type': 'ImageObject',
-        url: `${siteUrl}/images/omoolaex-logo.svg`,
-      },
-    },
-  },
-  {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Home', item: siteUrl },
-      { '@type': 'ListItem', position: 2, name: 'Careers', item: `${siteUrl}/careers` },
-    ],
-  },
-];
+// OmoolaEx company address
+const companyAddress = {
+  streetAddress:
+    'Rgnt Palace, 8 R.T.S. Apena Cl, Oriyomi St, Off Olowu Street, Opebi, Ikeja 100271',
+  addressLocality: 'Lagos',
+  addressRegion: 'LA',
+  postalCode: '100271',
+  addressCountry: 'NG',
+}
 
 export default function CareersPage() {
+  // Ensure jobListings is an array
+  const jobsArray = Array.isArray(jobListings) ? jobListings : []
+
+  // Separate full-time and internship jobs
+  const fullTimeJobs = jobsArray.filter(job => job.type.toLowerCase() !== 'internship')
+  const internshipJobs = jobsArray.filter(job => job.type.toLowerCase() === 'internship')
+
+  // Helper function to create JobPosting JSON-LD
+  const createJobPosting = (job) => {
+    const isRemote = job.location.toLowerCase().includes('remote')
+    let employmentType = job.type.toUpperCase()
+    if (employmentType === 'INTERNSHIP') employmentType = 'INTERN'
+
+    return {
+      '@context': 'https://schema.org',
+      '@type': 'JobPosting',
+      title: job.title,
+      description: job.description,
+      datePosted: new Date().toISOString().split('T')[0],
+      validThrough: new Date(new Date().setMonth(new Date().getMonth() + 1)).toISOString(),
+      employmentType,
+      hiringOrganization: {
+        '@type': 'Organization',
+        name: 'OmoolaEx',
+        sameAs: siteUrl,
+        logo: `${siteUrl}/images/omoolaex-logo.svg`,
+      },
+      jobLocation: {
+        '@type': 'Place',
+        address: isRemote
+          ? { '@type': 'PostalAddress', addressCountry: 'NG', addressLocality: 'Remote' }
+          : { '@type': 'PostalAddress', ...companyAddress },
+      },
+      baseSalary: {
+        '@type': 'MonetaryAmount',
+        currency: 'NGN',
+        value: { '@type': 'QuantitativeValue', value: 0, unitText: 'MONTH' },
+      },
+      ...(isRemote && { applicantLocationRequirements: { '@type': 'Country', name: 'NG' } }),
+    }
+  }
+
+  // Build structured data array
+  const structuredData = [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'WebPage',
+      name: 'Careers Opportunities at OmoolaEx',
+      url: `${siteUrl}/careers`,
+      description:
+        'Explore job opportunities and grow your career at OmoolaEx. Work on innovative web development, branding, IT consulting, and digital solutions projects.',
+      publisher: {
+        '@type': 'Organization',
+        name: 'OmoolaEx',
+        url: siteUrl,
+        logo: { '@type': 'ImageObject', url: `${siteUrl}/images/omoolaex-logo.svg` },
+      },
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home', item: siteUrl },
+        { '@type': 'ListItem', position: 2, name: 'Careers', item: `${siteUrl}/careers` },
+      ],
+    },
+    ...fullTimeJobs.map(createJobPosting),
+    ...internshipJobs.map(createJobPosting),
+  ]
+
   return (
     <>
       <Head>
@@ -85,7 +104,6 @@ export default function CareersPage() {
         />
       </Head>
 
-      {/* ✅ Track GA pageviews */}
       <PageViewTracker
         title="Careers Opportunities at OmoolaEx"
         path="/careers"
@@ -105,5 +123,5 @@ export default function CareersPage() {
         <CareersForm />
       </main>
     </>
-  );
+  )
 }
