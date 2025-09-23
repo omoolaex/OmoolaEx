@@ -14,6 +14,7 @@ export default function JobApplyModal({ show, onClose, jobTitle }) {
     coverLetter: '',
   })
   const [loading, setLoading] = useState(false)
+  const [isDragging, setIsDragging] = useState(false)
 
   const backdropRef = useRef(null)
 
@@ -25,28 +26,49 @@ export default function JobApplyModal({ show, onClose, jobTitle }) {
     }))
   }
 
+  const handleDrop = (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setIsDragging(false)
+
+    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+      setFormData((prev) => ({
+        ...prev,
+        resume: e.dataTransfer.files[0],
+      }))
+      e.dataTransfer.clearData()
+    }
+  }
+
+  const handleDragOver = (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setIsDragging(true)
+  }
+
+  const handleDragLeave = (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setIsDragging(false)
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault()
     setLoading(true)
 
     try {
-      // Prepare multipart/form-data
       const payload = new FormData()
       payload.append('name', formData.name)
       payload.append('email', formData.email)
       payload.append('phone', formData.phone)
-      payload.append('company', formData.linkedin || 'N/A') // storing LinkedIn as company
-      payload.append('type', 'Job Application')
-      payload.append('budget', formData.position || jobTitle || 'N/A') // using budget for role/position
-      payload.append('timeline', 'N/A')
-      payload.append('contactMethod', 'Any')
-      payload.append('message', `Cover Letter:\n${formData.coverLetter || 'N/A'}`)
-
+      payload.append('position', formData.position || jobTitle || 'N/A')
+      payload.append('linkedin', formData.linkedin)
+      payload.append('coverLetter', formData.coverLetter)
       if (formData.resume) {
         payload.append('resume', formData.resume)
       }
 
-      const res = await fetch('/api/request-quote', {
+      const res = await fetch('/api/job-apply', {
         method: 'POST',
         body: payload,
       })
@@ -71,6 +93,7 @@ export default function JobApplyModal({ show, onClose, jobTitle }) {
       console.error(error)
       alert('❌ Something went wrong while submitting.')
     }
+
     setLoading(false)
   }
 
@@ -100,7 +123,7 @@ export default function JobApplyModal({ show, onClose, jobTitle }) {
           exit={{ opacity: 0 }}
         >
           <motion.div
-            className="bg-white rounded-2xl shadow-xl max-w-lg w-full p-6 relative"
+            className="bg-white rounded-2xl shadow-xl max-w-lg w-full p-6 relative max-h-[90vh] flex flex-col overflow-y-auto"
             initial={{ scale: 0.9, y: 50 }}
             animate={{ scale: 1, y: 0 }}
             exit={{ scale: 0.9, y: 50 }}
@@ -124,7 +147,10 @@ export default function JobApplyModal({ show, onClose, jobTitle }) {
             </p>
 
             {/* Form */}
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form
+              onSubmit={handleSubmit}
+              className="space-y-4 flex-1"
+            >
               <input
                 type="text"
                 name="name"
@@ -161,8 +187,15 @@ export default function JobApplyModal({ show, onClose, jobTitle }) {
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg"
               />
 
-              {/* Styled File Upload */}
-              <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-sm text-gray-600">
+              {/* Drag-and-Drop File Upload */}
+              <div
+                onDrop={handleDrop}
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
+                className={`border-2 border-dashed rounded-lg p-4 text-sm text-gray-600 cursor-pointer ${
+                  isDragging ? 'border-blue-500 bg-blue-50' : 'border-gray-300'
+                }`}
+              >
                 <label className="block font-medium text-gray-700 mb-2">
                   Upload Your Resume (PDF, DOC)
                 </label>
@@ -174,6 +207,10 @@ export default function JobApplyModal({ show, onClose, jobTitle }) {
                   required
                   className="w-full text-sm text-gray-600"
                 />
+                {formData.resume && (
+                  <p className="mt-2 text-gray-700">{formData.resume.name}</p>
+                )}
+                {isDragging && <p className="text-blue-500 mt-2">Drop file here...</p>}
               </div>
 
               <textarea
