@@ -6,7 +6,7 @@ import Link from 'next/link'
 export default function CTA() {
   return (
     <section className="relative overflow-hidden bg-gradient-to-br from-blue-800 via-blue-700 to-indigo-800 text-white py-20 md:py-32">
-      {/* Decorative SVG grid line overlay */}
+      {/* Decorative SVG grid overlay */}
       <div className="absolute inset-0 pointer-events-none opacity-10">
         <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
           <defs>
@@ -18,7 +18,7 @@ export default function CTA() {
         </svg>
       </div>
 
-      {/* Decorative blurred circle */}
+      {/* Light blur accents */}
       <div className="absolute -top-20 -left-20 w-72 h-72 bg-blue-500/20 rounded-full blur-3xl"></div>
       <div className="absolute bottom-0 right-0 w-64 h-64 bg-indigo-500/30 rounded-full blur-2xl"></div>
 
@@ -28,9 +28,9 @@ export default function CTA() {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
-          className="text-2xl sm:text-3xl md:text-4xl font-bold mb-6 leading-tight"
+          className="text-3xl md:text-4xl font-bold mb-6 leading-tight"
         >
-          Ready to Elevate Your Business?
+          Ready to Partner With Us?
         </motion.h2>
 
         <motion.p
@@ -38,9 +38,11 @@ export default function CTA() {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
           viewport={{ once: true }}
-          className="text-base sm:text-lg md:text-xl text-gray-200 mb-10"
+          className="text-base sm:text-lg md:text-xl text-gray-200 mb-10 leading-relaxed"
         >
-          Partner with OmoolaEx and let&rsquo;s create powerful, tailored solutions that drive real results.
+          Whether you're exploring IT consulting options in Lagos, need strategic guidance on digital transformation, 
+          or want to discuss a specific technology challenge, we're here to help. 
+          Let’s talk about how OmoolaEx can become your trusted technology partner.
         </motion.p>
 
         <motion.div
@@ -53,7 +55,7 @@ export default function CTA() {
             href="/contact"
             className="bg-white text-blue-900 font-semibold px-6 md:px-8 py-3 md:py-4 rounded-full shadow-lg hover:bg-gray-200 transition duration-300"
           >
-            Let&rsquo;s Work Together
+            Get in Touch Today
           </Link>
         </motion.div>
       </div>

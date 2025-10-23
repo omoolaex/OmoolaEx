@@ -8,7 +8,7 @@ import imageUrlBuilder from '@sanity/image-url';
 
 const builder = imageUrlBuilder(client);
 const urlFor = (source) =>
-  builder.image(source).width(600).height(400).fit('crop').auto('format').url();
+  builder.image(source).width(800).height(400).fit('crop').auto('format').url();
 
 export default function HomePortfolio() {
   const [portfolioItems, setPortfolioItems] = useState([]);
@@ -46,18 +46,17 @@ export default function HomePortfolio() {
       ? portfolioItems
       : portfolioItems.filter((item) => item.category === activeCategory);
 
-  // ✅ Always show only 3 items for grid
   const displayItems = filteredItems.slice(0, 3);
 
   return (
-    <section className="relative bg-gradient-to-br from-yellow-50 via-white to-blue-50 py-12 sm:py-16 md:py-20 lg:py-24 overflow-hidden">
+    <section className="relative bg-gradient-to-br from-yellow-50 via-white to-blue-50 py-16 sm:py-20 lg:py-20 overflow-hidden">
       {/* Background Blobs */}
-      <div className="absolute top-[-80px] left-[-60px] w-[200px] h-[200px] sm:w-[240px] sm:h-[240px] bg-blue-100 rounded-full blur-[80px] sm:blur-[100px] opacity-40 -z-10" />
-      <div className="absolute bottom-[-40px] right-[-50px] w-[180px] h-[180px] sm:w-[200px] sm:h-[200px] bg-yellow-100 rounded-full blur-[70px] sm:blur-[90px] opacity-30 -z-10" />
+      <div className="absolute top-[-80px] left-[-60px] w-[200px] h-[200px] sm:w-[240px] sm:h-[240px] bg-blue-100 rounded-full blur-[80px] sm:blur-[100px] opacity-30 -z-10" />
+      <div className="absolute bottom-[-40px] right-[-50px] w-[180px] h-[180px] sm:w-[200px] sm:h-[200px] bg-yellow-100 rounded-full blur-[70px] sm:blur-[90px] opacity-20 -z-10" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         {/* Header */}
-        <div className="text-center mb-10 sm:mb-14">
+        <div className="text-center mb-12 sm:mb-16">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -80,12 +79,12 @@ export default function HomePortfolio() {
 
         {/* Category Filters */}
         {categories.length > 1 && (
-          <div className="flex flex-wrap justify-center gap-3 sm:gap-4 mb-8 sm:mb-12">
+          <div className="flex flex-wrap justify-center gap-3 sm:gap-4 mb-10 sm:mb-12">
             {categories.map((cat) => (
               <button
                 key={cat}
                 onClick={() => setActiveCategory(cat)}
-                className={`px-4 py-2 text-sm sm:text-base rounded-full border transition ${
+                className={`px-4 py-2 text-sm sm:text-base rounded-full border transition cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-400 ${
                   activeCategory === cat
                     ? 'bg-blue-600 text-white border-blue-600'
                     : 'bg-white text-gray-600 hover:border-blue-400 border-gray-200'
@@ -99,8 +98,8 @@ export default function HomePortfolio() {
           </div>
         )}
 
-        {/* Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+        {/* Portfolio Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8 justify-items-center">
           {loading &&
             [...Array(3)].map((_, i) => (
               <div
@@ -120,7 +119,7 @@ export default function HomePortfolio() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="group block overflow-hidden rounded-xl shadow-md hover:shadow-xl transition duration-300 bg-white focus:outline-none focus:ring-2 focus:ring-blue-400"
+                className="group w-full max-w-sm overflow-hidden rounded-xl shadow-md hover:shadow-xl transition duration-300 bg-white flex flex-col h-full focus:outline-none focus:ring-2 focus:ring-blue-400"
               >
                 {/* Image */}
                 <div className="relative h-52 sm:h-56 md:h-64 w-full">
@@ -138,7 +137,7 @@ export default function HomePortfolio() {
                 </div>
 
                 {/* Text Block */}
-                <div className="p-4 sm:p-5">
+                <div className="p-4 sm:p-5 flex flex-col justify-between flex-grow">
                   <h3 className="text-base sm:text-lg font-semibold text-blue-800 mb-1">
                     {item.title}
                   </h3>
@@ -149,13 +148,13 @@ export default function HomePortfolio() {
               </motion.a>
             ))}
 
-          {/* Optional placeholder for consistent 3-grid layout */}
+          {/* Placeholder for consistent 3-grid layout */}
           {!loading &&
             displayItems.length < 3 &&
             [...Array(3 - displayItems.length)].map((_, i) => (
               <div
                 key={`placeholder-${i}`}
-                className="hidden lg:block rounded-xl bg-gray-100"
+                className="hidden lg:block w-full max-w-sm h-64 rounded-xl bg-gray-100"
               />
             ))}
         </div>
@@ -164,7 +163,7 @@ export default function HomePortfolio() {
         <div className="text-center mt-10 sm:mt-14">
           <a
             href="/portfolio"
-            className="inline-block px-6 sm:px-8 py-3 bg-blue-600 text-white rounded-full font-medium hover:bg-blue-700 transition text-sm sm:text-base"
+            className="inline-block px-6 sm:px-8 py-4 bg-blue-600 text-white rounded-full font-medium hover:bg-blue-700 shadow-lg hover:shadow-xl transition text-sm sm:text-base"
           >
             View Full Portfolio →
           </a>

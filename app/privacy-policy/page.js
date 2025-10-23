@@ -1,5 +1,4 @@
 // app/privacy/page.js
-
 import Script from "next/script";
 import PrivacyContent from "@/components/PrivacyContent";
 import PageViewTracker from "@/components/Analytics/PageViewTracker";
@@ -10,66 +9,96 @@ const siteUrl =
     ? "https://omoolaex.com.ng"
     : "http://localhost:3000");
 
+// ✅ Updated SEO metadata (aligned with OmoolaEx IT Consultancy focus)
 export const metadata = {
-  title: "Privacy Policy | OmoolaEx | Protecting Your Data",
+  title: "Privacy Policy | OmoolaEx IT Consultancy Ltd | Data Protection & Transparency",
   description:
-    "Learn how OmoolaEx collects, uses, and safeguards your personal information. Our commitment to privacy and data protection.",
+    "Read OmoolaEx IT Consultancy Ltd’s Privacy Policy to understand how we collect, use, and protect your data in line with global data protection standards.",
   keywords: [
-    "OmoolaEx privacy policy",
+    "OmoolaEx IT Consultancy Ltd",
     "data protection Nigeria",
-    "web development privacy",
-    "IT consulting privacy",
-    "digital agency privacy",
+    "privacy policy IT consulting",
+    "digital transformation data privacy",
+    "information security Nigeria",
+    "tech company privacy compliance",
   ],
-  alternates: { canonical: `${siteUrl}/privacy-policy` },
+  alternates: {
+    canonical: `${siteUrl}/privacy-policy`,
+  },
   openGraph: {
-    title: "Privacy Policy | OmoolaEx",
+    title: "Privacy Policy | OmoolaEx IT Consultancy Ltd",
     description:
-      "Understand how OmoolaEx collects, uses, and protects your personal data and ensures your privacy.",
+      "OmoolaEx IT Consultancy Ltd is committed to protecting your data privacy and ensuring transparency across all our digital and consulting operations.",
     url: `${siteUrl}/privacy-policy`,
-    siteName: "OmoolaEx",
+    siteName: "OmoolaEx IT Consultancy Ltd",
     type: "website",
+    locale: "en_NG",
     images: [
       {
-        url: `${siteUrl}/images/omoolaex.jpg`,
+        url: `${siteUrl}/images/logo.svg`,
         width: 1200,
         height: 630,
-        alt: "OmoolaEx Privacy Policy",
+        alt: "OmoolaEx IT Consultancy Privacy Policy",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Privacy Policy | OmoolaEx",
-    description:
-      "Understand OmoolaEx’s commitment to protecting your data and privacy.",
-    images: [`${siteUrl}/images/omoolaex.jpg`],
     site: "@omoolaex",
+    title: "Privacy Policy | OmoolaEx IT Consultancy Ltd",
+    description:
+      "Learn about OmoolaEx IT Consultancy Ltd’s approach to data privacy, transparency, and user protection across our digital solutions.",
+    images: [`${siteUrl}/images/logo.svg`],
   },
 };
 
+// ✅ Enhanced structured data for better indexing
 const structuredData = {
   "@context": "https://schema.org",
   "@type": "WebPage",
-  name: "Privacy Policy | OmoolaEx",
+  name: "Privacy Policy | OmoolaEx IT Consultancy Ltd",
   url: `${siteUrl}/privacy-policy`,
   description:
-    "Learn how OmoolaEx collects, uses, and safeguards your personal information. Our commitment to privacy and data protection.",
+    "OmoolaEx IT Consultancy Ltd’s official privacy policy explaining how we collect, store, and protect your information in compliance with Nigerian and global data protection laws.",
   publisher: {
     "@type": "Organization",
-    name: "OmoolaEx",
+    name: "OmoolaEx IT Consultancy Ltd",
     url: siteUrl,
     logo: {
       "@type": "ImageObject",
       url: `${siteUrl}/images/logo.png`,
     },
   },
+  mainEntity: {
+    "@type": "CreativeWork",
+    name: "Privacy Policy",
+    about: [
+      "Data Collection Practices",
+      "User Consent and Transparency",
+      "Data Storage and Security",
+      "Third-party Tools and Cookies",
+      "GDPR & NDPR Compliance",
+    ],
+  },
+  breadcrumb: {
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: siteUrl },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Privacy Policy",
+        item: `${siteUrl}/privacy-policy`,
+      },
+    ],
+  },
 };
 
+// ✅ Page Component
 export default function PrivacyPage() {
   return (
     <main className="overflow-x-hidden relative">
-      {/* ✅ Structured Data */}
+      {/* Structured Data for Google Indexing */}
       <Script
         id="structured-data-privacy-policy"
         type="application/ld+json"
@@ -77,14 +106,14 @@ export default function PrivacyPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
 
-      {/* ✅ Track Pageviews */}
+      {/* Pageview Tracking */}
       <PageViewTracker
-        title="Privacy Policy | OmoolaEx"
+        title="Privacy Policy | OmoolaEx IT Consultancy Ltd"
         path="/privacy-policy"
         location={`${siteUrl}/privacy-policy`}
       />
 
-      {/* Page Content */}
+      {/* Content */}
       <PrivacyContent />
     </main>
   );

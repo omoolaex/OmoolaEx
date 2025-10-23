@@ -4,24 +4,9 @@ import { FaPhoneAlt, FaEnvelope, FaMapMarkerAlt } from 'react-icons/fa'
 import { motion } from 'framer-motion'
 
 const contactItems = [
-  {
-    icon: <FaPhoneAlt size={24} />,
-    title: 'Phone',
-    value: '+234 708 921 7123',
-    link: 'tel:+2347089217123',
-  },
-  {
-    icon: <FaEnvelope size={24} />,
-    title: 'Email',
-    value: 'contact@omoolaex.com.ng',
-    link: 'mailto:contact@omoolaex.com.ng',
-  },
-  {
-    icon: <FaMapMarkerAlt size={24} />,
-    title: 'Address',
-    value: 'Regent Palace, 8 R.T.S. Apena Cl, Oriyomi St, off Olowu Street, Opebi, Ikeja 100271, Lagos',
-    link: 'https://maps.app.goo.gl/yRGZ5sgvVJsn8ozw6',
-  },
+  { icon: <FaEnvelope size={24} />, title: 'Email', value: 'contact@omoolaex.com.ng', link: 'mailto:contact@omoolaex.com.ng' },
+  { icon: <FaPhoneAlt size={24} />, title: 'Phone', value: '+234 708 921 7123', link: 'tel:+2347089217123' },
+  { icon: <FaMapMarkerAlt size={24} />, title: 'Address', value: 'Regent Palace, 8 R.T.S. Apena Cl, Oriyomi St, off Olowu Street, Opebi, Ikeja 100271, Lagos', link: 'https://maps.app.goo.gl/yRGZ5sgvVJsn8ozw6' },
 ]
 
 export default function ContactInfo() {
@@ -35,9 +20,9 @@ export default function ContactInfo() {
         className="max-w-7xl mx-auto"
       >
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-4">
-          {contactItems.map((item, index) => (
+          {contactItems.map((item, idx) => (
             <motion.a
-              key={index}
+              key={idx}
               href={item.link}
               target="_blank"
               rel="noopener noreferrer"

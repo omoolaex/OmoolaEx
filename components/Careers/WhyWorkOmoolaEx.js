@@ -1,95 +1,87 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Briefcase, HeartHandshake, Rocket, Users } from 'lucide-react'
+import { Rocket, Users, Briefcase, HeartHandshake } from 'lucide-react'
 
 const reasons = [
   {
-    icon: <Rocket className="w-8 h-8 text-blue-500" />,
-    title: 'Grow Fast',
+    icon: <Rocket className="w-8 h-8 text-blue-600" />,
+    title: 'Accelerated Growth',
     description:
-      'We invest in your growth through mentorship, trainings, and real challenges that accelerate your career.',
+      'Gain hands-on experience through live IT consulting projects, guided mentorship, and continuous professional development.',
   },
   {
-    icon: <Users className="w-8 h-8 text-blue-500" />,
-    title: 'Collaborative Team',
+    icon: <Users className="w-8 h-8 text-blue-600" />,
+    title: 'Collaborative Culture',
     description:
-      'Work alongside brilliant minds in a culture where everyone’s voice is valued and heard.',
+      'Work alongside consultants, developers, and digital strategists in a team that values shared knowledge and creative problem-solving.',
   },
   {
-    icon: <Briefcase className="w-8 h-8 text-blue-500" />,
-    title: 'Real Impact',
+    icon: <Briefcase className="w-8 h-8 text-blue-600" />,
+    title: 'Innovation in Action',
     description:
-      'Be part of meaningful projects that empower businesses and communities with technology.',
+      'Be part of digital transformation initiatives that strengthen Nigerian and African businesses across multiple industries.',
   },
   {
-    icon: <HeartHandshake className="w-8 h-8 text-blue-500" />,
-    title: 'People-First Culture',
+    icon: <HeartHandshake className="w-8 h-8 text-blue-600" />,
+    title: 'People-First Philosophy',
     description:
-      'We respect your work-life balance, wellness, and aspirations — and support you every step of the way.',
+      'We create a supportive environment where work-life balance, wellbeing, and professional growth truly matter.',
   },
 ]
 
-export default function WhyWorkOmoolaEx() {
+export default function WhyJoinOmoolaEx() {
   return (
     <section
-      className="relative bg-gray-50 py-16 px-4 sm:px-6 md:px-12 lg:px-20 overflow-hidden"
-      aria-label="Why work at OmoolaEx"
+      className="relative bg-gray-50 py-20 px-6 sm:px-8 lg:px-20 overflow-hidden"
+      aria-label="Why join OmoolaEx"
     >
-      {/* Floating Background Glow */}
+      {/* Decorative glow */}
       <motion.div
-        className="absolute -top-20 -left-10 w-60 h-60 bg-blue-100 rounded-full opacity-30 blur-3xl"
-        animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
-        transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
+        className="absolute -top-20 left-0 w-60 h-60 bg-blue-100 rounded-full opacity-40 blur-3xl"
+        animate={{ scale: [1, 1.2, 1], opacity: [0.4, 0.6, 0.4] }}
+        transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
       />
       <motion.div
-        className="absolute bottom-0 right-0 w-80 h-80 bg-blue-100 rounded-full opacity-20 blur-2xl"
+        className="absolute bottom-0 right-0 w-80 h-80 bg-blue-200 rounded-full opacity-20 blur-3xl"
         animate={{ scale: [1.1, 1.3, 1.1], opacity: [0.2, 0.4, 0.2] }}
-        transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut' }}
+        transition={{ duration: 9, repeat: Infinity, ease: 'easeInOut' }}
       />
 
       <div className="relative z-10 max-w-7xl mx-auto text-center">
         <motion.h2
-          className="text-3xl sm:text-4xl font-bold text-gray-900"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, ease: 'easeOut' }}
+          transition={{ duration: 0.6 }}
+          className="text-3xl sm:text-4xl font-bold text-gray-900"
         >
-          Why Work at OmoolaEx?
+          Why Build Your Career at OmoolaEx
         </motion.h2>
+
         <motion.p
-          className="mt-4 text-base sm:text-lg text-gray-600 max-w-2xl mx-auto"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
           transition={{ delay: 0.2, duration: 0.6 }}
+          className="mt-4 text-gray-600 max-w-2xl mx-auto text-base sm:text-lg"
         >
-          We’re not just building digital solutions — we’re building a better future, together.
+          Our people make the difference. Join a company where innovation meets integrity,
+          and where every idea contributes to building smarter digital futures.
         </motion.p>
 
-        <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8 lg:gap-10 text-left">
-          {reasons.map((item, index) => (
+        <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-left">
+          {reasons.map((item, i) => (
             <motion.div
-              key={index}
-              className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group"
+              key={i}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.15, duration: 0.5 }}
+              transition={{ delay: i * 0.15, duration: 0.6 }}
+              className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 group"
             >
-              <motion.div
-                className="mb-4"
-                initial={{ scale: 0.9 }}
-                whileInView={{ scale: 1 }}
-                transition={{ type: 'spring', stiffness: 100, damping: 10 }}
-              >
-                {item.icon}
-              </motion.div>
-              <h3 className="text-lg sm:text-xl font-semibold text-gray-800 mb-2 group-hover:text-blue-600 transition-colors">
+              <div className="mb-4">{item.icon}</div>
+              <h3 className="text-lg font-semibold text-gray-800 mb-2 group-hover:text-blue-600 transition-colors">
                 {item.title}
               </h3>
-              <p className="text-sm sm:text-base text-gray-600">{item.description}</p>
+              <p className="text-sm text-gray-600 leading-relaxed">{item.description}</p>
             </motion.div>
           ))}
         </div>

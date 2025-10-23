@@ -1,38 +1,75 @@
-import Head from 'next/head'
 import PageHero from '@/components/PageHero'
 import CareersHero from '@/components/Careers/CareersHero'
-import WhyWorkOmoolaEx from '@/components/Careers/WhyWorkOmoolaEx'
-import Careers, { jobs as jobListings } from '@/components/Careers/Careers'
-import PerksAndBenefits from '@/components/Careers/PerksAndBenefits'
-import HowWeWork from '@/components/Careers/HowWeWork'
+import WhyJoinOmoolaEx from '@/components/Careers/WhyWorkOmoolaEx'
+import { jobs as jobListings } from '@/components/Careers/Careers'
 import CareersForm from '@/components/Careers/CareersForm'
 import PageViewTracker from '@/components/Analytics/PageViewTracker'
+import AboutOmoolaEx from '@/components/Careers/AboutOmoolaEx'
+import CareerPathways from '@/components/Careers/CareerPathways'
+import JoinTalentNetwork from '@/components/Careers/JoinTalentNetwork'
 
+// Base URL
 const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL ||
   (process.env.NODE_ENV === 'production'
     ? 'https://omoolaex.com.ng'
     : 'http://localhost:3000')
 
-// OmoolaEx company address
+// Company details for structured data
 const companyAddress = {
-  streetAddress:
-    'Rgnt Palace, 8 R.T.S. Apena Cl, Oriyomi St, Off Olowu Street, Opebi, Ikeja 100271',
+  streetAddress: 'Regent Palace, 8 R.T.S. Apena Cl, Oriyomi St, Off Olowu Street, Opebi, Ikeja 100271',
   addressLocality: 'Lagos',
   addressRegion: 'LA',
   postalCode: '100271',
   addressCountry: 'NG',
 }
 
-export default function CareersPage() {
-  // Ensure jobListings is an array
-  const jobsArray = Array.isArray(jobListings) ? jobListings : []
+// ✅ Static Metadata (auto injected into <head>)
+export const metadata = {
+  title: 'Careers at OmoolaEx | Build Africa’s Digital Future',
+  description:
+    'Join OmoolaEx IT Consultancy Ltd. We’re building a team of consultants, developers, and digital innovators shaping how businesses across Nigeria use technology.',
+  keywords: [
+    'IT consulting jobs Nigeria',
+    'tech internship Lagos',
+    'graduate trainee programme Nigeria',
+    'IT consultancy careers',
+    'OmoolaEx IT Consultancy Ltd',
+    'digital transformation jobs Nigeria',
+  ],
+  openGraph: {
+    title: 'Careers at OmoolaEx | Build Africa’s Digital Future',
+    description:
+      'Explore opportunities to grow with OmoolaEx, a Nigerian IT consultancy empowering businesses through digital transformation.',
+    url: `${siteUrl}/careers`,
+    type: 'website',
+    siteName: 'OmoolaEx IT Consultancy Ltd',
+    images: [
+      {
+        url: `${siteUrl}/images/logo.svg`,
+        width: 1200,
+        height: 630,
+        alt: 'OmoolaEx IT Consultancy Careers Nigeria',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Careers at OmoolaEx | IT Consulting Jobs in Nigeria',
+    description:
+      'Discover internship, volunteer, and graduate trainee opportunities at OmoolaEx IT Consultancy Ltd.',
+    images: [`${siteUrl}/images/logo.svg`],
+  },
+  alternates: {
+    canonical: `${siteUrl}/careers`,
+  },
+}
 
-  // Separate full-time and internship jobs
-  const fullTimeJobs = jobsArray.filter(job => job.type.toLowerCase() !== 'internship')
-  const internshipJobs = jobsArray.filter(job => job.type.toLowerCase() === 'internship')
+// ✅ Dynamic Structured Data (JSON-LD Schema)
+function generateStructuredData(jobsArray) {
+  const fullTimeJobs = jobsArray.filter((job) => job.type.toLowerCase() !== 'internship')
+  const internshipJobs = jobsArray.filter((job) => job.type.toLowerCase() === 'internship')
 
-  // Helper function to create JobPosting JSON-LD
   const createJobPosting = (job) => {
     const isRemote = job.location.toLowerCase().includes('remote')
     let employmentType = job.type.toUpperCase()
@@ -48,9 +85,9 @@ export default function CareersPage() {
       employmentType,
       hiringOrganization: {
         '@type': 'Organization',
-        name: 'OmoolaEx',
+        name: 'OmoolaEx IT Consultancy Ltd',
         sameAs: siteUrl,
-        logo: `${siteUrl}/images/omoolaex-logo.svg`,
+        logo: `${siteUrl}/images/logo.svg`,
       },
       jobLocation: {
         '@type': 'Place',
@@ -61,26 +98,24 @@ export default function CareersPage() {
       baseSalary: {
         '@type': 'MonetaryAmount',
         currency: 'NGN',
-        value: { '@type': 'QuantitativeValue', value: 0, unitText: 'MONTH' },
+        value: { '@type': 'QuantitativeValue', value: 0, unitText: 'NONE' },
       },
-      ...(isRemote && { applicantLocationRequirements: { '@type': 'Country', name: 'NG' } }),
     }
   }
 
-  // Build structured data array
-  const structuredData = [
+  return [
     {
       '@context': 'https://schema.org',
       '@type': 'WebPage',
-      name: 'Careers Opportunities at OmoolaEx',
+      name: 'Careers at OmoolaEx | IT Consulting Jobs in Nigeria',
       url: `${siteUrl}/careers`,
       description:
-        'Explore job opportunities and grow your career at OmoolaEx. Work on innovative web development, branding, IT consulting, and digital solutions projects.',
+        'Explore future career opportunities at OmoolaEx IT Consultancy Ltd. Join a growing team shaping the future of technology, cloud systems, and digital transformation in Nigeria.',
       publisher: {
         '@type': 'Organization',
-        name: 'OmoolaEx',
+        name: 'OmoolaEx IT Consultancy Ltd',
         url: siteUrl,
-        logo: { '@type': 'ImageObject', url: `${siteUrl}/images/omoolaex-logo.svg` },
+        logo: { '@type': 'ImageObject', url: `${siteUrl}/images/logo.svg` },
       },
     },
     {
@@ -94,32 +129,47 @@ export default function CareersPage() {
     ...fullTimeJobs.map(createJobPosting),
     ...internshipJobs.map(createJobPosting),
   ]
+}
+
+// ✅ Page Component
+export default function CareersPage() {
+  const jobsArray = Array.isArray(jobListings) ? jobListings : []
+  const structuredData = generateStructuredData(jobsArray)
+
+  // Analytics Event Tracker
+  const trackEvent = (action, label) => {
+    if (typeof window !== 'undefined' && window.gtag) {
+      window.gtag('event', action, {
+        event_category: 'Careers',
+        event_label: label,
+        page_location: `${siteUrl}/careers`,
+      })
+    }
+  }
 
   return (
     <>
-      <Head>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-        />
-      </Head>
+      {/* JSON-LD for SEO Rich Snippets */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
 
+      {/* Page View Tracking */}
       <PageViewTracker
-        title="Careers Opportunities at OmoolaEx"
+        title="Careers at OmoolaEx"
         path="/careers"
         location={`${siteUrl}/careers`}
       />
 
+      {/* Page Sections */}
       <main className="flex flex-col overflow-x-hidden">
-        <PageHero
-          title="Join Our Team"
-          subtitle="Grow your career at OmoolaEx and work on innovative IT, web development, and branding projects."
-        />
+        <PageHero />
         <CareersHero />
-        <WhyWorkOmoolaEx />
-        <Careers />
-        <PerksAndBenefits />
-        <HowWeWork />
+        <AboutOmoolaEx />
+        <WhyJoinOmoolaEx />
+        <CareerPathways />
+        <JoinTalentNetwork />
         <CareersForm />
       </main>
     </>

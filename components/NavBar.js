@@ -15,21 +15,22 @@ export default function Navbar() {
     { href: '/', label: 'Home' },
     { href: '/about', label: 'About Us' },
     { href: '/services', label: 'Services' },
-    { href: '/portfolio', label: 'Portfolio' },
+    { href: '/industries', label: 'Industries We Serve' },
+    { href: '/portfolio', label: 'Case Studies' },
     { href: '/contact', label: 'Contact' },
   ]
 
   return (
-    <header className="bg-white sticky top-0 z-50 shadow-md">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
+    <header className="bg-white sticky top-0 z-50 shadow-md px-4 sm:px-6 lg:px-8 py-4">
+      <div className="max-w-7xl mx-auto flex items-center justify-between">
         {/* Logo */}
-        <Link href="/" className="flex items-center">
+        <Link href="/" className="flex items-center z-50">
           <Image
             src="/images/logo.svg"
             alt="OmoolaEx Logo"
-            width={140}
-            height={40}
-            className="w-auto h-8 md:h-10 object-contain"
+            width={220}          // slightly larger for visibility
+            height={60}          // increase height
+            className="object-contain w-auto h-auto max-h-16 md:max-h-20" // responsive height
             priority
           />
         </Link>
@@ -58,12 +59,12 @@ export default function Navbar() {
             })}
           </nav>
 
-          {/* CTA Button (Desktop only) */}
+          {/* CTA Button */}
           <Link
-            href="/request-a-quote"
+            href="/bookings"
             className="ml-6 px-5 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-all duration-200 shadow-sm whitespace-nowrap"
           >
-            Get a Free Quote
+            Book a Consultation
           </Link>
         </div>
 
@@ -100,13 +101,13 @@ export default function Navbar() {
                 {link.label}
               </Link>
             ))}
-            {/* CTA Button (Mobile/Tablet only) */}
+            {/* CTA Button */}
             <Link
-              href="/request-a-quote"
+              href="/bookings"
               onClick={() => setIsOpen(false)}
               className="mt-3 block text-center px-5 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition"
             >
-              Get a Free Quote
+              Book a Consultation
             </Link>
           </nav>
         </div>

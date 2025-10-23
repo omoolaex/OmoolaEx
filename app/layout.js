@@ -17,29 +17,28 @@ export const metadata = {
   alternates: {
     canonical: "https://omoolaex.com.ng",
   },
-  title: "OmoolaEx | Web Development, Branding & IT Consulting in Lagos, Nigeria",
+  title: "OmoolaEx | IT Consulting Firm in Nigeria | Digital Transformation & Cloud Solutions",
   description:
-    "OmoolaEx offers expert web development, responsive website design, branding, and IT consulting services in Lagos, Nigeria. Grow your business online with our digital solutions tailored for startups, SMEs, and enterprises.",
+    "OmoolaEx is an IT consulting firm in Nigeria helping businesses navigate digital transformation. We provide IT strategy consulting, cloud solutions, custom software, managed IT services, and digital growth consulting across Lagos and West Africa.",
   keywords: [
-    "OmoolaEx",
-    "Web Development Lagos",
-    "Web Design Nigeria",
+    "IT Consulting Firm Nigeria",
     "IT Consulting Lagos",
-    "Branding Services Lagos",
-    "Digital Agency Nigeria",
-    "SEO Lagos",
-    "Responsive Website Design",
-    "WordPress Developer Nigeria",
-    "Business Website Lagos",
-    "Custom Web Solutions",
-    "Lagos Tech Company",
-    "UI UX Design Lagos",
-    "Ecommerce Development Nigeria",
+    "Digital Transformation Consulting Nigeria",
+    "IT Solutions Nigeria",
+    "Technology Consulting Nigeria",
+    "Cloud Solutions Nigeria",
+    "Managed IT Services Lagos",
+    "Custom Software Development Nigeria",
+    "Cybersecurity Training Nigeria",
+    "IT Infrastructure Services Lagos",
+    "Business IT Consulting Nigeria",
+    "Systems Integration Nigeria",
+    "OmoolaEx IT Consulting",
   ],
   openGraph: {
-    title: "OmoolaEx | Web Development, Branding & IT Consulting in Lagos, Nigeria",
+    title: "OmoolaEx | IT Consulting Firm in Nigeria | Digital Transformation & Cloud Solutions",
     description:
-      "OmoolaEx provides professional web development, branding, and IT consulting services in Lagos, Nigeria. Boost your business with modern, SEO-optimized websites and digital solutions.",
+      "OmoolaEx provides expert IT consulting services in Nigeria — including IT strategy, digital transformation, cloud migration, software development, and managed IT services for startups, SMEs, and enterprises.",
     url: "https://omoolaex.com.ng",
     siteName: "OmoolaEx",
     images: [
@@ -47,7 +46,7 @@ export const metadata = {
         url: "https://omoolaex.com.ng/images/omoolaex.jpg",
         width: 1200,
         height: 630,
-        alt: "OmoolaEx – Web Development, Branding & IT Consulting in Lagos",
+        alt: "OmoolaEx – IT Consulting Firm in Nigeria",
       },
     ],
     type: "website",
@@ -58,20 +57,34 @@ export const metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "OmoolaEx | Web Development, Branding & IT Consulting in Lagos, Nigeria",
+    title: "OmoolaEx | IT Consulting Firm in Nigeria",
     description:
-      "Get modern, SEO-optimized websites, branding, and IT consulting from OmoolaEx in Lagos, Nigeria. Empower your business online.",
+      "Strategic IT consulting and digital transformation services for Nigerian businesses. OmoolaEx delivers IT strategy, cloud solutions, managed services, and more.",
     images: ["https://omoolaex.com.ng/images/omoolaex.jpg"],
     site: "@omoolaex",
   },
 };
 
+// Updated Schema to match IT consulting structure
 const structuredData = {
   "@context": "https://schema.org",
   "@type": "Organization",
-  name: "OmoolaEx",
+  name: "OmoolaEx IT Consultancy Ltd",
+  legalName: "OmoolaEx IT Consultancy Ltd",
   url: "https://omoolaex.com.ng",
   logo: "https://omoolaex.com.ng/images/omoolaex.jpg",
+  foundingDate: "2020",
+  foundingLocation: {
+    "@type": "Place",
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: "Regent Palace, 8 R.T.S. Apena Cl, Oriyomi St, off Olowu Street, Opebi",
+      addressLocality: "Ikeja",
+      addressRegion: "Lagos",
+      postalCode: "100271",
+      addressCountry: "NG",
+    },
+  },
   sameAs: [
     "https://www.facebook.com/OmoolaEx",
     "https://www.instagram.com/omoolaex_",
@@ -87,19 +100,56 @@ const structuredData = {
     areaServed: "NG",
     availableLanguage: ["English"],
   },
+  "@graph": [
+    {
+      "@type": "Service",
+      serviceType: "IT Consulting & Advisory",
+      areaServed: "Nigeria",
+      description:
+        "Strategic IT guidance, digital transformation consulting, and technology cost optimization for businesses across Nigeria.",
+    },
+    {
+      "@type": "Service",
+      serviceType: "Digital Solutions & Systems Integration",
+      areaServed: "Nigeria",
+      description:
+        "Custom software development, web and mobile applications, and systems integration services designed for Nigerian businesses.",
+    },
+    {
+      "@type": "Service",
+      serviceType: "Brand & Digital Growth Consulting",
+      areaServed: "Nigeria",
+      description:
+        "Strategic brand and digital marketing consulting to help businesses grow with data-driven campaigns and optimized online presence.",
+    },
+    {
+      "@type": "Service",
+      serviceType: "Cloud Solutions & IT Infrastructure",
+      areaServed: "Nigeria",
+      description:
+        "Cloud migration, IT infrastructure setup, data security, and disaster recovery solutions for modern business operations.",
+    },
+    {
+      "@type": "Service",
+      serviceType: "Managed IT Services & Capacity Building",
+      areaServed: "Nigeria",
+      description:
+        "Ongoing IT support, cybersecurity training, and capacity-building programs that empower teams and ensure reliable operations.",
+    },
+  ],
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
-        {/* ✅ Search Console HTML Tag */}
+        {/* ✅ Google Site Verification */}
         <meta
           name="google-site-verification"
           content="f8UAWQDAokSA_8RVGOPAinyV895VBHIKbpPxbQkhMX4"
         />
 
-        {/* ✅ Google Tag Manager Script (must be high in head) */}
+        {/* ✅ Google Tag Manager */}
         <Script id="gtm-head" strategy="beforeInteractive">
           {`
             (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -110,7 +160,7 @@ export default function RootLayout({ children }) {
           `}
         </Script>
 
-        {/* ✅ Google Analytics 4 (must be in head) */}
+        {/* ✅ Google Analytics */}
         {GA_TRACKING_ID && (
           <>
             <Script
@@ -134,7 +184,7 @@ export default function RootLayout({ children }) {
           </>
         )}
 
-        {/* ✅ Structured Data */}
+        {/* ✅ Structured Data for IT Consulting */}
         <Script
           id="structured-data"
           type="application/ld+json"
@@ -145,10 +195,23 @@ export default function RootLayout({ children }) {
         <script src="https://analytics.ahrefs.com/analytics.js" data-key="CoV3WdOBMx/5LHIhEDzKnw" async></script>
 
         <link rel="alternate" type="application/rss+xml" title="OmoolaEx Blog" href="/api/rss.xml" />
-        <link rel="alternate" type="application/rss+xml" title="OmoolaEx Resource Library RSS Feed" href="/api/rss/resources"/>
+        <link
+          rel="alternate"
+          type="application/rss+xml"
+          title="OmoolaEx Resource Library RSS Feed"
+          href="/api/rss/resources"
+        />
+        <style>{`
+          :root {
+            --color-navy: #003767;
+            --color-electric-blue: #178ddd;
+            --color-violet: #8e3ec9;
+            --color-white: #ffffff;
+          }
+        `}</style>
       </head>
+
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}>
-        {/* ✅ GTM NoScript immediately after body */}
         <noscript>
           <iframe
             src="https://www.googletagmanager.com/ns.html?id=GTM-THBBB5GM"

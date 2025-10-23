@@ -10,56 +10,73 @@ export default function CareersForm() {
     phone: '',
     portfolio: '',
     roleType: '',
+    specificRole: '',
     education: '',
-    preferredRole: '',
     message: '',
     resume: null,
     consent: false,
   })
   const [loading, setLoading] = useState(false)
 
+  // Roles grouped under programmes
+  const roleOptions = {
+    Volunteer: [
+      'Tech Community Volunteer',
+      'Digital Training Volunteer',
+      'Research & Innovation Volunteer',
+      'Creative Design Volunteer',
+      'Outreach & Communications Volunteer',
+    ],
+    Internship: [
+      'Frontend Developer Intern',
+      'Backend Developer Intern',
+      'UI/UX Designer Intern',
+      'Digital Marketing Intern',
+      'Project Management Intern',
+      'Graphics Designer Intern',
+      'Content Writer Intern',
+    ],
+    Graduate: [
+      'Graduate IT Consultant',
+      'Graduate Software Engineer',
+      'Graduate Cybersecurity Analyst',
+      'Graduate Project Coordinator',
+      'Graduate Business Analyst',
+    ],
+  }
+
   const handleChange = (e) => {
     const { name, value, type, checked, files } = e.target
     setForm((prev) => ({
       ...prev,
       [name]: type === 'checkbox' ? checked : files ? files[0] : value,
+      ...(name === 'roleType' ? { specificRole: '' } : {}), // reset when programme changes
     }))
   }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     if (!form.consent) {
-      alert('You must accept the Privacy Policy to proceed.')
+      alert('Please accept the Privacy Policy to continue.')
       return
     }
 
     setLoading(true)
     try {
-      // Prepare FormData for multipart/form-data
       const formData = new FormData()
       formData.append('name', form.fullName)
       formData.append('email', form.email)
       formData.append('phone', form.phone)
-      formData.append('company', form.portfolio || 'N/A') // store LinkedIn/Portfolio
-      formData.append('type', 'Career Application')
-      formData.append('budget', form.roleType || 'N/A') // using "budget" as roleType
-      formData.append('timeline', form.education || 'N/A') // using "timeline" as education level
-      formData.append('contactMethod', form.preferredRole || 'Any')
-      formData.append(
-        'message',
-        `Applicant Message:\n${form.message || 'N/A'}\nPortfolio: ${form.portfolio || 'N/A'}`
-      )
+      formData.append('portfolio', form.portfolio || 'N/A')
+      formData.append('type', form.roleType)
+      formData.append('specificRole', form.specificRole)
+      formData.append('education', form.education)
+      formData.append('message', form.message)
+      if (form.resume) formData.append('resume', form.resume)
 
-      if (form.resume) {
-        formData.append('resume', form.resume)
-      }
-
-      const res = await fetch('/api/request-quote', {
-        method: 'POST',
-        body: formData,
-      })
-
+      const res = await fetch('/api/request-quote', { method: 'POST', body: formData })
       const result = await res.json()
+
       if (result.success) {
         alert('✅ Application submitted successfully!')
         setForm({
@@ -68,24 +85,24 @@ export default function CareersForm() {
           phone: '',
           portfolio: '',
           roleType: '',
+          specificRole: '',
           education: '',
-          preferredRole: '',
           message: '',
           resume: null,
           consent: false,
         })
       } else {
-        alert('❌ Failed to submit. Please try again.')
+        alert('❌ Submission failed. Please try again.')
       }
     } catch (error) {
       console.error(error)
-      alert('❌ Something went wrong.')
+      alert('❌ Something went wrong. Please try again later.')
     }
     setLoading(false)
   }
 
   return (
-    <section className="bg-gray-100 py-20 px-6 md:px-12">
+    <section className="bg-gray-100 py-20 px-6 md:px-12" id="careers-form">
       <div className="max-w-4xl mx-auto text-center">
         {/* Heading */}
         <motion.div
@@ -94,11 +111,10 @@ export default function CareersForm() {
           transition={{ duration: 0.5 }}
         >
           <h2 className="text-3xl md:text-4xl font-bold text-gray-800">
-            Ready to Launch Your Career at OmoolaEx?
+            Submit Your Application
           </h2>
           <p className="mt-4 text-gray-600 text-lg">
-            Whether you&apos;re a student, intern, or a jobseeker ready for your next chapter,
-            we are excited to connect.
+            Apply for our Volunteer, Internship, or Graduate Trainee programmes and begin your journey with OmoolaEx.
           </p>
         </motion.div>
 
@@ -146,6 +162,8 @@ export default function CareersForm() {
               placeholder="LinkedIn or Portfolio URL"
               className="p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 w-full"
             />
+
+            {/* Programme Selection */}
             <select
               name="roleType"
               value={form.roleType}
@@ -153,18 +171,36 @@ export default function CareersForm() {
               required
               className="p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 w-full"
             >
-              <option value="">What are you applying for?</option>
-              <option value="Internship">Internship</option>
-              <option value="Graduate">Graduate Role</option>
-              <option value="Experienced">Experienced Position</option>
-              <option value="Freelance">Freelance/Contract</option>
+              <option value="">Select Programme</option>
+              <option value="Volunteer">Volunteer Programme</option>
+              <option value="Internship">Internship Programme</option>
+              <option value="Graduate">Graduate Training Programme</option>
             </select>
+
+            {/* Role under Programme */}
+            {form.roleType && (
+              <select
+                name="specificRole"
+                value={form.specificRole}
+                onChange={handleChange}
+                required
+                className="p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 w-full"
+              >
+                <option value="">Select Role</option>
+                {roleOptions[form.roleType].map((role, index) => (
+                  <option key={index} value={role}>
+                    {role}
+                  </option>
+                ))}
+              </select>
+            )}
+
             <select
               name="education"
               value={form.education}
               onChange={handleChange}
               required
-              className="p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 w-full"
+              className="p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 w-full md:col-span-2"
             >
               <option value="">Education Level</option>
               <option value="Secondary School">Secondary School</option>
@@ -173,14 +209,6 @@ export default function CareersForm() {
               <option value="Self-Taught">Self-Taught</option>
               <option value="Other">Other</option>
             </select>
-            <input
-              name="preferredRole"
-              value={form.preferredRole}
-              onChange={handleChange}
-              type="text"
-              placeholder="Preferred Role (e.g., Frontend Developer, Design Intern)"
-              className="p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 w-full md:col-span-2"
-            />
           </div>
 
           <textarea
