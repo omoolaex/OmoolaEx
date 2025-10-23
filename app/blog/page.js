@@ -1,3 +1,4 @@
+// app/blog/page.js
 import Link from "next/link";
 import { client } from "@/sanity/client";
 import PageHero from "@/components/PageHero";
@@ -10,53 +11,59 @@ import {
   totalPostsByCategoryQuery,
 } from "@/lib/queries";
 
-// ✅ Blog Page Metadata
+const POSTS_PER_PAGE = 12;
+
+const siteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL ||
+  (process.env.NODE_ENV === "production"
+    ? "https://omoolaex.com.ng"
+    : "http://localhost:3000");
+
 export const metadata = {
-  title: "Blog | OmoolaEx | Web Design & IT Consulting Insights",
+  title: "Insights & Updates | OmoolaEx IT Consultancy Ltd Blog",
   description:
-    "Explore OmoolaEx blog for expert insights on web development, IT consulting, branding, digital strategy, and business growth in Nigeria.",
+    "Stay ahead with expert insights from OmoolaEx IT Consultancy Ltd — covering IT strategy, cloud solutions, software innovation, branding, and digital transformation in Nigeria.",
   keywords: [
-    "OmoolaEx Blog",
-    "Web Design Tips",
-    "IT Consulting Insights",
-    "Startup Growth Nigeria",
-    "Digital Strategy",
-    "Branding Tips",
-    "UI UX Design Blog",
-    "Cybersecurity Advice",
+    "OmoolaEx IT Consultancy Ltd blog",
+    "IT consulting insights Nigeria",
+    "digital transformation Lagos",
+    "software development trends",
+    "cloud computing Nigeria",
+    "UI UX design insights",
+    "business technology strategy",
   ],
-  alternates: {
-    canonical: "https://omoolaex.com.ng/blog",
-  },
+  alternates: { canonical: `${siteUrl}/blog` },
   openGraph: {
-    title: "OmoolaEx Blog | Web Development & IT Consulting Insights",
+    title: "OmoolaEx Blog | IT Consulting & Digital Transformation Insights",
     description:
-      "Get the latest strategies, tips, and insights from OmoolaEx to help grow your startup or business in Nigeria.",
-    url: "https://omoolaex.com.ng/blog",
-    siteName: "OmoolaEx",
+      "Explore articles and insights from OmoolaEx IT Consultancy Ltd on web innovation, digital growth, and emerging technology in Nigeria.",
+    url: `${siteUrl}/blog`,
+    siteName: "OmoolaEx IT Consultancy Ltd",
+    locale: "en_NG",
+    type: "website",
     images: [
       {
-        url: "https://omoolaex.com.ng/images/omoolaex.jpg",
+        url: `${siteUrl}/images/logo.svg`,
         width: 1200,
         height: 630,
-        alt: "OmoolaEx Blog",
+        alt: "OmoolaEx Blog - IT Consulting Insights",
       },
     ],
-    type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "OmoolaEx Blog | Digital Insights",
+    title: "OmoolaEx Blog | IT Consulting & Technology Insights",
     description:
-      "OmoolaEx Blog shares expert advice on IT consulting, branding, web design, and digital solutions in Lagos, Nigeria.",
-    images: ["https://omoolaex.com.ng/images/omoolaex.jpg"],
+      "Get thought leadership articles on IT consulting, software innovation, and digital transformation from OmoolaEx IT Consultancy Ltd.",
+    images: [`${siteUrl}/images/logo.svg`],
     site: "@omoolaex",
   },
 };
 
-const POSTS_PER_PAGE = 12;
+export default async function BlogPage({ searchParams: rawSearchParams }) {
+  // ✅ Fix: await searchParams in App Router
+  const searchParams = await rawSearchParams;
 
-export default async function BlogPage({ searchParams }) {
   const page = parseInt(searchParams?.page || "1", 10);
   const categorySlug = searchParams?.category || null;
 
@@ -66,7 +73,7 @@ export default async function BlogPage({ searchParams }) {
   // ✅ Fetch categories
   const categories = await client.fetch(allCategoriesQuery);
 
-  // ✅ Match category ID from slug
+  // ✅ Resolve category from slug
   let categoryId = null;
   if (categorySlug) {
     const match = categories.find((c) => c.slug.current === categorySlug);
@@ -83,24 +90,18 @@ export default async function BlogPage({ searchParams }) {
 
   const totalPages = Math.ceil(totalPosts / POSTS_PER_PAGE);
 
-  const siteUrl =
-    process.env.NEXT_PUBLIC_SITE_URL ||
-    (process.env.NODE_ENV === "production"
-      ? "https://omoolaex.com.ng"
-      : "http://localhost:3000");
-
   const pageUrl = categorySlug
     ? `${siteUrl}/blog?category=${categorySlug}&page=${page}`
     : `${siteUrl}/blog${page > 1 ? `?page=${page}` : ""}`;
 
-  // ✅ JSON-LD Structured Data
+  // ✅ Structured Data for SEO
   const blogStructuredData = {
     "@context": "https://schema.org",
     "@type": "Blog",
-    name: "OmoolaEx Blog",
+    name: "OmoolaEx IT Consultancy Ltd Blog",
     url: `${siteUrl}/blog`,
     description:
-      "Expert web design, IT consulting, branding, and digital strategy insights from OmoolaEx.",
+      "OmoolaEx IT Consultancy Ltd shares insights on web development, IT consulting, cloud technology, and digital transformation.",
     blogPost: posts.map((post) => ({
       "@type": "BlogPosting",
       headline: post.title,
@@ -108,9 +109,15 @@ export default async function BlogPage({ searchParams }) {
       datePublished: post.publishedAt,
       author: {
         "@type": "Person",
-        name: post.author || "OmoolaEx Team",
+        name: post.author || "OmoolaEx Editorial Team",
       },
     })),
+    publisher: {
+      "@type": "Organization",
+      name: "OmoolaEx IT Consultancy Ltd",
+      url: siteUrl,
+      logo: { "@type": "ImageObject", url: `${siteUrl}/images/logo.svg` },
+    },
   };
 
   const breadcrumbSchema = {
@@ -134,7 +141,7 @@ export default async function BlogPage({ searchParams }) {
 
   return (
     <>
-      {/* ✅ Structured Data */}
+      {/* ✅ JSON-LD Structured Data */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -142,17 +149,21 @@ export default async function BlogPage({ searchParams }) {
         }}
       />
 
-      {/* ✅ Analytics Tracking */}
-      <PageViewTracker url={pageUrl} />
+      {/* ✅ Page Analytics */}
+      <PageViewTracker
+        title="OmoolaEx Blog | IT Consulting Insights"
+        path="/blog"
+        location={pageUrl}
+      />
 
-      {/* Hero */}
+      {/* ✅ Page Hero */}
       <PageHero
-        title="Our Blog"
-        subtitle="Insights, tips, and updates from OmoolaEx"
+        title="OmoolaEx Blog"
+        subtitle="Ideas, insights, and innovations shaping the future of technology and digital transformation in Africa."
       />
 
       <main className="container mx-auto min-h-screen px-6 lg:px-12 py-12">
-        {/* Categories */}
+        {/* ✅ Categories Filter */}
         <section className="flex justify-center gap-3 mb-10 flex-wrap">
           <Link
             href="/blog"
@@ -182,10 +193,10 @@ export default async function BlogPage({ searchParams }) {
           })}
         </section>
 
-        {/* Blog Grid */}
+        {/* ✅ Blog Grid */}
         <BlogGrid posts={posts} />
 
-        {/* Pagination */}
+        {/* ✅ Pagination */}
         {totalPages > 1 && (
           <section className="flex justify-center items-center gap-2 mt-10">
             {Array.from({ length: totalPages }).map((_, i) => {

@@ -27,37 +27,31 @@ const team = [
       instagram: '#',
     },
   },
-  {
-    name: 'Priscilla Agwu',
-    role: 'Junior Developer',
-    image: '/images/team/agwu.jpg',
-    bio: 'Junior Frontend Developer.',
-    socials: {
-      linkedin: '#',
-      twitter: '#',
-      instagram: '#',
-    },
-  },
 ]
 
 export default function OurTeam() {
   return (
     <section className="bg-white py-24">
-      <div className="max-w-7xl mx-auto px-6 md:px-12">
+      <div className="max-w-7xl mx-auto px-6 md:px-12 grid grid-cols-1 md:grid-cols-2 gap-16 items-start">
 
-        {/* Section Title */}
-        <motion.h2
+        {/* Left Column: Title + Text */}
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
-          className="text-center text-3xl md:text-4xl font-bold text-blue-900 mb-16"
+          className="space-y-6"
         >
-          Meet Our Team
-        </motion.h2>
+          <h2 className="text-3xl md:text-4xl font-bold text-blue-900">
+            Meet Our Team
+          </h2>
+          <p className="text-gray-600 leading-relaxed">
+            Behind OmoolaEx is a team of strategists, developers, designers, and technology consultants who are passionate about helping Nigerian businesses thrive in the digital age. We bring diverse expertise across IT consulting, software development, brand design, and digital strategy—united by a shared commitment to delivering exceptional value to every client we serve.
+          </p>
+        </motion.div>
 
-        {/* Team Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-12">
+        {/* Right Column: Team Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-10">
           {team.map((member, index) => (
             <motion.div
               key={index}

@@ -7,33 +7,34 @@ import { Typewriter } from 'react-simple-typewriter'
 
 export default function Hero() {
   return (
-    <section className="bg-white relative py-4 sm:py-6 md:py-8 overflow-hidden">
-      {/* Background Blobs */}
-      <div className="absolute inset-0 -z-10">
+    <section className="relative bg-white py-8 sm:py-12 md:py-16 overflow-hidden">
+      {/* === Background Decorations === */}
+      <div className="absolute inset-0 -z-10 select-none pointer-events-none">
         <div className="absolute top-[-80px] left-[-100px] w-[240px] h-[240px] sm:w-[280px] sm:h-[280px] md:w-[320px] md:h-[320px] bg-yellow-100 rounded-full blur-[100px] md:blur-[120px] opacity-50 md:opacity-60" />
         <div className="absolute bottom-[-60px] right-[-80px] w-[200px] h-[200px] sm:w-[220px] sm:h-[220px] md:w-[240px] md:h-[240px] bg-blue-100 rounded-full blur-[80px] md:blur-[100px] opacity-40 md:opacity-50" />
         <div className="absolute top-[30%] left-[12%] w-6 h-6 sm:w-8 sm:h-8 bg-yellow-300 rounded-full opacity-30 animate-pulse" />
         <div className="absolute bottom-[25%] right-[10%] w-4 h-4 sm:w-6 sm:h-6 bg-blue-300 rounded-full opacity-30 animate-bounce" />
       </div>
 
-      {/* Main Container */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col-reverse lg:flex-row items-center gap-10 lg:gap-12 relative">
-        
-        {/* Text Block */}
+      {/* === Main Content === */}
+      <div className="max-w-7xl mx-auto px-6 sm:px-8 flex flex-col-reverse lg:flex-row items-center lg:items-center gap-8 lg:gap-10 relative">
+
+        {/* --- Text Section --- */}
         <motion.div
           initial={{ opacity: 0, x: -40 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.6, ease: 'easeOut' }}
-          className="w-full lg:w-[55%] z-30 bg-white p-6 sm:p-8 md:p-8 lg:p-20 rounded-tr-[40px] sm:rounded-tr-[60px] lg:rounded-tr-[80px] shadow-md lg:-mr-40"
+          className="w-full lg:w-[75%] z-30 bg-white p-6 sm:p-8 md:p-8 lg:p-12 rounded-tr-[40px] sm:rounded-tr-[60px] lg:rounded-tr-[80px] shadow-md lg:-mr-40 relative flex flex-col justify-center lg:-mt-18"
+          style={{ alignSelf: 'center' }}
         >
-          {/* Fixed height container for heading */}
-          <div className="min-h-[80px] sm:min-h-[98px] md:min-h-[112px] flex items-start">
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-blue-900 leading-tight tracking-tight max-w-xl">
+          {/* Headline */}
+          <div className="h-[100px] sm:h-[120px] md:h-[140px] flex items-start overflow-hidden">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-blue-900 leading-tight tracking-tight max-w-2xl">
               <Typewriter
-                words={['Trusted Digital Growth Partner for SMEs & Startups in Lagos']}
+                words={['Transform Your Business with Strategic IT Consulting in Nigeria']}
                 loop={false}
                 cursor
-                cursorStyle="_"
+                cursorStyle="..."
                 typeSpeed={70}
                 deleteSpeed={50}
                 delaySpeed={2000}
@@ -41,44 +42,38 @@ export default function Hero() {
             </h1>
           </div>
 
-          <p className="text-gray-700 text-sm sm:text-base md:text-lg leading-relaxed mb-6 max-w-lg mt-4">
-            At OmoolaEx, we help you turn your vision into reality. Whether you need a standout website, a memorable brand, or reliable IT systems, our team is here to support your growth and prepare your business for the future.
+          {/* Description */}
+          <p className="text-gray-700 text-sm sm:text-base md:text-lg leading-relaxed mb-6 max-w-xl mt-4">
+            In today's fast-paced digital landscape, staying ahead means making the right technology decisions. OmoolaEx is an IT consulting firm in Nigeria, helping businesses bridge the gap between global technology standards and local market realities. Whether you're a startup looking to scale, an SME navigating digital transformation, or a corporate seeking to optimize your IT infrastructure, we provide the strategic guidance and technical expertise you need to thrive.
           </p>
 
-          <div className="flex gap-4 flex-nowrap mt-6">
-            {/* Primary Button */}
+          {/* CTA Button */}
+          <div className="flex gap-4 mt-4">
             <Link
-              href="/request-a-quote"
-              className="group inline-flex items-center justify-center px-6 sm:px-8 py-3 rounded-full text-white font-semibold backdrop-blur-lg bg-gradient-to-r from-blue-500/70 to-blue-700/70 border border-white/30 shadow-[0_8px_32px_rgba(31,38,135,0.37)] hover:shadow-[0_12px_40px_rgba(31,38,135,0.45)] hover:scale-105 transition-all duration-300 text-sm sm:text-base whitespace-nowrap"
+              href="/services"
+              className="group inline-flex items-center justify-center px-2 sm:px-3 py-3 font-semibold text-blue-700 bg-white/50 backdrop-blur-md hover:scale-105 transition-all duration-300 text-sm sm:text-base whitespace-nowrap rounded-md"
             >
-              Get a Free Quote
-            </Link>
-
-            {/* Secondary Button */}
-            <Link
-              href="/bookings"
-              className="group inline-flex items-center justify-center px-6 sm:px-8 py-3 font-semibold text-blue-700 bg-white/50 backdrop-blur-md hover:bg-blue-50 hover:scale-105 transition-all duration-300 text-sm sm:text-base whitespace-nowrap"
-            >
-              Book a Free Consultation
-              <span className="ml-2 transform transition-transform duration-300 group-hover:translate-x-1">
-                →
+              Ready to future-proof your business?
+              <span className="ml-2 transition-transform duration-300 group-hover:translate-x-1">
+                Let's talk →
               </span>
             </Link>
           </div>
         </motion.div>
 
-        {/* Image Block */}
+        {/* --- Image Section --- */}
         <motion.div
           initial={{ opacity: 0, x: 40 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.6, ease: 'easeOut', delay: 0.2 }}
-          className="w-full lg:w-[75%] h-[280px] sm:h-[360px] md:h-[400px] lg:h-[550px] relative z-10"
+          className="w-full lg:w-[90%] relative z-10 lg:-mt-10 lg:mb-10 flex justify-center"
         >
-          <div className="relative w-full h-full overflow-hidden rounded-tr-[20px] rounded-bl-[80px] sm:rounded-bl-[100px] lg:rounded-bl-[120px] shadow-lg">
+          <div className="relative w-full h-[300px] sm:h-[380px] md:h-[460px] lg:h-[640px] overflow-hidden rounded-tr-[20px] rounded-bl-[100px] sm:rounded-bl-[110px] lg:rounded-bl-[130px] shadow-lg">
             <Image
-              src="/images/team-working.png"
-              alt="Omoolaex Team working"
+              src="/images/office-space.png"
+              alt="OmoolaEx team working together"
               fill
+              sizes="(max-width: 1024px) 100vw, 70vw"
               className="object-cover"
               priority
             />

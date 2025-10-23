@@ -11,54 +11,61 @@ const siteUrl =
     ? "https://omoolaex.com.ng"
     : "http://localhost:3000");
 
+// ✅ Updated SEO Metadata (aligned with OmoolaEx IT Consulting brand)
 export const metadata = {
-  title: "Our Portfolio | OmoolaEx | Projects Showcase",
+  title: "Portfolio | OmoolaEx IT Consultancy Ltd | Digital Transformation & Technology Solutions",
   description:
-    "Explore OmoolaEx portfolio showcasing web development, mobile apps, software solutions, branding, and IT projects for businesses across industries.",
+    "Explore OmoolaEx IT Consultancy Ltd portfolio — a showcase of enterprise IT projects, digital transformation initiatives, web and mobile solutions delivered for leading Nigerian businesses.",
   keywords: [
-    "OmoolaEx portfolio",
-    "web development projects",
-    "software solutions",
-    "branding showcase",
-    "IT consulting projects",
+    "OmoolaEx IT Consultancy Ltd",
+    "IT consulting projects Nigeria",
+    "digital transformation case studies",
+    "enterprise software solutions",
+    "web development Nigeria",
+    "mobile app development Nigeria",
+    "technology portfolio OmoolaEx",
   ],
-  alternates: { canonical: `${siteUrl}/portfolio` },
+  alternates: {
+    canonical: `${siteUrl}/portfolio`,
+  },
   openGraph: {
-    title: "Our Portfolio | OmoolaEx",
+    title: "OmoolaEx IT Consultancy Ltd | Our Project Portfolio",
     description:
-      "Explore OmoolaEx portfolio showcasing web development, mobile apps, software solutions, branding, and IT projects.",
+      "Discover OmoolaEx’s successful IT projects and digital transformation solutions for businesses across Nigeria — from web development to enterprise system integration.",
     url: `${siteUrl}/portfolio`,
-    siteName: "OmoolaEx",
+    siteName: "OmoolaEx IT Consultancy Ltd",
     type: "website",
+    locale: "en_NG",
     images: [
       {
-        url: `${siteUrl}/images/omoolaex.jpg`,
+        url: `${siteUrl}/images/logo.svg`,
         width: 1200,
         height: 630,
-        alt: "OmoolaEx Portfolio",
+        alt: "OmoolaEx IT Consultancy Project Portfolio",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Our Portfolio | OmoolaEx",
-    description:
-      "Check out OmoolaEx portfolio showcasing web development, branding, IT consulting, and software solutions.",
-    images: [`${siteUrl}/images/omoolaex.jpg`],
     site: "@omoolaex",
+    title: "OmoolaEx Portfolio | Digital Transformation & IT Projects",
+    description:
+      "Explore OmoolaEx’s technology portfolio — a collection of IT consulting, web, and cloud transformation projects shaping Africa’s digital future.",
+    images: [`${siteUrl}/images/logo.svg`],
   },
 };
 
+// ✅ Enhanced Structured Data (Schema.org)
 const structuredData = {
   "@context": "https://schema.org",
   "@type": "CollectionPage",
-  name: "OmoolaEx Portfolio",
+  name: "OmoolaEx IT Consultancy Ltd Portfolio",
   description:
-    "Explore OmoolaEx portfolio showcasing web development, mobile apps, software solutions, branding, and IT projects for businesses across industries.",
+    "A showcase of enterprise IT projects, web applications, and digital transformation initiatives by OmoolaEx IT Consultancy Ltd across Nigeria and Africa.",
   url: `${siteUrl}/portfolio`,
   publisher: {
     "@type": "Organization",
-    name: "OmoolaEx",
+    name: "OmoolaEx IT Consultancy Ltd",
     url: siteUrl,
     logo: {
       "@type": "ImageObject",
@@ -72,47 +79,73 @@ const structuredData = {
       { "@type": "ListItem", position: 2, name: "Portfolio", item: `${siteUrl}/portfolio` },
     ],
   },
+  mainEntity: {
+    "@type": "ItemList",
+    itemListElement: [
+      {
+        "@type": "CreativeWork",
+        name: "Digital Transformation Projects",
+        description:
+          "Technology-driven initiatives helping businesses modernize operations through OmoolaEx’s IT consulting expertise.",
+      },
+      {
+        "@type": "CreativeWork",
+        name: "Web & Mobile Solutions",
+        description:
+          "Full-stack web and mobile applications built for startups and enterprises in Nigeria.",
+      },
+      {
+        "@type": "CreativeWork",
+        name: "Enterprise Systems & Cloud Integration",
+        description:
+          "Cloud infrastructure and enterprise software deployments that power efficiency and growth.",
+      },
+    ],
+  },
 };
 
-// ✅ server-side fetch
+// ✅ Server-side data fetch
 async function getPortfolioData() {
-  const projects = await client.fetch(`*[_type == "portfolio"] | order(_createdAt desc){
-    _id,
-    title,
-    "slug": slug.current,
-    "featuredImage": featuredImage.asset->url,
-    projectOverview,
-    category->{ _id, title, "slug": slug.current },
-    projectSnapshots[]{ asset->{url} },
-    keyFeatures,
-    challenges,
-    ourSolution,
-    impactResults,
-    techStack,
-    liveWebsite
-  }`,
+  const projects = await client.fetch(
+    `*[_type == "portfolio"] | order(_createdAt desc){
+      _id,
+      title,
+      "slug": slug.current,
+      "featuredImage": featuredImage.asset->url,
+      projectOverview,
+      category->{ _id, title, "slug": slug.current },
+      projectSnapshots[]{ asset->{url} },
+      keyFeatures,
+      challenges,
+      ourSolution,
+      impactResults,
+      techStack,
+      liveWebsite
+    }`,
     {},
     { next: { revalidate: 60 } }
   );
 
-  const categories = await client.fetch(`*[_type == "portfolioCategory"] | order(title asc){
-    _id,
-    title,
-    "slug": slug.current
-  }`,
+  const categories = await client.fetch(
+    `*[_type == "portfolioCategory"] | order(title asc){
+      _id,
+      title,
+      "slug": slug.current
+    }`,
     {},
     { next: { revalidate: 60 } }
-);
+  );
 
   return { projects, categories };
 }
 
+// ✅ Page component
 export default async function PortfolioPage() {
   const { projects, categories } = await getPortfolioData();
 
   return (
     <main className="overflow-x-hidden relative">
-      {/* ✅ Structured Data */}
+      {/* ✅ Structured Data for Google Indexing */}
       <Script
         id="structured-data-portfolio"
         type="application/ld+json"
@@ -120,21 +153,18 @@ export default async function PortfolioPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />
 
-      {/* ✅ Pageview Tracker */}
+      {/* ✅ Pageview Tracking for Analytics */}
       <PageViewTracker
-        title="Our Portfolio | OmoolaEx"
+        title="OmoolaEx IT Consultancy Portfolio"
         path="/portfolio"
         location={`${siteUrl}/portfolio`}
       />
-
       <PageHero
-        title="Our Portfolio"
-        subtitle="Showcasing our successful projects across web, software, and IT solutions"
+        title="Our Project Portfolio"
+        subtitle="Explore how OmoolaEx helps organizations transform through technology — delivering innovative, data-driven, and scalable digital solutions."
       />
-
-      {/* ✅ Pass fetched data down */}
+      {/* ✅ Portfolio Projects */}
       <PortfolioContainer projects={projects} categories={categories} />
-
       <PortfolioCTA />
     </main>
   );

@@ -1,34 +1,34 @@
 'use client'
 
-import { Lightbulb, ClipboardCheck, Code, Rocket } from 'lucide-react'
+import { Lightbulb, ClipboardCheck, Server, ShieldCheck } from 'lucide-react'
 import { motion } from 'framer-motion'
 
 const processSteps = [
   {
-    title: 'Discovery',
+    title: 'Business Discovery',
     icon: <Lightbulb className="w-8 h-8 text-blue-600" />,
-    desc: 'We understand your goals, challenges, and target audience through strategic consultation.',
+    desc: 'We assess your organization’s current IT landscape, business goals, and operational challenges to identify opportunities for digital transformation.',
   },
   {
-    title: 'Planning',
+    title: 'IT Strategy Planning',
     icon: <ClipboardCheck className="w-8 h-8 text-blue-600" />,
-    desc: 'We define project scope, timeline, and strategy tailored to your unique needs.',
+    desc: 'We develop a tailored IT strategy roadmap that aligns technology investments with measurable business outcomes and scalability.',
   },
   {
-    title: 'Design & Develop',
-    icon: <Code className="w-8 h-8 text-blue-600" />,
-    desc: 'We design and build a stunning, functional product with performance in mind.',
+    title: 'Solution Design & Implementation',
+    icon: <Server className="w-8 h-8 text-blue-600" />,
+    desc: 'We architect, design, and deploy IT solutions—including software, cloud, and infrastructure—ensuring seamless integration and operational efficiency.',
   },
   {
-    title: 'Launch & Support',
-    icon: <Rocket className="w-8 h-8 text-blue-600" />,
-    desc: 'We deploy your solution and offer continuous optimization and support.',
+    title: 'Managed Support & Optimization',
+    icon: <ShieldCheck className="w-8 h-8 text-blue-600" />,
+    desc: 'We provide ongoing monitoring, IT management, and optimization, ensuring systems remain secure, reliable, and aligned with evolving business needs.',
   },
 ]
 
 export default function OurProcess() {
   return (
-    <section className="relative bg-gradient-to-br from-white via-blue-50 to-yellow-50 py-12 sm:py-16 md:py-20 lg:py-24 overflow-hidden">
+    <section className="relative bg-gradient-to-br from-white via-blue-50 to-white py-12 sm:py-16 md:py-20 lg:py-24 overflow-hidden">
       {/* Background Blobs */}
       <div className="absolute top-[-60px] right-[-60px] w-[160px] h-[160px] sm:w-[200px] sm:h-[200px] bg-yellow-100 rounded-full blur-[80px] sm:blur-[100px] opacity-40 -z-10" />
       <div className="absolute bottom-[-60px] left-[-50px] w-[140px] h-[140px] sm:w-[180px] sm:h-[180px] bg-blue-100 rounded-full blur-[70px] sm:blur-[90px] opacity-30 -z-10" />
@@ -42,7 +42,7 @@ export default function OurProcess() {
             transition={{ duration: 0.6 }}
             className="text-2xl sm:text-3xl md:text-4xl font-bold text-blue-900"
           >
-            Our Process
+            Our IT Consultancy Process
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -50,7 +50,7 @@ export default function OurProcess() {
             transition={{ duration: 0.7, delay: 0.1 }}
             className="text-gray-600 text-sm sm:text-base md:text-lg mt-2"
           >
-            How we turn your ideas into impactful digital products.
+            From strategy to execution, we guide your business through digital transformation with measurable impact.
           </motion.p>
         </div>
 

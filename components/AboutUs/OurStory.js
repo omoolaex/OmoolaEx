@@ -7,31 +7,31 @@ const timeline = [
   {
     year: '2020',
     title: 'The Spark',
-    desc: 'OmoolaEx started as a vision to bring digital growth closer to individuals and small businesses.',
+    desc: 'In 2020, OmoolaEx began with a vision: to bring digital growth closer to individuals and small businesses across Nigeria. We started by building websites for local founders, learning what it truly meant to deliver solutions that worked both technically and practically.',
     image: '/images/illustrations/idea.svg',
   },
   {
     year: '2021',
     title: 'The Foundation',
-    desc: 'We launched our first few websites for local founders and started building our workflow and reputation.',
+    desc: '2021, We launched our first websites for local founders and started building our workflow and reputation.',
     image: '/images/illustrations/laptop.svg',
   },
   {
     year: '2022',
     title: 'Expanding Reach',
-    desc: 'Word of mouth grew. We refined our services around what our audience truly needed conversion-focused web development.',
+    desc: 'By 2022, word of mouth grew as clients saw real results. We refined our services around what businesses actually needed—moving beyond websites to conversion-focused development and strategic digital solutions.',
     image: '/images/illustrations/network.svg',
   },
   {
     year: '2023',
     title: 'Positioning to Scale',
-    desc: 'We niched down, built partnerships, and leaned into strategy, UX, and value-driven delivery.',
+    desc: 'In 2023, we positioned to scale. We built partnerships, developed frameworks, and leaned into IT strategy, UX design, and value-driven delivery. We became trusted advisors, not just service providers.',
     image: '/images/illustrations/growth.svg',
   },
   {
-    year: '2024+',
+    year: '2025',
     title: 'Now & Next',
-    desc: 'Today, OmoolaEx stands as a trusted partner for forward-thinking founders and teams. And we are just getting started.',
+    desc: 'Today, With over 8 years of combined IT strategy experience from our leadership, 10+ successful brand launches, and a track record of delivering results, we are expanding our focus to serve businesses across Nigeria and West Africa with comprehensive IT consulting and advisory services. we are evolving into a full-fledged IT consulting firm. ',
     image: '/images/illustrations/rocket.svg',
   },
 ]

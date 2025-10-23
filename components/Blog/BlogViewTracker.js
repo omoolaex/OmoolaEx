@@ -1,18 +1,27 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState, useRef } from "react";
 
-export default function BlogViewTracker({ slug }) {
+export default function BlogViewTracker({ slug, initialViews = 0 }) {
+  const [views, setViews] = useState(initialViews);
+  const hasIncremented = useRef(false);
+
   useEffect(() => {
-    if (!slug) return;
+    if (!slug || hasIncremented.current) return;
 
     const incrementView = async () => {
       try {
-        await fetch("/api/increment-view", {
+        const res = await fetch("/api/increment-view", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ slug }),
         });
+
+        if (res.ok) {
+          const data = await res.json();
+          setViews(data.views);
+          hasIncremented.current = true; // mark as incremented
+        }
       } catch (err) {
         console.error("Failed to increment blog view:", err);
       }
@@ -21,5 +30,5 @@ export default function BlogViewTracker({ slug }) {
     incrementView();
   }, [slug]);
 
-  return null; // ✅ This runs silently in the background
+  return <span>👁 {views}</span>;
 }

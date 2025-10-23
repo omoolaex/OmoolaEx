@@ -1,88 +1,87 @@
 'use client'
-
 import { motion } from 'framer-motion'
-import {
-  FaStar, FaRocket, FaUserShield, FaCogs, FaSmile, FaHandshake
-} from 'react-icons/fa'
+import { FaHandshake, FaRocket, FaCogs, FaUserShield, FaSmile } from 'react-icons/fa'
 
 const reasons = [
   {
-    title: 'Client-Centered Approach',
-    icon: <FaHandshake size={36} />,
-    desc: 'We tailor every solution to your business goals, not just trends.',
+    title: 'Tailored to Your Reality',
+    desc: 'We offer solutions designed around your specific business context, challenges, and budget realities.',
+    icon: <FaHandshake />
   },
   {
-    title: 'Proven Expertise',
-    icon: <FaStar size={36} />,
-    desc: 'Years of experience delivering successful digital projects across industries.',
+    title: 'Implementation, Not Just Plans',
+    desc: 'A strategy document doesn\'t help if you can\'t execute it. We stay with you through implementation, providing hands-on support until solutions are working as intended.',
+    icon: <FaRocket />
   },
   {
-    title: 'Reliable & Transparent',
-    icon: <FaUserShield size={36} />,
-    desc: 'Clear communication, honest timelines, and accountable delivery.',
+    title: 'Training & Knowledge Transfer',
+    desc: 'We empower your team to own and evolve the solutions we build together. You\'re never left dependent on us for basic operations.',
+    icon: <FaCogs />
   },
   {
-    title: 'Innovative Solutions',
-    icon: <FaRocket size={36} />,
-    desc: 'We apply modern tools and creative thinking to keep you ahead.',
+    title: 'Transparent Communication',
+    desc: 'Clear explanations, realistic timelines, and honest assessments. We tell you what\'s possible, what it will take, and what you can expect—then we deliver on those commitments.',
+    icon: <FaUserShield />
   },
   {
-    title: 'All-in-One Services',
-    icon: <FaCogs size={36} />,
-    desc: 'From design to deployment — everything you need under one roof.',
-  },
-  {
-    title: 'Delighted Clients',
-    icon: <FaSmile size={36} />,
-    desc: 'Your success is our top priority — we aim to exceed expectations.',
+    title: 'Long-Term Partnership',
+    desc: 'We measure success by your growth, not project completion. Our goal is to become your trusted technology partner for the long haul.',
+    icon: <FaSmile />
   },
 ]
 
-export default function WhyChooseUs() {
+export default function WhyChooseUsTimeline() {
   return (
-    <section className="bg-gradient-to-b from-white to-blue-50 py-16 overflow-hidden">
-      <div className="container mx-auto px-4 text-center max-w-7xl">
-        <motion.h2
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
-          className="text-3xl md:text-4xl font-bold mb-4 text-gray-800"
+    <section className="relative bg-gradient-to-b from-white to-blue-50 py-16">
+      <div className="max-w-7xl mx-auto px-6">
+        {/* Section Header */}
+        <motion.div className="text-center mb-12"
+          initial={{opacity:0,y:20}}
+          whileInView={{opacity:1,y:0}}
+          transition={{duration:0.6}}
         >
-          Why Choose OmoolaEx
-        </motion.h2>
+          <h2 className="text-3xl sm:text-4xl font-bold text-gray-800 mb-2">Why Choose OmoolaEx Services</h2>
+          <p className="text-gray-600 max-w-2xl mx-auto">
+            We deliver practical, sustainable IT solutions with a focus on partnership, transparency, and measurable growth.
+          </p>
+        </motion.div>
 
-        <motion.p
-          initial={{ opacity: 0, y: 10 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          viewport={{ once: true }}
-          className="text-gray-600 max-w-2xl mx-auto mb-12"
-        >
-          We’re more than just a service provider — we’re your digital growth partner. Here’s what makes OmoolaEx a standout choice.
-        </motion.p>
+        {/* Timeline */}
+        <div className="relative">
+          {/* Central vertical line */}
+          <div className="absolute left-1/2 transform -translate-x-1/2 h-full border-l-2 border-blue-200"></div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-          {reasons.map((item, idx) => (
-            <motion.div
-              key={idx}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: idx * 0.1 }}
-              viewport={{ once: true }}
-              whileHover={{ scale: 1.03 }}
-              className="bg-white rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 p-6 flex flex-col items-center text-center"
-            >
-              <motion.div
-                whileHover={{ rotate: [0, -10, 10, 0], transition: { duration: 0.6 } }}
-                className="text-blue-600 mb-4"
-              >
-                {item.icon}
-              </motion.div>
-              <h4 className="text-lg font-semibold mb-2 text-gray-800">{item.title}</h4>
-              <p className="text-sm text-gray-600">{item.desc}</p>
-            </motion.div>
-          ))}
+          <div className="space-y-12">
+            {reasons.map((r, i) => {
+              const isLeft = i % 2 === 0
+              return (
+                <motion.div
+                  key={i}
+                  className={`relative flex flex-col md:flex-row items-center ${isLeft ? 'md:justify-start' : 'md:justify-end'}`}
+                  initial={{opacity:0, y:30}}
+                  whileInView={{opacity:1, y:0}}
+                  transition={{duration:0.5, delay:i*0.1}}
+                >
+                  {/* Numbered badge */}
+                  <div className="absolute left-1/2 transform -translate-x-1/2 w-6 h-6 rounded-full bg-blue-600 z-10 shadow-md flex items-center justify-center text-white font-bold">
+                    {i + 1}
+                  </div>
+
+                  {/* Card */}
+                  <div className={`bg-white rounded-3xl shadow-md p-6 md:w-5/12 flex flex-col ${isLeft ? 'md:mr-auto md:text-left' : 'md:ml-auto md:text-left'}`}>
+                    {/* Icon */}
+                    <div className="flex items-center mb-3 text-blue-600 text-2xl">
+                      {r.icon}
+                    </div>
+                    {/* Title */}
+                    <h4 className="text-xl font-semibold mb-2 text-gray-800">{r.title}</h4>
+                    {/* Description */}
+                    <p className="text-gray-600 text-sm">{r.desc}</p>
+                  </div>
+                </motion.div>
+              )
+            })}
+          </div>
         </div>
       </div>
     </section>

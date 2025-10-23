@@ -2,104 +2,137 @@
 
 import Script from "next/script";
 import PageHero from "@/components/PageHero";
+import ServicesHero from "@/components/Services/ServicesHero";
+import ServicesOverview from "@/components/Services/ServicesOverview";
 import ServicesCTA from "@/components/Services/ServicesCTA";
 import ServicesGrid from "@/components/Services/ServicesGrid";
 import WhyChooseUs from "@/components/Services/WhyChooseUs";
 import PageViewTracker from "@/components/Analytics/PageViewTracker";
+import WhoWeServe from "@/components/Services/WhoWeServe";
 
+/* -------------------------------------------------------
+   ✅ SITE CONFIG
+------------------------------------------------------- */
 const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL ||
   (process.env.NODE_ENV === "production"
     ? "https://omoolaex.com.ng"
     : "http://localhost:3000");
 
+/* -------------------------------------------------------
+   ✅ METADATA — Brand-aligned SEO
+------------------------------------------------------- */
 export const metadata = {
   title:
-    "Our Services | OmoolaEx | Web Development, IT Consulting & Branding Experts in Lagos, Nigeria",
+    "Our Services | OmoolaEx IT Consultancy | Thinking Differently | Digital Transformation in Nigeria",
   description:
-    "OmoolaEx offers web development, branding, IT consulting, and digital solutions for startups and SMEs in Nigeria. Grow your business online with our expert services.",
+    "OmoolaEx IT Consultancy provides IT consulting, cloud solutions, cybersecurity, and digital transformation services for startups, SMEs, and enterprises across Nigeria.",
   keywords: [
-    "Web Development Lagos",
     "IT Consulting Nigeria",
-    "Brand Design Lagos",
-    "Digital Agency Nigeria",
-    "Cybersecurity",
-    "Software Development",
-    "Mobile App Development",
-    "IT Outsourcing",
-    "IT Training",
+    "Digital Transformation Lagos",
+    "Cloud Solutions Nigeria",
+    "Managed IT Services Lagos",
+    "Cybersecurity Consulting",
+    "Systems Integration",
+    "Technology Advisory",
+    "Business Process Automation",
+    "IT Infrastructure Nigeria",
   ],
   alternates: { canonical: `${siteUrl}/services` },
   openGraph: {
-    title: "Our Services | OmoolaEx",
+    title:
+      "Our Services | OmoolaEx IT Consultancy | Thinking Differently | Nigeria",
     description:
-      "Explore OmoolaEx services including web development, branding, IT consulting, and digital solutions to help startups and SMEs grow online.",
+      "Explore OmoolaEx IT Consultancy services — IT strategy, cloud infrastructure, cybersecurity, and digital transformation solutions tailored for African businesses.",
     url: `${siteUrl}/services`,
-    siteName: "OmoolaEx",
+    siteName: "OmoolaEx IT Consultancy",
     type: "website",
     images: [
       {
         url: `${siteUrl}/images/omoolaex.jpg`,
         width: 1200,
         height: 630,
-        alt: "OmoolaEx Services Page",
+        alt: "OmoolaEx IT Consultancy Services Page",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "OmoolaEx Services",
+    title:
+      "OmoolaEx IT Consultancy | Thinking Differently | Our IT Consulting Services",
     description:
-      "Empowering startups and SMEs through innovative web development, branding, and IT consulting services.",
+      "Discover OmoolaEx’s full range of IT consulting, digital transformation, and cloud infrastructure services in Nigeria.",
     images: [`${siteUrl}/images/omoolaex.jpg`],
     site: "@omoolaex",
   },
 };
 
+/* -------------------------------------------------------
+   ✅ STRUCTURED DATA
+------------------------------------------------------- */
 const servicesSchema = {
   "@context": "https://schema.org",
   "@type": "WebPage",
-  name: "Our Services | OmoolaEx",
+  name: "Our Services | OmoolaEx IT Consultancy",
   url: `${siteUrl}/services`,
   description:
-    "OmoolaEx provides web development, branding, and IT consulting services tailored for startups and SMEs in Nigeria.",
+    "OmoolaEx IT Consultancy offers IT consulting, cloud infrastructure, cybersecurity, and digital transformation services for startups, SMEs, and enterprises across Nigeria.",
   publisher: {
     "@type": "Organization",
-    name: "OmoolaEx",
+    name: "OmoolaEx IT Consultancy Ltd",
     url: siteUrl,
     logo: {
       "@type": "ImageObject",
-      url: `${siteUrl}/images/omoolaex.jpg`,
+      url: `${siteUrl}/images/logo.svg`,
     },
   },
   mainEntity: [
     {
       "@type": "Service",
-      name: "Web Design & Development",
+      name: "IT Consulting & Advisory",
       description:
-        "Responsive websites built for performance, SEO, and user experience.",
+        "Strategic technology advisory helping businesses plan, optimize, and scale IT systems with measurable outcomes.",
       areaServed: "Nigeria",
-      provider: { "@type": "Organization", name: "OmoolaEx" },
+      provider: { "@type": "Organization", name: "OmoolaEx IT Consultancy Ltd" },
     },
     {
       "@type": "Service",
-      name: "Brand Design & Strategy",
+      name: "Cloud Solutions & Infrastructure",
       description:
-        "Unique brand identities created for startups and SMEs using modern design tools.",
+        "Comprehensive cloud deployment, migration, and IT infrastructure management for secure, scalable operations.",
       areaServed: "Nigeria",
-      provider: { "@type": "Organization", name: "OmoolaEx" },
+      provider: { "@type": "Organization", name: "OmoolaEx IT Consultancy Ltd" },
     },
     {
       "@type": "Service",
-      name: "IT Consulting & Digital Solutions",
+      name: "Cybersecurity & Risk Management",
       description:
-        "Custom IT services including cybersecurity, software development, and digital marketing.",
+        "Security audits, incident response, and compliance strategies to protect business assets and data integrity.",
       areaServed: "Nigeria",
-      provider: { "@type": "Organization", name: "OmoolaEx" },
+      provider: { "@type": "Organization", name: "OmoolaEx IT Consultancy Ltd" },
+    },
+    {
+      "@type": "Service",
+      name: "Digital Transformation & Automation",
+      description:
+        "End-to-end transformation solutions that streamline workflows and modernize business processes through automation.",
+      areaServed: "Nigeria",
+      provider: { "@type": "Organization", name: "OmoolaEx IT Consultancy Ltd" },
+    },
+    {
+      "@type": "Service",
+      name: "Managed IT Services & Capacity Building",
+      description:
+        "Ongoing IT management, monitoring, and employee training programs to ensure consistent technical excellence.",
+      areaServed: "Nigeria",
+      provider: { "@type": "Organization", name: "OmoolaEx IT Consultancy Ltd" },
     },
   ],
 };
 
+/* -------------------------------------------------------
+   ✅ COMPONENT
+------------------------------------------------------- */
 export default function Services() {
   return (
     <main className="overflow-x-hidden relative">
@@ -119,9 +152,11 @@ export default function Services() {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "Organization",
-            name: "OmoolaEx",
+            name: "OmoolaEx IT Consultancy Ltd",
+            legalName: "OmoolaEx IT Consultancy Ltd",
             url: siteUrl,
-            logo: `${siteUrl}/images/omoolaex.jpg`,
+            logo: `${siteUrl}/images/logo.svg`,
+            slogan: "Thinking Differently",
             sameAs: [
               "https://www.facebook.com/OmoolaEx",
               "https://www.instagram.com/omoolaex_",
@@ -133,28 +168,40 @@ export default function Services() {
             contactPoint: {
               "@type": "ContactPoint",
               telephone: "+2347089217123",
-              contactType: "Customer Support",
+              contactType: "Customer Service",
               areaServed: "NG",
               availableLanguage: ["English"],
+            },
+            address: {
+              "@type": "PostalAddress",
+              streetAddress:
+                "Regent Palace, 8 R.T.S. Apena Cl, Oriyomi St, off Olowu Street, Opebi",
+              addressLocality: "Ikeja",
+              addressRegion: "Lagos",
+              postalCode: "100271",
+              addressCountry: "NG",
             },
           }),
         }}
       />
 
-      {/* ✅ Track Pageviews */}
+      {/* ✅ Analytics: Track Page Views */}
       <PageViewTracker
-        title="OmoolaEx Services | Web Development, IT Consulting & Branding"
+        title="OmoolaEx IT Consultancy | Thinking Differently | Our Services"
         path="/services"
         location={`${siteUrl}/services`}
       />
 
-      {/* Page Content */}
+      {/* ✅ Page Content */}
       <PageHero
         title="Our Services"
-        subtitle="Innovative web development, branding, and IT consulting services for startups and SMEs."
+        subtitle="Tailored IT consulting, digital transformation, and cloud solutions designed for businesses across Africa."
       />
+      <ServicesHero />
+      <ServicesOverview />
       <ServicesGrid />
       <WhyChooseUs />
+      <WhoWeServe />
       <ServicesCTA />
     </main>
   );
