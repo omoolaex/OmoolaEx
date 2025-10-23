@@ -1,4 +1,5 @@
 'use client'
+
 import { motion } from 'framer-motion'
 import Link from 'next/link'
 
@@ -35,7 +36,7 @@ export default function ServicesCTA() {
           Whether you need comprehensive IT consulting services in Nigeria, strategic guidance on a specific technology challenge, or a partner to support your digital transformation journey, <strong>OmoolaEx is here to help.</strong>
         </p>
         <p className="text-lg sm:text-xl text-blue-100 mb-12 leading-relaxed">
-          <strong>Get in touch today</strong> and let's discuss how our services can drive your business forward.
+          <strong>Get in touch today</strong> and let&apos;s discuss how our services can drive your business forward.
         </p>
 
         {/* CTA Button */}

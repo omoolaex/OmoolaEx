@@ -30,11 +30,11 @@ export default function AboutHero() {
           </h1>
 
           <p className="text-gray-600 text-base sm:text-lg md:text-[1.075rem] lg:text-xl leading-relaxed max-w-xl md:max-w-lg lg:max-w-2xl mb-5">
-            OmoolaEx is an IT consulting firm in Nigeria helping businesses navigate the complexities of digital transformation with confidence. Based in Lagos, we're more than consultants — we're partners in your growth journey. Whether you're a startup building your first digital product, an SME scaling operations, or a corporate optimizing IT infrastructure, we bring the strategic thinking and technical expertise needed to turn technology challenges into business opportunities.
+            OmoolaEx is an IT consulting firm in Nigeria helping businesses navigate the complexities of digital transformation with confidence. Based in Lagos, we&apos;re more than consultants — we&apos;re partners in your growth journey. Whether you&apos;re a startup building your first digital product, an SME scaling operations, or a corporate optimizing IT infrastructure, we bring the strategic thinking and technical expertise needed to turn technology challenges into business opportunities.
           </p>
 
           <p className="text-gray-600 text-base sm:text-lg md:text-[1.05rem] leading-relaxed max-w-xl md:max-w-lg lg:max-w-2xl mb-8">
-            Since 2020, we've been helping businesses leverage technology effectively. Now, as we evolve into a full-fledged IT consulting firm, we're bridging the gap between global technology standards and the realities of operating in the Nigerian market.
+            Since 2020, we&apos;ve been helping businesses leverage technology effectively. Now, as we evolve into a full-fledged IT consulting firm, we&apos;re bridging the gap between global technology standards and the realities of operating in the Nigerian market.
           </p>
 
           {/* Trust Badge */}

@@ -22,10 +22,10 @@ export default function CTASection() {
             Ready to Transform Your IT Strategy?
           </h2>
           <p className="text-gray-600 text-base sm:text-lg md:text-xl">
-            Whether you need IT consulting in Lagos, digital transformation guidance, or a complete technology overhaul, OmoolaEx is here to help. Let’s discuss how we can turn your technology challenges into competitive advantages.
+            Whether you need IT consulting in Lagos, digital transformation guidance, or a complete technology overhaul, OmoolaEx is here to help. Let&apos;s discuss how we can turn your technology challenges into competitive advantages.
           </p>
           <p className="text-gray-700 text-sm sm:text-base font-medium">
-            <strong>Book a free consultation today</strong> and discover what's possible when you partner with the right IT consulting firm in Nigeria.
+            <strong>Book a free consultation today</strong> and discover what&apos;s possible when you partner with the right IT consulting firm in Nigeria.
           </p>
 
           {/* Text-based CTA Link */}

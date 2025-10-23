@@ -30,12 +30,15 @@ export default function ServicesOverview() {
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-6 leading-snug">
             Our Approach to Service Delivery
           </h2>
+
           <p className="text-white/90 text-base sm:text-sm md:text-xl mb-4">
-            Most IT consulting firms in Nigeria either promise everything or specialize so narrowly they can't see the bigger picture. We take a different approach: comprehensive services delivered with a partnership mindset.
+            Most IT consulting firms in Nigeria either promise everything or specialize so narrowly they can&apos;t see the bigger picture. We take a different approach: comprehensive services delivered with a partnership mindset.
           </p>
+
           <p className="text-white/90 text-base sm:text-lg md:text-xl mb-4">
-            We start by understanding your business context—not just your technology needs. Then we recommend solutions that make sense for where you are now and where you're headed. We stay with you through implementation, provide training for your team, and ensure you can sustain and evolve the solutions we build together.
+            We start by understanding your business context — not just your technology needs. Then we recommend solutions that make sense for where you are now and where you&apos;re headed. We stay with you through implementation, provide training for your team, and ensure you can sustain and evolve the solutions we build together.
           </p>
+
           <p className="text-white text-lg sm:text-xl md:text-2xl font-semibold mt-4">
             Global standards. Local expertise. Practical execution.
           </p>
