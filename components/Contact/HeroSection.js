@@ -14,13 +14,13 @@ export default function HeroSection() {
           className="lg:w-1/2 flex flex-col justify-center space-y-6"
         >
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-blue-900">
-            Let's Talk About Your Technology Needs
+            Let&apos;s Talk About Your Technology Needs
           </h1>
           <p className="text-gray-700 text-base sm:text-lg md:text-xl">
             Looking for reliable IT consulting in Nigeria? Whether you need strategic guidance on digital transformation, help with cloud migration, or a technology partner to support your business growth, OmoolaEx is here to help.
           </p>
           <p className="text-gray-700 text-base sm:text-lg md:text-xl">
-            Reach out today and let's discuss how we can support your goals.
+            Reach out today and let&apos;s discuss how we can support your goals.
           </p>
         </motion.div>
 

@@ -44,7 +44,7 @@ export default function Hero() {
 
           {/* Description */}
           <p className="text-gray-700 text-sm sm:text-base md:text-lg leading-relaxed mb-6 max-w-xl mt-4">
-            In today's fast-paced digital landscape, staying ahead means making the right technology decisions. OmoolaEx is an IT consulting firm in Nigeria, helping businesses bridge the gap between global technology standards and local market realities. Whether you're a startup looking to scale, an SME navigating digital transformation, or a corporate seeking to optimize your IT infrastructure, we provide the strategic guidance and technical expertise you need to thrive.
+            In today&apos;s fast-paced digital landscape, staying ahead means making the right technology decisions. OmoolaEx is an IT consulting firm in Nigeria, helping businesses bridge the gap between global technology standards and local market realities. Whether you&apos;re a startup looking to scale, an SME navigating digital transformation, or a corporate seeking to optimize your IT infrastructure, we provide the strategic guidance and technical expertise you need to thrive.
           </p>
 
           {/* CTA Button */}
@@ -55,7 +55,7 @@ export default function Hero() {
             >
               Ready to future-proof your business?
               <span className="ml-2 transition-transform duration-300 group-hover:translate-x-1">
-                Let's talk →
+                Let&apos;s talk →
               </span>
             </Link>
           </div>

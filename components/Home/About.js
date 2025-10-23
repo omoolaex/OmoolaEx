@@ -37,15 +37,15 @@ export default function WhoWeAreSection() {
           </h2>
 
           <p className="text-gray-700 text-base sm:text-lg mb-6 sm:mb-8 leading-relaxed">
-            OmoolaEx is more than just an IT consulting firm, we're your trusted technology partner. 
+            OmoolaEx is more than just an IT consulting firm, we&apos;re your trusted technology partner. 
             Based in Lagos, Nigeria, we combine deep technical expertise with practical business insight 
             to deliver IT solutions that actually work for African businesses. From IT strategy development 
-            to cloud migration, cybersecurity training to custom software development, we've helped 
+            to cloud migration, cybersecurity training to custom software development, we&apos;ve helped 
             organizations across Nigeria and West Africa turn technology challenges into competitive advantages.
           </p>
 
           <p className="text-gray-700 text-base sm:text-lg mb-6 sm:mb-8 leading-relaxed">
-            We don't just implement solutions; we ensure they align with your business goals, budget, 
+            We don&apos;t just implement solutions; we ensure they align with your business goals, budget, 
             and growth trajectory.
           </p>
 

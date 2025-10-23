@@ -40,9 +40,9 @@ export default function CTA() {
           viewport={{ once: true }}
           className="text-base sm:text-lg md:text-xl text-gray-200 mb-10 leading-relaxed"
         >
-          Whether you're exploring IT consulting options in Lagos, need strategic guidance on digital transformation, 
-          or want to discuss a specific technology challenge, we're here to help. 
-          Let’s talk about how OmoolaEx can become your trusted technology partner.
+          Whether you&apos;re exploring IT consulting options in Lagos, need strategic guidance on digital transformation, 
+          or want to discuss a specific technology challenge, we&apos;re here to help. 
+          Let&apos;s talk about how OmoolaEx can become your trusted technology partner.
         </motion.p>
 
         <motion.div
