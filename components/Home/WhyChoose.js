@@ -14,7 +14,7 @@ const reasons = [
 
 export default function WhyChooseTwoColumn() {
   return (
-    <section className="relative bg-gradient-to-br from-blue-50 via-white to-yellow-50 py-24 sm:py-28 lg:py-32 overflow-hidden">
+    <section className="relative bg-gradient-to-br from-blue-50 via-white to-yellow-50 py-20 sm:py-24 lg:py-32 overflow-hidden">
       {/* Decorative blobs */}
       <div className="absolute top-[-60px] left-[-60px] w-56 h-56 bg-blue-100 rounded-full blur-3xl opacity-30 -z-10" />
       <div className="absolute bottom-[-40px] right-[-60px] w-56 h-56 bg-yellow-100 rounded-full blur-3xl opacity-20 -z-10" />
@@ -31,8 +31,11 @@ export default function WhyChooseTwoColumn() {
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-blue-900">
             Why Choose <span className="text-blue-700">OmoolaEx</span>
           </h2>
+
           <p className="text-gray-600 text-base sm:text-lg md:text-xl">
-            Practical IT consulting for Nigerian businesses with global standards. Our solutions combine local expertise with international best practices to drive measurable results.
+            Practical IT consulting for Nigerian businesses with global standards. Our
+            solutions combine local expertise with international best practices to drive
+            measurable results.
           </p>
 
           {/* Checklist */}
@@ -59,7 +62,7 @@ export default function WhyChooseTwoColumn() {
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
             href="/services"
-            className="px-2 sm:px-3 py-3 font-bold text-blue-700 backdrop-blur-md hover:scale-105 transition-all duration-300 text-xl xl:text-base whitespace-nowrap"
+            className="px-4 py-3 font-bold text-blue-700 border border-blue-700 rounded-lg hover:bg-blue-700 hover:text-white transition-all duration-300 text-base sm:text-lg w-fit"
           >
             Work With Us →
           </motion.a>
@@ -71,15 +74,17 @@ export default function WhyChooseTwoColumn() {
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="lg:w-1/2"
+          className="lg:w-1/2 w-full"
         >
-          <div className="relative w-full h-80 sm:h-96 lg:h-[480px] rounded-2xl overflow-hidden shadow-lg">
+          {/* Responsive container: no fixed height, uses aspect ratio */}
+          <div className="relative w-full aspect-[4/3] sm:aspect-[16/10] lg:aspect-[16/9] rounded-2xl overflow-hidden shadow-lg">
             <Image
               src="/images/why-choose-us.png"
               alt="Why Choose OmoolaEx"
               fill
               className="object-cover transition-transform duration-300 hover:scale-105"
               sizes="(max-width: 1024px) 100vw, 50vw"
+              priority
             />
           </div>
         </motion.div>

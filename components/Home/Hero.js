@@ -26,28 +26,36 @@ export default function Hero() {
           transition={{ duration: 0.6, ease: 'easeOut' }}
           className="w-full lg:w-[75%] z-30 bg-white p-6 sm:p-8 md:p-8 lg:p-12 rounded-tr-[40px] sm:rounded-tr-[60px] lg:rounded-tr-[80px] shadow-md lg:-mr-40 relative flex flex-col justify-center lg:-mt-18"
           style={{ alignSelf: 'center' }}
-        >
+          >
           {/* Headline */}
-          <div className="h-[100px] sm:h-[120px] md:h-[140px] flex items-start overflow-hidden">
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-blue-900 leading-tight tracking-tight max-w-2xl">
-              <Typewriter
-                words={['Transform Your Business with Strategic IT Consulting in Nigeria']}
-                loop={false}
-                cursor
-                cursorStyle="..."
-                typeSpeed={70}
-                deleteSpeed={50}
-                delaySpeed={2000}
-              />
-            </h1>
-          </div>
+          <h1 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-blue-900 leading-tight tracking-tight max-w-2xl">
+            Transform Your Business with Strategic IT Consulting in Nigeria
+          </h1>
 
-          {/* Description */}
-          <p className="text-gray-700 text-sm sm:text-base md:text-lg leading-relaxed mb-6 max-w-xl mt-4">
-            In today&apos;s fast-paced digital landscape, staying ahead means making the right technology decisions. OmoolaEx is an IT consulting firm in Nigeria, helping businesses bridge the gap between global technology standards and local market realities. Whether you&apos;re a startup looking to scale, an SME navigating digital transformation, or a corporate seeking to optimize your IT infrastructure, we provide the strategic guidance and technical expertise you need to thrive.
+          {/* Subheading with Typewriter effect */}
+          <p className="text-blue-700 font-medium mt-3 text-base sm:text-lg md:text-xl">
+            <Typewriter
+              words={[
+                'Digital Transformation',
+                'Cloud Solutions',
+                'Technology Strategy',
+                'Business Growth',
+              ]}
+              loop
+              cursor
+              cursorStyle="|"
+              typeSpeed={60}
+              deleteSpeed={40}
+              delaySpeed={1800}
+            />
           </p>
 
-          {/* CTA Button */}
+          {/* Description */}
+          <p className="text-gray-700 text-sm sm:text-base md:text-lg leading-relaxed mb-6 max-w-xl mt-6">
+            In today&apos;s fast-paced digital landscape, staying ahead means making the right technology decisions. OmoolaEx is an IT consulting firm in Nigeria helping businesses bridge the gap between global technology standards and local market realities. Whether you&apos;re a startup looking to scale, an SME navigating digital transformation, or a corporate optimizing IT infrastructure, we provide the strategic guidance and technical expertise you need to thrive.
+          </p>
+
+          {/* CTA */}
           <div className="flex gap-4 mt-4">
             <Link
               href="/services"

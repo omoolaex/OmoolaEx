@@ -16,7 +16,7 @@ const services = [
       'Data Analytics & Business Intelligence',
     ],
     useCase: 'Perfect for businesses needing strategic clarity before major technology investments, companies navigating digital transformation, or leadership teams seeking expert guidance.',
-    link: '/services/it-consulting',
+    link: '/services/it-consulting-advisory',
   },
   {
     title: 'Digital Solutions & Systems Integration',
