@@ -11,7 +11,7 @@ export default function CoreServices() {
       description:
         'Strategic IT guidance that helps you develop robust strategies, navigate digital transformation, and make technology decisions that drive real business value.',
       icon: <Briefcase className="w-6 h-6 text-blue-700" />,
-      href: '/services/it-consulting',
+      href: '/services/it-consulting-advisory',
     },
     {
       title: 'Digital Solutions & Systems Integration',

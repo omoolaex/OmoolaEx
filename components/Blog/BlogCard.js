@@ -8,7 +8,7 @@ export default function BlogCard({ post }) {
     : "/images/logo.svg";
 
   return (
-    <article className="border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200 bg-white flex flex-col">
+    <article className="border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-200 bg-white dark:bg-gray-900 flex flex-col">
       {/* Featured Image with Overlay */}
       {post.image && (
         <div className="relative aspect-video">
@@ -19,12 +19,12 @@ export default function BlogCard({ post }) {
               fill
               className="object-cover"
               sizes="(max-width: 768px) 100vw, 33vw"
-              priority={false} // Only true for above-the-fold images
+              priority={false}
             />
           </Link>
 
           {/* Overlay: Categories + Views */}
-          <div className="absolute bottom-0 w-full flex justify-between items-center px-3 py-2 bg-gradient-to-t from-black/60 to-transparent text-white text-xs">
+          <div className="absolute bottom-0 w-full flex justify-between items-center px-3 py-2 bg-gradient-to-t from-black/70 to-transparent text-white text-xs">
             <div className="flex flex-wrap gap-1">
               {post.categories?.map((cat) => (
                 <span
@@ -35,7 +35,7 @@ export default function BlogCard({ post }) {
                 </span>
               ))}
             </div>
-            <span className="flex items-center gap-1">👁 {post.views || 0}</span>
+            <span className="flex items-center gap-1 opacity-90">👁 {post.views || 0}</span>
           </div>
         </div>
       )}
@@ -43,17 +43,23 @@ export default function BlogCard({ post }) {
       {/* Content */}
       <div className="p-4 flex flex-col flex-1">
         <Link href={`/blog/${post.slug.current}`}>
-          <h2 className="text-lg font-semibold line-clamp-2 mb-2 hover:text-blue-600">
+          <h2 className="text-lg font-semibold line-clamp-2 mb-2 text-gray-900 dark:text-gray-100 hover:text-blue-700 dark:hover:text-blue-400 transition-colors">
             {post.title}
           </h2>
         </Link>
 
-        <p className="text-gray-600 text-sm line-clamp-3 mb-4">{post.excerpt}</p>
+        <p className="text-gray-600 dark:text-gray-300 text-sm line-clamp-3 mb-4 leading-relaxed">
+          {post.excerpt}
+        </p>
 
         {/* Author + Date */}
-        <p className="text-xs text-gray-500 mt-auto">
+        <p className="text-xs text-gray-500 dark:text-gray-400 mt-auto">
           By {post.author || "OmoolaEx Team"} •{" "}
-          {new Date(post.publishedAt).toLocaleDateString()}
+          {new Date(post.publishedAt).toLocaleDateString(undefined, {
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+          })}
         </p>
       </div>
     </article>

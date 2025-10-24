@@ -87,7 +87,7 @@ export default function Navbar() {
           isOpen ? 'max-h-[500px]' : 'max-h-0'
         }`}
       >
-        <div className="bg-white border-t border-gray-100 px-4 py-4 space-y-4">
+        <div className="bg-white border-t border-gray-100 px-4 py-6 space-y-4">
           <nav className="flex flex-col gap-3 text-gray-700 font-medium">
             {navLinks.map(link => (
               <Link
