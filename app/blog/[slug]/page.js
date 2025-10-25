@@ -1,4 +1,3 @@
-// app/blog/[slug]/page.js
 import { client } from "@/sanity/client";
 import { urlFor } from "@/sanity/image";
 import { singlePostQuery, allSlugsQuery } from "@/lib/queries";
@@ -9,6 +8,7 @@ import BlogViewTracker from "@/components/Blog/BlogViewTracker";
 import PageViewTracker from "@/components/Analytics/PageViewTracker";
 import Link from "next/link";
 import Image from "next/image";
+import OGMetaInjector from "@/components/Blog/OGMetaInjector";
 
 /* -------------------------------
    1️⃣ Generate Static Paths
@@ -22,76 +22,39 @@ export async function generateStaticParams() {
    2️⃣ Dynamic Metadata for SEO
 --------------------------------- */
 export async function generateMetadata({ params }) {
-  const { slug } = await params;
+  const { slug } = params;
   const post = await client.fetch(singlePostQuery, { slug });
-
   if (!post) return { title: "Post Not Found | OmoolaEx Blog" };
 
-  const siteUrl =
-    process.env.NEXT_PUBLIC_SITE_URL ||
-    (process.env.NODE_ENV === "production"
-      ? "https://omoolaex.com.ng"
-      : "http://localhost:3000");
-
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://omoolaex.com.ng";
   const postUrl = `${siteUrl}/blog/${slug}`;
-  const imageUrl = post.image
-    ? urlFor(post.image).width(1200).url()
-    : `${siteUrl}/images/logo.svg`;
-
+  const imageUrl = post.image ? urlFor(post.image).width(1200).url() : `${siteUrl}/images/logo.svg`;
   const title = post.seoTitle || post.title;
-  const description =
-    post.seoDescription || post.excerpt?.slice(0, 155) || `Read this article: ${post.title}`;
-  const keywords = post.keywords || ["OmoolaEx", "Blog", "IT consulting Nigeria"];
+  const description = post.seoDescription || post.excerpt?.slice(0, 155) || `Read this article: ${post.title}`;
 
   return {
     title,
     description,
-    keywords,
-    alternates: { canonical: postUrl },
-    robots: { index: true, follow: true },
-    openGraph: {
-      title,
-      description,
-      url: postUrl,
-      type: "article",
-      publishedTime: post.publishedAt,
-      authors: [post.author || "OmoolaEx Team"],
-      images: [{ url: imageUrl, width: 1200, height: 630 }],
-    },
-    twitter: {
-      card: "summary_large_image",
-      title,
-      description,
-      images: [imageUrl],
-    },
+    openGraph: { title, description, url: postUrl, images: [{ url: imageUrl, width: 1200, height: 630 }] },
+    twitter: { card: "summary_large_image", title, description, images: [imageUrl] },
   };
 }
 
 /* -------------------------------
-   3️⃣ Single Blog Post Page
+   3️⃣ BlogPostPage (Server Component)
 --------------------------------- */
 export default async function BlogPostPage({ params }) {
-  const { slug } = await params;
+  const { slug } = params;
   const post = await client.fetch(singlePostQuery, { slug });
   if (!post) return <div className="text-center py-20">Post not found</div>;
 
-  const siteUrl =
-    process.env.NEXT_PUBLIC_SITE_URL ||
-    (process.env.NODE_ENV === "production"
-      ? "https://omoolaex.com.ng"
-      : "http://localhost:3000");
-
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://omoolaex.com.ng";
   const postUrl = `${siteUrl}/blog/${slug}`;
-  const imageUrl = post.image
-    ? urlFor(post.image).width(1200).url()
-    : `${siteUrl}/images/logo.svg`;
-
+  const imageUrl = post.image ? urlFor(post.image).width(1200).url() : `${siteUrl}/images/logo.svg`;
   const title = post.seoTitle || post.title;
-  const description =
-    post.seoDescription || post.excerpt?.slice(0, 155) || `Read this article: ${post.title}`;
+  const description = post.seoDescription || post.excerpt?.slice(0, 155) || `Read this article: ${post.title}`;
   const keywords = post.keywords || ["OmoolaEx", "Blog", "IT consulting Nigeria"];
 
-  // ----------------------------
   // Adjacent Posts
   const prevPost = await client.fetch(
     `*[_type=="post" && publishedAt < $current] | order(publishedAt desc)[0]{ title, slug }`,
@@ -102,13 +65,12 @@ export default async function BlogPostPage({ params }) {
     { current: post.publishedAt }
   );
 
-  // Related posts (matching any keyword)
+  // Related Posts
   const relatedPosts = await client.fetch(
     `*[_type=="post" && slug.current != $slug && count(keywords[@ in $keywords]) > 0] | order(publishedAt desc)[0..2]{ title, slug }`,
     { slug, keywords: post.keywords || [] }
   );
 
-  // ----------------------------
   // JSON-LD Schemas
   const blogPostingSchema = {
     "@context": "https://schema.org",
@@ -146,27 +108,24 @@ export default async function BlogPostPage({ params }) {
 
   return (
     <main className="container mx-auto p-8 max-w-3xl">
+      {/* Inject OG/Twitter meta client-side */}
+      <OGMetaInjector title={title} description={description} url={postUrl} image={imageUrl} />
+
       {/* Pageview Analytics */}
       <PageViewTracker title={title} path={`/blog/${slug}`} location={postUrl} />
 
       {/* JSON-LD */}
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify([blogPostingSchema, breadcrumbSchema]),
-        }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify([blogPostingSchema, breadcrumbSchema]) }}
       />
 
       {/* Breadcrumb */}
       <nav className="text-sm mb-6 text-gray-600" aria-label="Breadcrumb">
         <ol className="flex space-x-2">
-          <li>
-            <Link href="/" className="hover:underline">Home</Link>
-          </li>
+          <li><Link href="/" className="hover:underline">Home</Link></li>
           <li>/</li>
-          <li>
-            <Link href="/blog" className="hover:underline">Blog</Link>
-          </li>
+          <li><Link href="/blog" className="hover:underline">Blog</Link></li>
           <li>/</li>
           <li className="text-gray-500">{post.title}</li>
         </ol>
@@ -175,8 +134,6 @@ export default async function BlogPostPage({ params }) {
       {/* Blog Content */}
       <article itemScope itemType="https://schema.org/BlogPosting">
         <h1 className="text-4xl font-bold mb-4" itemProp="headline">{post.title}</h1>
-
-        {/* Blog View Tracker */}
         <div className="text-sm text-gray-500 mb-6">
           By <span itemProp="author">{post.author || "OmoolaEx Team"}</span> •{" "}
           <time itemProp="datePublished" dateTime={post.publishedAt}>
@@ -204,16 +161,8 @@ export default async function BlogPostPage({ params }) {
 
       {/* Prev / Next Posts */}
       <div className="flex justify-between mt-12 pt-6 border-t text-blue-600">
-        {prevPost ? (
-          <Link href={`/blog/${prevPost.slug.current}`} className="hover:underline">
-            ← {prevPost.title}
-          </Link>
-        ) : <span />}
-        {nextPost ? (
-          <Link href={`/blog/${nextPost.slug.current}`} className="hover:underline">
-            {nextPost.title} →
-          </Link>
-        ) : <span />}
+        {prevPost ? <Link href={`/blog/${prevPost.slug.current}`} className="hover:underline">← {prevPost.title}</Link> : <span />}
+        {nextPost ? <Link href={`/blog/${nextPost.slug.current}`} className="hover:underline">{nextPost.title} →</Link> : <span />}
       </div>
 
       {/* Related Posts */}
@@ -223,9 +172,7 @@ export default async function BlogPostPage({ params }) {
           <ul className="space-y-2">
             {relatedPosts.map((rp) => (
               <li key={rp.slug.current}>
-                <Link href={`/blog/${rp.slug.current}`} className="text-blue-600 hover:underline">
-                  {rp.title}
-                </Link>
+                <Link href={`/blog/${rp.slug.current}`} className="text-blue-600 hover:underline">{rp.title}</Link>
               </li>
             ))}
           </ul>

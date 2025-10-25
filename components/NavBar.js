@@ -15,7 +15,6 @@ export default function Navbar() {
     { href: '/', label: 'Home' },
     { href: '/about', label: 'About Us' },
     { href: '/services', label: 'Services' },
-    { href: '/industries', label: 'Industries We Serve' },
     { href: '/portfolio', label: 'Case Studies' },
     { href: '/contact', label: 'Contact' },
   ]

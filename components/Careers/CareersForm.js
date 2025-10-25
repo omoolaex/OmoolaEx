@@ -9,51 +9,89 @@ export default function CareersForm() {
     email: '',
     phone: '',
     portfolio: '',
-    roleType: '',
-    specificRole: '',
+    roleType: '', // Programme
+    programmeType: '', // Programme Type
+    specificRole: '', // Role
     education: '',
     message: '',
     resume: null,
     consent: false,
   })
+
   const [loading, setLoading] = useState(false)
 
-  // Roles grouped under programmes
+  // --- Role hierarchy ---
   const roleOptions = {
-    Volunteer: [
-      'Tech Community Volunteer',
-      'Digital Training Volunteer',
-      'Research & Innovation Volunteer',
-      'Creative Design Volunteer',
-      'Outreach & Communications Volunteer',
-    ],
-    Internship: [
-      'Frontend Developer Intern',
-      'Backend Developer Intern',
-      'UI/UX Designer Intern',
-      'Digital Marketing Intern',
-      'Project Management Intern',
-      'Graphics Designer Intern',
-      'Content Writer Intern',
-    ],
-    Graduate: [
-      'Graduate IT Consultant',
-      'Graduate Software Engineer',
-      'Graduate Cybersecurity Analyst',
-      'Graduate Project Coordinator',
-      'Graduate Business Analyst',
-    ],
+    Volunteer: {
+      'Technology & Engineering': [
+        'Frontend Development Volunteer',
+        'Backend Development Volunteer',
+        'Cybersecurity Volunteer',
+        'Technical Support Volunteer',
+        'Software Testing Volunteer',
+      ],
+      'Research & Innovation': [
+        'Technology Research Volunteer',
+        'Data & Insights Volunteer',
+        'Innovation Programme Support Volunteer',
+      ],
+      'Creative & Content': [
+        'Content Writing Volunteer',
+        'Graphics Design Volunteer',
+        'Video Editing Volunteer',
+        'UI/UX Design Volunteer',
+      ],
+      'Digital Engagement & Community': [
+        'Digital Marketing Volunteer',
+        'Outreach & Communications Volunteer',
+        'Community Engagement Volunteer',
+        'Events Coordination Volunteer',
+      ],
+    },
+    Internship: {
+      'Technology & Engineering': [
+        'Frontend Developer Intern',
+        'Backend Developer Intern',
+        'Cybersecurity Intern',
+        'Software Testing Intern',
+      ],
+      'Creative & Content': [
+        'UI/UX Designer Intern',
+        'Graphics Designer Intern',
+        'Content Writer Intern',
+      ],
+      'Digital & Business': [
+        'Digital Marketing Intern',
+        'Project Management Intern',
+        'Business Analyst Intern',
+      ],
+    },
+    Graduate: {
+      'Technology & Consulting': [
+        'Graduate IT Consultant',
+        'Graduate Software Engineer',
+        'Graduate Cybersecurity Analyst',
+      ],
+      'Project & Business': [
+        'Graduate Project Coordinator',
+        'Graduate Business Analyst',
+        'Graduate Operations Analyst',
+      ],
+    },
   }
 
+  // --- Handle Input Changes ---
   const handleChange = (e) => {
     const { name, value, type, checked, files } = e.target
     setForm((prev) => ({
       ...prev,
       [name]: type === 'checkbox' ? checked : files ? files[0] : value,
-      ...(name === 'roleType' ? { specificRole: '' } : {}), // reset when programme changes
+      ...(name === 'roleType' ? { programmeType: '', specificRole: '' } : {}),
+      ...(name === 'programmeType' ? { specificRole: '' } : {}),
     }))
   }
 
+  // --- Handle Submit ---
   const handleSubmit = async (e) => {
     e.preventDefault()
     if (!form.consent) {
@@ -67,14 +105,16 @@ export default function CareersForm() {
       formData.append('name', form.fullName)
       formData.append('email', form.email)
       formData.append('phone', form.phone)
-      formData.append('portfolio', form.portfolio || 'N/A')
-      formData.append('type', form.roleType)
-      formData.append('specificRole', form.specificRole)
+      formData.append('linkedin', form.portfolio || 'N/A')
+      formData.append(
+        'position',
+        `${form.roleType} / ${form.programmeType} / ${form.specificRole}`
+      )
       formData.append('education', form.education)
-      formData.append('message', form.message)
+      formData.append('coverLetter', form.message || 'N/A')
       if (form.resume) formData.append('resume', form.resume)
 
-      const res = await fetch('/api/request-quote', { method: 'POST', body: formData })
+      const res = await fetch('/api/job-apply', { method: 'POST', body: formData })
       const result = await res.json()
 
       if (result.success) {
@@ -85,6 +125,7 @@ export default function CareersForm() {
           phone: '',
           portfolio: '',
           roleType: '',
+          programmeType: '',
           specificRole: '',
           education: '',
           message: '',
@@ -114,7 +155,8 @@ export default function CareersForm() {
             Submit Your Application
           </h2>
           <p className="mt-4 text-gray-600 text-lg">
-            Apply for our Volunteer, Internship, or Graduate Trainee programmes and begin your journey with OmoolaEx.
+            Apply for our Volunteer, Internship, or Graduate Trainee programmes and begin your
+            journey with OmoolaEx.
           </p>
         </motion.div>
 
@@ -127,6 +169,7 @@ export default function CareersForm() {
           className="mt-10 text-left bg-white p-8 rounded-2xl shadow-lg"
         >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Basic Info */}
             <input
               name="fullName"
               value={form.fullName}
@@ -177,8 +220,26 @@ export default function CareersForm() {
               <option value="Graduate">Graduate Training Programme</option>
             </select>
 
-            {/* Role under Programme */}
+            {/* Programme Type Selection */}
             {form.roleType && (
+              <select
+                name="programmeType"
+                value={form.programmeType}
+                onChange={handleChange}
+                required
+                className="p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 w-full"
+              >
+                <option value="">Select Programme Type</option>
+                {Object.keys(roleOptions[form.roleType]).map((type, i) => (
+                  <option key={i} value={type}>
+                    {type}
+                  </option>
+                ))}
+              </select>
+            )}
+
+            {/* Specific Role */}
+            {form.programmeType && (
               <select
                 name="specificRole"
                 value={form.specificRole}
@@ -187,7 +248,7 @@ export default function CareersForm() {
                 className="p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 w-full"
               >
                 <option value="">Select Role</option>
-                {roleOptions[form.roleType].map((role, index) => (
+                {roleOptions[form.roleType][form.programmeType].map((role, index) => (
                   <option key={index} value={role}>
                     {role}
                   </option>
@@ -195,6 +256,7 @@ export default function CareersForm() {
               </select>
             )}
 
+            {/* Education */}
             <select
               name="education"
               value={form.education}
@@ -211,6 +273,7 @@ export default function CareersForm() {
             </select>
           </div>
 
+          {/* Message */}
           <textarea
             name="message"
             value={form.message}
@@ -234,6 +297,7 @@ export default function CareersForm() {
             />
           </div>
 
+          {/* Consent */}
           <div className="flex items-start text-sm text-gray-600 mt-4">
             <input
               type="checkbox"
@@ -245,13 +309,17 @@ export default function CareersForm() {
             />
             <span>
               I agree to the{' '}
-              <a href="/privacy-policy" className="underline text-blue-600 hover:text-blue-800">
+              <a
+                href="/privacy-policy"
+                className="underline text-blue-600 hover:text-blue-800"
+              >
                 Privacy Policy
               </a>{' '}
               and confirm my details are accurate.
             </span>
           </div>
 
+          {/* Submit */}
           <button
             type="submit"
             disabled={loading}
