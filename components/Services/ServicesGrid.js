@@ -30,7 +30,7 @@ const services = [
       'API Development & Third-Party Integrations',
     ],
     useCase: 'Ideal for businesses that need custom software to solve specific problems or organizations integrating multiple systems for seamless operations.',
-    link: '/services/digital-solutions',
+    link: '/services/digital-solutions-systems-integration',
   },
   {
     title: 'Brand & Digital Growth Consulting',

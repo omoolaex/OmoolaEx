@@ -78,7 +78,7 @@ export default function Footer() {
           <h4 className="font-semibold text-2xl text-black mb-4">Services</h4>
           <ul className="space-y-2 text-gray-700">
             <li><Link href="/services/it-consulting-advisory" className="hover:text-blue-700 transition">IT Consulting & Advisory</Link></li>
-            <li><Link href="/services/digital-solutions" className="hover:text-blue-700 transition">Digital Solutions & Systems Integration</Link></li>
+            <li><Link href="/services/digital-solutions-systems-integration" className="hover:text-blue-700 transition">Digital Solutions & Systems Integration</Link></li>
             <li><Link href="/services/managed-it" className="hover:text-blue-700 transition">Managed IT Services & Capacity Building</Link></li>
             <li><Link href="/services/cloud-solutions" className="hover:text-blue-700 transition">Cloud Solutions & IT Infrastructure</Link></li>
             <li><Link href="/services/branding" className="hover:text-blue-700 transition">Brand & Digital Growth Consulting</Link></li>
