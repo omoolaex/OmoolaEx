@@ -33,7 +33,7 @@ export default function CalendlyWidget() {
       {/* Calendly Embed */}
       <div
         className="calendly-inline-widget shadow-lg rounded-lg border border-gray-200"
-        data-url="https://calendly.com/omoolaex/30min?hide_gdpr_banner=1"
+        data-url="https://calendly.com/omoolaex-info/45min?hide_gdpr_banner=1"
         style={{ minWidth: "320px", height: "700px" }}
       ></div>
     </div>

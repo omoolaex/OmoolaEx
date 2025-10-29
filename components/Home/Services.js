@@ -18,7 +18,7 @@ export default function CoreServices() {
       description:
         'Custom software, web and mobile applications, and seamless systems integration that fit your unique business needs.',
       icon: <Layers className="w-6 h-6 text-blue-700" />,
-      href: '/services/digital-solutions',
+      href: '/services/digital-solutions-systems-integration',
     },
     {
       title: 'Brand & Digital Growth Consulting',
