@@ -44,7 +44,7 @@ const services = [
       'Content Strategy & Execution',
     ],
     useCase: 'Perfect for startups establishing market presence, businesses rebranding, or companies scaling digital marketing strategically.',
-    link: '/services/digital-growth',
+    link: '/services/brand-digital-growth-consulting',
   },
   {
     title: 'Cloud Solutions & IT Infrastructure',
@@ -58,7 +58,7 @@ const services = [
       'Disaster Recovery Planning',
     ],
     useCase: 'Ideal for businesses moving from on-premise to cloud infrastructure or organizations prioritizing data security and business continuity.',
-    link: '/services/cloud-solutions',
+    link: '/services/cloud-solutions-it-infrastructure',
   },
   {
     title: 'Managed IT Services & Capacity Building',
@@ -72,7 +72,7 @@ const services = [
       'Help Desk & Technical Support',
     ],
     useCase: 'Perfect for businesses without in-house IT teams or companies investing in employee digital literacy and cybersecurity awareness.',
-    link: '/services/managed-it',
+    link: '/services/managed-it-services-capacity-building',
   },
 ]
 

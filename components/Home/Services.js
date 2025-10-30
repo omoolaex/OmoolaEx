@@ -25,21 +25,21 @@ export default function CoreServices() {
       description:
         'Strengthen your digital presence with strategic brand design, digital marketing, and performance optimization that drives growth.',
       icon: <Globe2 className="w-6 h-6 text-blue-700" />,
-      href: '/services/digital-growth',
+      href: '/services/brand-digital-growth-consulting',
     },
     {
       title: 'Cloud Solutions & IT Infrastructure',
       description:
         'Modern cloud migration, infrastructure setup, data security, and collaboration tools that keep your business running smoothly.',
       icon: <Cloud className="w-6 h-6 text-blue-700" />,
-      href: '/services/cloud-solutions',
+      href: '/services/cloud-solutions-it-infrastructure',
     },
     {
       title: 'Managed IT Services & Capacity Building',
       description:
         'Reliable IT support and training programs that empower your team with the digital skills needed for success.',
       icon: <ShieldCheck className="w-6 h-6 text-blue-700" />,
-      href: '/services/managed-it',
+      href: '/services/managed-it-services-capacity-building',
     },
   ]
 
