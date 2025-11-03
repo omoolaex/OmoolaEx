@@ -60,7 +60,7 @@ export default function DigitalSolutionsHero() {
               </Link>
 
               <Link
-                href="/services/digital-solutions-systems-integration-systems-integration#services"
+                href="/services/digital-solutions-systems-integration#services"
                 className="inline-flex items-center justify-center rounded-2xl border border-white/30 px-6 py-3 text-sm sm:text-base font-medium hover:bg-white/10 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white/50"
               >
                 Explore Our Services

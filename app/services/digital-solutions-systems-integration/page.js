@@ -34,13 +34,13 @@ export const metadata = {
     "Business automation Nigeria",
   ],
   alternates: {
-    canonical: `${siteUrl}/services/digital-solutions-systems-integration-systems-integration`,
+    canonical: `${siteUrl}/services/digital-solutions-systems-integration`,
   },
   openGraph: {
     title: "Custom Software Development & Systems Integration | OmoolaEx Nigeria",
     description:
       "We deliver custom digital solutions — websites, mobile apps, and integrated software that scale with your business.",
-    url: `${siteUrl}/services/digital-solutions-systems-integration-systems-integration`,
+    url: `${siteUrl}/services/digital-solutions-systems-integration`,
     siteName: "OmoolaEx",
     type: "website",
     locale: "en_NG",
@@ -184,7 +184,7 @@ const breadcrumbSchema = {
       "@type": "ListItem",
       position: 3,
       name: "Digital Solutions & Systems Integration",
-      item: `${siteUrl}/services/digital-solutions-systems-integration-systems-integration`,
+      item: `${siteUrl}/services/digital-solutions-systems-integration`,
     },
   ],
 };
@@ -255,8 +255,8 @@ export default function DigitalSolutionsPage() {
       {/* ✅ Page Analytics */}
       <PageViewTracker
         title="Custom Software Development & Systems Integration | OmoolaEx"
-        path="/services/digital-solutions-systems-integration-systems-integration"
-        location={`${siteUrl}/services/digital-solutions-systems-integration-systems-integration`}
+        path="/services/digital-solutions-systems-integration"
+        location={`${siteUrl}/services/digital-solutions-systems-integration`}
       />
 
       {/* ✅ Page Sections */}
