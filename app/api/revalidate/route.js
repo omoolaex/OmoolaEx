@@ -1,3 +1,5 @@
+import { revalidatePath } from "next/cache";
+
 export async function POST(req) {
   const { searchParams } = new URL(req.url);
   const secret = searchParams.get("secret");
@@ -7,11 +9,13 @@ export async function POST(req) {
   }
 
   try {
-    await res.revalidate("/");
-    await res.revalidate("/blog");
+    revalidatePath("/");
+    revalidatePath("/blog");
+    revalidatePath("/blog/${slug}");
     return new Response(JSON.stringify({ revalidated: true }), { status: 200 });
   } catch (err) {
-    return new Response(JSON.stringify({ message: "Error revalidating", error: err }), {
+    console.error("Revalidation error:", err);
+    return new Response(JSON.stringify({ message: "Error revalidating", error: err.message }), {
       status: 500,
     });
   }
