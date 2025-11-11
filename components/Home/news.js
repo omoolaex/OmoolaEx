@@ -1,4 +1,4 @@
-export const revalidate = 60; // Revalidate every 60 seconds
+export const revalidate = 60;
 
 import { client } from "@/sanity/client";
 import { latestPostsQuery } from "@/lib/queries";
@@ -8,18 +8,12 @@ export default async function NewsSection() {
   let posts = [];
 
   try {
-    // ✅ Use cache in production, disable only in dev
-    const fetchOptions =
-      process.env.NODE_ENV === "development"
-        ? { cache: "no-store" }
-        : { cache: "force-cache" };
-
-    posts = await client.fetch(latestPostsQuery, {}, fetchOptions);
+    posts = await client.fetch(latestPostsQuery, {}, { next: { revalidate: 60 } });
   } catch (err) {
     console.error("Sanity fetch error:", err);
   }
 
-  if (!posts || posts.length === 0) return null;
+  if (!posts?.length) return null;
 
   return <NewsSectionClient posts={posts} />;
 }
