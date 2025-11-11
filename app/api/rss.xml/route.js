@@ -19,7 +19,7 @@ function portableTextToPlain(blocks = []) {
 export async function GET() {
   try {
     const posts = await client.fetch(query)
-    const site = process.env.SITE_URL || "https://omoolaex.com"
+    const site = process.env.SITE_URL || "https://omoolaex.com.ng"
     const lastBuildDate = posts.length
       ? new Date(posts[0].publishedAt).toUTCString()
       : new Date().toUTCString()

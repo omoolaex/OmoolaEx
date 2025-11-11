@@ -7,6 +7,11 @@ export default function BlogCard({ post }) {
     ? urlFor(post.image).width(600).height(400).url()
     : "/images/logo.svg";
 
+  // Deduplicate categories by _id
+  const uniqueCategories = post.categories
+    ? [...new Map(post.categories.map(c => [c._id, c])).values()]
+    : [];
+
   return (
     <article className="border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-200 bg-white dark:bg-gray-900 flex flex-col">
       {/* Featured Image with Overlay */}
@@ -26,7 +31,7 @@ export default function BlogCard({ post }) {
           {/* Overlay: Categories + Views */}
           <div className="absolute bottom-0 w-full flex justify-between items-center px-3 py-2 bg-gradient-to-t from-black/70 to-transparent text-white text-xs">
             <div className="flex flex-wrap gap-1">
-              {post.categories?.map((cat) => (
+              {uniqueCategories.map((cat) => (
                 <span
                   key={cat._id}
                   className="px-2 py-0.5 bg-white/20 rounded-full backdrop-blur-sm"
