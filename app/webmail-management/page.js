@@ -35,7 +35,7 @@ export async function generateMetadata() {
       siteName: "OmoolaEx",
       images: [
         {
-          url: `${siteUrl}/images/omoolaex.jpg`,
+          url: `${siteUrl}/images/og-image.png`,
           width: 1200,
           height: 630,
           alt: "Webmail Management | OmoolaEx",
@@ -48,7 +48,7 @@ export async function generateMetadata() {
         title: "Webmail Management | OmoolaEx",
         description:
         "Professional, secure, and reliable webmail for SMEs. Custom domain emails, shared inboxes, anti-phishing, backups, and ongoing management.",
-        images: [`${siteUrl}/images/omoolaex.jpg`],
+        images: [`${siteUrl}/images/og-image.png`],
         site: "@omoolaex",
     },
   };

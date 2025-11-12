@@ -30,7 +30,7 @@ export const metadata = {
     type: "website",
     images: [
       {
-        url: `${siteUrl}/images/omoolaex.jpg`,
+        url: `${siteUrl}/images/og-image.png`,
         width: 1200,
         height: 630,
         alt: "OmoolaEx Terms & Conditions",
@@ -42,7 +42,7 @@ export const metadata = {
     title: "Terms & Conditions | OmoolaEx",
     description:
       "Learn about OmoolaEx's policies, service terms, and user responsibilities for web development and IT services.",
-    images: [`${siteUrl}/images/omoolaex.jpg`],
+    images: [`${siteUrl}/images/og-image.png`],
     site: "@omoolaex",
   },
 };
@@ -59,7 +59,7 @@ const structuredData = {
     "@type": "Organization",
     name: "OmoolaEx",
     url: siteUrl,
-    logo: `${siteUrl}/images/omoolaex.jpg`,
+    logo: `${siteUrl}/images/og-image.png`,
     sameAs: [
       "https://www.facebook.com/OmoolaEx",
       "https://www.instagram.com/omoolaex_",

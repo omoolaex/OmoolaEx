@@ -44,7 +44,7 @@ export const metadata = {
     locale: "en_NG",
     images: [
       {
-        url: `${siteUrl}/images/omoolaex-managed-it.jpg`,
+        url: `${siteUrl}/images/og-image.png`,
         width: 1200,
         height: 630,
         alt: "OmoolaEx Managed IT Services and Training Nigeria",
@@ -56,7 +56,7 @@ export const metadata = {
     title: "OmoolaEx | Managed IT Services & Training in Nigeria",
     description:
       "Comprehensive IT management, cybersecurity awareness, and digital skills training for Nigerian businesses.",
-    images: [`${siteUrl}/images/omoolaex-managed-it.jpg`],
+    images: [`${siteUrl}/images/og-image.png`],
     site: "@omoolaex",
   },
 };
@@ -67,7 +67,7 @@ const organizationSchema = {
   "@type": "Organization",
   name: "OmoolaEx IT Consultancy Ltd",
   url: siteUrl,
-  logo: `${siteUrl}/images/omoolaex-logo.jpg`,
+  logo: `${siteUrl}/images/og-image.png`,
   contactPoint: [
     {
       "@type": "ContactPoint",
@@ -102,7 +102,7 @@ const serviceSchema = {
     "@type": "Organization",
     name: "OmoolaEx IT Consultancy Ltd",
     url: siteUrl,
-    logo: `${siteUrl}/images/omoolaex-logo.jpg`,
+    logo: `${siteUrl}/images/og-image.png`,
   },
   areaServed: {
     "@type": "Country",

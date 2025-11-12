@@ -35,7 +35,7 @@ export const metadata = {
     locale: "en_NG",
     images: [
       {
-        url: `${siteUrl}/images/logo.svg`,
+        url: `${siteUrl}/images/og-image.png`,
         width: 1200,
         height: 630,
         alt: "OmoolaEx IT Consultancy Privacy Policy",
@@ -48,7 +48,7 @@ export const metadata = {
     title: "Privacy Policy | OmoolaEx IT Consultancy Ltd",
     description:
       "Learn about OmoolaEx IT Consultancy Ltd’s approach to data privacy, transparency, and user protection across our digital solutions.",
-    images: [`${siteUrl}/images/logo.svg`],
+    images: [`${siteUrl}/images/og-image.png`],
   },
 };
 

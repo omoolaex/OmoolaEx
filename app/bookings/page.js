@@ -3,10 +3,11 @@ import CalendlyWidget from './CalendlyWidget';
 import PageViewTracker from '@/components/Analytics/PageViewTracker';
 
 export const metadata = {
-  title: 'Book a Free Consultation | OmoolaEx | Web Development & IT Consulting in Lagos, Nigeria',
+  title: 'Book a Free Consultation | OmoolaEx IT Consultancy',
   description:
     'Easily book a free consultation with OmoolaEx. Choose your preferred date and time to discuss web development, branding, IT consulting, or digital growth strategies.',
   keywords: [
+    'IT Consultancy',
     'Book Consultation',
     'Web Development Lagos',
     'IT Consulting Nigeria',

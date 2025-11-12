@@ -44,7 +44,7 @@ export const metadata = {
     locale: "en_NG",
     images: [
       {
-        url: `${siteUrl}/images/omoolaex-cloud.jpg`,
+        url: `${siteUrl}/images/og-image.png`,
         width: 1200,
         height: 630,
         alt: "OmoolaEx Cloud Solutions & IT Infrastructure Nigeria",
@@ -56,7 +56,7 @@ export const metadata = {
     title: "OmoolaEx | Cloud Solutions & IT Infrastructure Nigeria",
     description:
       "Experts in cloud migration, infrastructure optimization, and data protection for Nigerian businesses.",
-    images: [`${siteUrl}/images/omoolaex-cloud.jpg`],
+    images: [`${siteUrl}/images/og-image.png`],
     site: "@omoolaex",
   },
 };
@@ -67,7 +67,7 @@ const organizationSchema = {
   "@type": "Organization",
   name: "OmoolaEx IT Consultancy Ltd",
   url: siteUrl,
-  logo: `${siteUrl}/images/omoolaex-logo.jpg`,
+  logo: `${siteUrl}/images/og-image.png`,
   sameAs: [
     "https://www.linkedin.com/company/omoolaex-it-consulting-company",
     "https://twitter.com/omoolaex",
@@ -102,7 +102,7 @@ const serviceSchema = {
     "@type": "Organization",
     name: "OmoolaEx IT Consultancy Ltd",
     url: siteUrl,
-    logo: `${siteUrl}/images/omoolaex-logo.jpg`,
+    logo: `${siteUrl}/images/og-image.png`,
   },
   areaServed: {
     "@type": "Country",

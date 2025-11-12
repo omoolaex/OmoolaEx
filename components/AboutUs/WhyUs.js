@@ -8,7 +8,6 @@ export default function WhyUs() {
   return (
     <section className="relative bg-white py-16 sm:py-20 md:py-24 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12">
-
         {/* Section Heading */}
         <motion.h2
           initial={{ opacity: 0, y: 30 }}
@@ -17,12 +16,11 @@ export default function WhyUs() {
           viewport={{ once: true }}
           className="text-center text-2xl sm:text-3xl md:text-4xl font-bold text-blue-900 mb-12 sm:mb-16"
         >
-          Why OmoolaEx
+          Why Businesses Trust OmoolaEx
         </motion.h2>
 
         {/* Responsive Flex Layout */}
         <div className="flex flex-col-reverse lg:flex-row items-center lg:items-start gap-12 lg:gap-0 relative">
-
           {/* Text Content */}
           <motion.div
             initial={{ opacity: 0, x: -60 }}
@@ -38,7 +36,7 @@ export default function WhyUs() {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="text-xl sm:text-2xl md:text-3xl font-semibold text-blue-800 mb-5"
             >
-              We’re More Than Just Developers
+              We Build Strategy Before Solutions
             </motion.h3>
 
             <motion.p
@@ -47,17 +45,19 @@ export default function WhyUs() {
               transition={{ duration: 0.6, delay: 0.4 }}
               className="text-gray-600 text-sm sm:text-base md:text-lg leading-relaxed mb-6"
             >
-              At OmoolaEx, we combine human insight with technology to deliver tailored solutions
-              for small businesses, startups, and founders. We don’t just build — we understand,
-              advise, and grow with you.
+              At OmoolaEx, we approach technology as an enabler, not a purchase. 
+              Every project begins with understanding your operations, business model, 
+              and growth goals. We bridge the gap between business strategy and IT 
+              execution — aligning every line of code, every system, and every 
+              recommendation with measurable outcomes.
             </motion.p>
 
             {/* Checklist */}
             <div className="space-y-5">
               {[
-                'Client-first approach to problem solving',
-                'Experienced in WordPress & modern frameworks',
-                'Reliable, scalable, and visually compelling work',
+                'End-to-end IT strategy — from consulting to implementation',
+                'Expertise across cloud, cybersecurity, and digital systems',
+                'Agile, data-driven, and aligned with your business goals',
               ].map((item, index) => (
                 <motion.div
                   key={index}
@@ -84,10 +84,11 @@ export default function WhyUs() {
             className="w-full lg:w-3/5 h-[300px] sm:h-[400px] md:h-[550px] relative"
           >
             <Image
-              src="/images/why-us.png"
-              alt="Why OmoolaEx"
+              src="/images/contact-hero.png"
+              alt="OmoolaEx IT Consultancy team collaborating with clients"
               fill
               className="object-cover rounded-tr-xl rounded-br-lg rounded-bl-[4.5rem] shadow-2xl"
+              priority
             />
           </motion.div>
         </div>

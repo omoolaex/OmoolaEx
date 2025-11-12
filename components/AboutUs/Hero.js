@@ -5,7 +5,7 @@ import { CheckCircle, Building2, Users2, Layers3, ThumbsUp } from 'lucide-react'
 
 export default function AboutHero() {
   const stats = [
-    { value: '3+', label: 'Years of Impact', icon: <Building2 className="w-6 h-6 text-blue-600" /> },
+    { value: '8+', label: 'Years of Impact', icon: <Building2 className="w-6 h-6 text-blue-600" /> },
     { value: '50+', label: 'Clients Served', icon: <Users2 className="w-6 h-6 text-blue-600" /> },
     { value: '10+', label: 'Industries Covered', icon: <Layers3 className="w-6 h-6 text-blue-600" /> },
     { value: '100%', label: 'Client Satisfaction', icon: <ThumbsUp className="w-6 h-6 text-blue-600" /> },

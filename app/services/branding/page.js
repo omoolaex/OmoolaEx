@@ -31,7 +31,7 @@ export const metadata = {
     type: "website",
     images: [
       {
-        url: `${siteUrl}/images/brand-management.jpg`,
+        url: `${siteUrl}/images/og-image.png`,
         width: 1200,
         height: 630,
         alt: "OmoolaEx Brand Management",
@@ -43,7 +43,7 @@ export const metadata = {
     title: "Brand Management Services | OmoolaEx",
     description:
       "Shape your brand to resonate, scale, and last with OmoolaEx branding services.",
-    images: [`${siteUrl}/images/brand-management.jpg`],
+    images: [`${siteUrl}/images/og-image.png`],
     site: "@omoolaex",
   },
 };

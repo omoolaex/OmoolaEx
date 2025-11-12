@@ -49,7 +49,7 @@ export const metadata = {
     type: "website",
     images: [
       {
-        url: `${siteUrl}/images/omoolaex.jpg`,
+        url: `${siteUrl}/images/og-image.png`,
         width: 1200,
         height: 630,
         alt: "OmoolaEx IT Consultancy Services Page",
@@ -62,7 +62,7 @@ export const metadata = {
       "OmoolaEx IT Consultancy | Thinking Differently | Our IT Consulting Services",
     description:
       "Discover OmoolaEx’s full range of IT consulting, digital transformation, and cloud infrastructure services in Nigeria.",
-    images: [`${siteUrl}/images/omoolaex.jpg`],
+    images: [`${siteUrl}/images/og-image.png`],
     site: "@omoolaex",
   },
 };

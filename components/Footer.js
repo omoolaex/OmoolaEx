@@ -41,7 +41,7 @@ export default function Footer() {
             <div className="flex items-start gap-2">
               <MapPin size={16} />
               <span>
-                <strong>OmoolaEx IT Consulting</strong><br />
+                <strong>OmoolaEx IT Consultancy Ltd</strong><br />
                 Rgnt Palace, 8 R.T.S. Apena Cl, Oriyomi St,<br />
                 Off Olowu Street, Opebi, Ikeja 100271,<br />
                 Lagos, Nigeria.

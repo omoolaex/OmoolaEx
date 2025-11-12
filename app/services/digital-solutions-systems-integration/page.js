@@ -46,7 +46,7 @@ export const metadata = {
     locale: "en_NG",
     images: [
       {
-        url: `${siteUrl}/images/omoolaex.jpg`,
+        url: `${siteUrl}/images/og-image.png`,
         width: 1200,
         height: 630,
         alt: "OmoolaEx Digital Solutions & Systems Integration Nigeria",
@@ -58,7 +58,7 @@ export const metadata = {
     title: "OmoolaEx | Custom Software Development Nigeria",
     description:
       "Website, web app, and systems integration experts helping Nigerian businesses grow with technology.",
-    images: [`${siteUrl}/images/omoolaex.jpg`],
+    images: [`${siteUrl}/images/og-image.png`],
     site: "@omoolaex",
   },
 };
@@ -69,7 +69,7 @@ const organizationSchema = {
   "@type": "Organization",
   name: "OmoolaEx IT Consultancy Ltd",
   url: siteUrl,
-  logo: `${siteUrl}/images/omoolaex-logo.jpg`,
+  logo: `${siteUrl}/images/og-image.png`,
   contactPoint: [
     {
       "@type": "ContactPoint",
@@ -104,7 +104,7 @@ const serviceSchema = {
     "@type": "Organization",
     name: "OmoolaEx IT Consultancy Ltd",
     url: siteUrl,
-    logo: `${siteUrl}/images/omoolaex-logo.jpg`,
+    logo: `${siteUrl}/images/og-image.png`,
   },
   areaServed: {
     "@type": "Country",

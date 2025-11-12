@@ -11,6 +11,9 @@ import {
   totalPostsByCategoryQuery,
 } from "@/lib/queries";
 
+/* -------------------------------
+   🔹 Constants
+--------------------------------- */
 const POSTS_PER_PAGE = 12;
 
 const siteUrl =
@@ -19,8 +22,11 @@ const siteUrl =
     ? "https://omoolaex.com.ng"
     : "http://localhost:3000");
 
+/* -------------------------------
+   🔹 Metadata (Static)
+--------------------------------- */
 export const metadata = {
-  title: "Insights & Updates | OmoolaEx IT Consultancy Ltd Blog",
+  title: "OmoolaEx Blog | IT Consulting & Digital Transformation Insights",
   description:
     "Stay ahead with expert insights from OmoolaEx IT Consultancy Ltd — covering IT strategy, cloud solutions, software innovation, branding, and digital transformation in Nigeria.",
   keywords: [
@@ -43,7 +49,7 @@ export const metadata = {
     type: "website",
     images: [
       {
-        url: `${siteUrl}/images/logo.svg`,
+        url: `${siteUrl}/images/og-image.png`,
         width: 1200,
         height: 630,
         alt: "OmoolaEx Blog - IT Consulting Insights",
@@ -55,15 +61,16 @@ export const metadata = {
     title: "OmoolaEx Blog | IT Consulting & Technology Insights",
     description:
       "Get thought leadership articles on IT consulting, software innovation, and digital transformation from OmoolaEx IT Consultancy Ltd.",
-    images: [`${siteUrl}/images/logo.svg`],
+    images: [`${siteUrl}/images/og-image.png`],
     site: "@omoolaex",
   },
 };
 
+/* -------------------------------
+   🔹 Page Component
+--------------------------------- */
 export default async function BlogPage({ searchParams: rawSearchParams }) {
-  // ✅ Fix: await searchParams in App Router
-  const searchParams = await rawSearchParams;
-
+  const searchParams = await rawSearchParams; // <--- this fixes the "await searchParams" error
   const page = parseInt(searchParams?.page || "1", 10);
   const categorySlug = searchParams?.category || null;
 
@@ -94,7 +101,9 @@ export default async function BlogPage({ searchParams: rawSearchParams }) {
     ? `${siteUrl}/blog?category=${categorySlug}&page=${page}`
     : `${siteUrl}/blog${page > 1 ? `?page=${page}` : ""}`;
 
-  // ✅ Structured Data for SEO
+  /* -------------------------------
+     🔹 Structured Data for SEO
+  --------------------------------- */
   const blogStructuredData = {
     "@context": "https://schema.org",
     "@type": "Blog",
@@ -131,7 +140,8 @@ export default async function BlogPage({ searchParams: rawSearchParams }) {
             {
               "@type": "ListItem",
               position: 3,
-              name: categories.find((c) => c.slug.current === categorySlug)?.title,
+              name: categories.find((c) => c.slug.current === categorySlug)
+                ?.title,
               item: `${siteUrl}/blog?category=${categorySlug}`,
             },
           ]
@@ -139,9 +149,12 @@ export default async function BlogPage({ searchParams: rawSearchParams }) {
     ],
   };
 
+  /* -------------------------------
+     🔹 Render
+  --------------------------------- */
   return (
     <>
-      {/* ✅ JSON-LD Structured Data */}
+      {/* ✅ Structured Data */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -149,14 +162,14 @@ export default async function BlogPage({ searchParams: rawSearchParams }) {
         }}
       />
 
-      {/* ✅ Page Analytics */}
+      {/* ✅ Analytics */}
       <PageViewTracker
         title="OmoolaEx Blog | IT Consulting Insights"
         path="/blog"
         location={pageUrl}
       />
 
-      {/* ✅ Page Hero */}
+      {/* ✅ Hero */}
       <PageHero
         title="OmoolaEx Blog"
         subtitle="Ideas, insights, and innovations shaping the future of technology and digital transformation in Africa."
@@ -194,11 +207,17 @@ export default async function BlogPage({ searchParams: rawSearchParams }) {
         </section>
 
         {/* ✅ Blog Grid */}
-        <BlogGrid posts={posts} />
+        {posts.length > 0 ? (
+          <BlogGrid posts={posts} />
+        ) : (
+          <div className="text-center text-gray-600 py-20">
+            No posts found in this category yet.
+          </div>
+        )}
 
         {/* ✅ Pagination */}
         {totalPages > 1 && (
-          <section className="flex justify-center items-center gap-2 mt-10">
+          <section className="flex justify-center items-center gap-2 mt-10 flex-wrap">
             {Array.from({ length: totalPages }).map((_, i) => {
               const pageNumber = i + 1;
               const url = categorySlug

@@ -42,7 +42,7 @@ export const metadata = {
     siteName: "OmoolaEx",
     images: [
       {
-        url: `${siteUrl}/images/omoolaex.jpg`,
+        url: `${siteUrl}/images/og-image.png`,
         width: 1200,
         height: 630,
         alt: "OmoolaEx Brand & Digital Growth Consulting",
@@ -55,7 +55,7 @@ export const metadata = {
     title: "OmoolaEx | Brand & Digital Growth Consulting Nigeria",
     description:
       "Partner with OmoolaEx for brand strategy, marketing consulting, and growth-driven digital transformation.",
-    images: [`${siteUrl}/images/omoolaex.jpg`],
+    images: [`${siteUrl}/images/og-image.png`],
     site: "@omoolaex",
   },
 };
@@ -71,7 +71,7 @@ const structuredData = {
     "@type": "Organization",
     name: "OmoolaEx IT Consultancy Ltd",
     url: siteUrl,
-    logo: `${siteUrl}/images/omoolaex-logo.jpg`,
+    logo: `${siteUrl}/images/og-image.png`,
     sameAs: [
       "https://www.linkedin.com/company/omoolaex-it-consulting-company",
       "https://twitter.com/omoolaex",

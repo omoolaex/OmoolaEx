@@ -1,8 +1,8 @@
-export const revalidate = 60;
-
 import { client } from "@/sanity/client";
 import { latestPostsQuery } from "@/lib/queries";
 import NewsSectionClient from "./NewsSectionClient";
+
+export const revalidate = 60;
 
 export default async function NewsSection() {
   let posts = [];
@@ -13,7 +13,7 @@ export default async function NewsSection() {
     console.error("Sanity fetch error:", err);
   }
 
-  if (!posts?.length) return null;
+  if (!posts.length) return null;
 
   return <NewsSectionClient posts={posts} />;
 }

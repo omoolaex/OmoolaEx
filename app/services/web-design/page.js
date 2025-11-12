@@ -42,7 +42,7 @@ export const metadata = {
     siteName: "OmoolaEx",
     images: [
       {
-        url: `${siteUrl}/images/omoolaex.jpg`,
+        url: `${siteUrl}/images/og-image.png`,
         width: 1200,
         height: 630,
         alt: "OmoolaEx Web Design & Development Services",
@@ -55,7 +55,7 @@ export const metadata = {
     title: "OmoolaEx | Web Design & Development Services in Lagos",
     description:
       "Build a responsive, fast, and SEO-optimized website with OmoolaEx. Serving startups and SMEs in Nigeria.",
-    images: [`${siteUrl}/images/omoolaex.jpg`],
+    images: [`${siteUrl}/images/og-image.png`],
     site: "@omoolaex",
   },
 };
@@ -71,7 +71,7 @@ const structuredData = {
     "@type": "Organization",
     name: "OmoolaEx",
     url: siteUrl,
-    logo: `${siteUrl}/images/omoolaex.jpg`,
+    logo: `${siteUrl}/images/og-image.png`,
     sameAs: [
       "https://www.facebook.com/OmoolaEx",
       "https://www.instagram.com/omoolaex_",

@@ -32,7 +32,7 @@ export const metadata = {
     type: 'website',
     images: [
       {
-        url: `${siteUrl}/images/omoolaex.jpg`,
+        url: `${siteUrl}/images/og-image.png`,
         width: 1200,
         height: 630,
         alt: 'OmoolaEx FAQs',
@@ -44,7 +44,7 @@ export const metadata = {
     title: 'FAQs | OmoolaEx',
     description:
       'Answers to frequently asked questions about OmoolaEx services: web development, IT consulting, and branding.',
-    images: [`${siteUrl}/images/omoolaex.jpg`],
+    images: [`${siteUrl}/images/og-image.png`],
     site: '@omoolaex',
   },
 };

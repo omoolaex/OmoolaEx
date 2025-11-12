@@ -38,7 +38,7 @@ export const metadata = {
     locale: "en_NG",
     images: [
       {
-        url: `${siteUrl}/images/logo.svg`,
+        url: `${siteUrl}/images/og-image.png`,
         width: 1200,
         height: 630,
         alt: "OmoolaEx IT Consultancy Project Portfolio",
@@ -51,7 +51,7 @@ export const metadata = {
     title: "OmoolaEx Portfolio | Digital Transformation & IT Projects",
     description:
       "Explore OmoolaEx’s technology portfolio — a collection of IT consulting, web, and cloud transformation projects shaping Africa’s digital future.",
-    images: [`${siteUrl}/images/logo.svg`],
+    images: [`${siteUrl}/images/og-image.png`],
   },
 };
 

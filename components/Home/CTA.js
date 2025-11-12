@@ -46,7 +46,7 @@ export default function CTASection() {
           className="relative w-full h-80 sm:h-96 lg:h-[500px] rounded-2xl overflow-hidden shadow-lg"
         >
           <Image
-            src="/images/cta-banner.png"
+            src="/images/it-strategy.png"
             alt="Transform IT Strategy"
             fill
             className="object-cover rounded-2xl transition-transform duration-300 hover:scale-105"

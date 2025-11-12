@@ -37,7 +37,7 @@ export const metadata = {
     locale: "en_NG",
     images: [
       {
-        url: `${siteUrl}/images/logo.svg`,
+        url: `${siteUrl}/images/og-image.png`,
         width: 1200,
         height: 630,
         alt: "OmoolaEx Request a Project Quote",
@@ -50,7 +50,7 @@ export const metadata = {
     title: "Request a Project Quote | OmoolaEx IT Consultancy Ltd",
     description:
       "Tell us about your web, IT, or digital project and get a custom quote from OmoolaEx IT Consultancy Ltd.",
-    images: [`${siteUrl}/images/logo.svg`],
+    images: [`${siteUrl}/images/og-image.png`],
   },
 };
 
