@@ -43,4 +43,4 @@ next-env.d.ts
 
 # folder + files generated not to be tracked
 /config/service-account.json
-/get-refresh-token.js
+/get-refreshed-tokens.js
