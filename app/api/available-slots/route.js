@@ -12,10 +12,10 @@ let isRefreshing = false;
 // ----- OAuth helper -----
 function getOAuthClient() {
   const client = new google.auth.OAuth2(
-    process.env.GOOGLE_CLIENT_ID,
-    process.env.GOOGLE_CLIENT_SECRET
+    process.env.CLIENT_ID,
+    process.env.CLIENT_SECRET
   );
-  client.setCredentials({ refresh_token: process.env.GOOGLE_REFRESH_TOKEN });
+  client.setCredentials({ refresh_token: process.env.REFRESH_TOKEN });
   return client;
 }
 
