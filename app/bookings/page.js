@@ -1,6 +1,6 @@
 import PageHero from '@/components/PageHero';
-import CalendlyWidget from './CalendlyWidget';
 import PageViewTracker from '@/components/Analytics/PageViewTracker';
+import BookingForm from '@/components/bookings/BookingForm';
 
 export const metadata = {
   title: 'Book a Free Consultation | OmoolaEx IT Consultancy',
@@ -104,7 +104,7 @@ export default function BookingsPage() {
       />
 
       {/* Calendly Widget */}
-      <CalendlyWidget />
+      <BookingForm />
     </main>
   );
 }

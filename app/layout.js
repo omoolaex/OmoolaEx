@@ -5,7 +5,7 @@ import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import Navbar from "@/components/NavBar";
 import Footer from "@/components/Footer";
-import DiscountPopup from "@/components/DiscountPopup";
+import Popup from "@/components/Popup";
 import CookieConsent from "@/components/CookieConsent";
 import { GA_TRACKING_ID } from "../lib/ga";
 import StyledComponentsRegistry from "@/lib/styledComponentsRegistry";
@@ -226,7 +226,7 @@ export default function RootLayout({ children }) {
           <Analytics />
           <SpeedInsights />
           <Navbar className="sticky" />
-          <DiscountPopup />
+          <Popup />
           <main className="flex-grow">
             {children}
             <FloatingContactActions />

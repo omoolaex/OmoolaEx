@@ -6,8 +6,8 @@ import nodemailer from 'nodemailer'
 // --- ZOHO SMTP Transporter ---
 const transporter = nodemailer.createTransport({
   host: 'smtp.zoho.com',
-  port: 587,
-  secure: false,
+  port: process.env.SMTP_PORT || 465,
+  secure: process.env.SMTP_SECURE || true,
   auth: {
     user: process.env.ZOHO_ADMIN_USER,
     pass: process.env.ZOHO_PASS,
@@ -58,6 +58,9 @@ export async function POST(req) {
     const timeline = sanitize(formData.get('timeline'))
     const consentTimestamp = new Date().toISOString()
     const attachment = formData.get('attachment')
+    const consent = formData.get('consent') === 'true'
+    const consentNewsletter = formData.get('consentNewsletter') === 'true' || formData.get('consentNewsletter') === true;
+
 
     // --- Build attachments ---
     let attachments = []
@@ -119,6 +122,7 @@ export async function POST(req) {
       Attachment: attachment ? attachment.name : 'N/A',
       ConsentTimestamp: consentTimestamp,
       IP: ip,
+      ConsentNewsletter: consentNewsletter ? 'Yes' : 'No',
     }
 
     const sheetRes = await fetch(`${process.env.SHEETDB_API_URI}?sheet=Contacts`, {
@@ -129,6 +133,36 @@ export async function POST(req) {
 
     if (!sheetRes.ok) throw new Error('Failed to log entry to SheetDB.')
 
+
+      // --- Brevo Newsletter Sync ---
+    if (consentNewsletter && email) {
+      try {
+        const BREVO_API_KEY = process.env.BREVO_API_KEY
+        const BREVO_LIST_ID = process.env.BREVO_NEWSLETTER_LIST_ID
+
+        const res = await fetch(process.env.BREVO_API_URL, {
+          method: 'POST',
+          headers: {
+            accept: 'application/json',
+            'content-type': 'application/json',
+            'api-key': BREVO_API_KEY,
+          },
+          body: JSON.stringify({
+            email,
+            attributes: { FIRSTNAME: name, PHONE: phone },
+            listIds: [parseInt(BREVO_LIST_ID, 10)],
+            updateEnabled: true,
+          }),
+        })
+
+        if (!res.ok) {
+          const text = await res.text()
+          console.error('Brevo newsletter failed:', res.status, text)
+        }
+      } catch (err) {
+        console.error('Brevo newsletter error:', err)
+      }
+    }    
     // --- Send confirmation email (delayed) ---
     setTimeout(async () => {
       try {
@@ -143,25 +177,26 @@ export async function POST(req) {
 
             ${
               reason === 'Request IT Consulting'
-                ? '<p>While you wait, you can explore our <a href="https://omoolaex.com/faq" target="_blank">FAQ page</a> to learn how we work with clients.</p>'
+                ? '<p>While you wait, you can explore our <a href="https://omoolaex.com.ng/faq" target="_blank">FAQ page</a> to learn how we work with clients.</p>'
                 : ''
             }
 
-            <p>If your matter is urgent, please reach us directly at <a href="mailto:info@omoolaex.com">info@omoolaex.com</a> or call <a href="tel:2347089217123"> <b>+234 (0) 708 921 7123</b>.</p>
+            <p>If your matter is urgent, please reach us directly at <a href="mailto:info@omoolaex.com.ng">info@omoolaex.com.ng</a> or call <a href="tel:2347089217123"> <b>+234 (0) 708 921 7123</b>.</p>
             
             <p>Thank you again for contacting OmoolaEx — we look forward to connecting.</p>
 
             <br/>
             <p>Warm regards,</p>
             <p><b>The OmoolaEx Team</b><br/>
-            <a href="https://omoolaex.com">https://omoolaex.com</a><br/>
-            <a href="https://omoolaex.com/privacy-policy">Privacy Policy</a></p>
+            <a href="https://omoolaex.com.ng">https://omoolaex.com.ng</a><br/>
+            <a href="https://omoolaex.com.ng/privacy-policy">Privacy Policy</a></p>
           `,
         })
       } catch (err) {
         console.error('Confirmation email failed:', err)
       }
     }, 10 * 60 * 1000) // 10-minute delay
+
 
     return NextResponse.json({ success: true, message: 'Contact submitted' })
   } catch (error) {

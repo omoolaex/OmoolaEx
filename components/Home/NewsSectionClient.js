@@ -67,7 +67,7 @@ export default function NewsSectionClient({ posts = [] }) {
               fill
               className="object-cover hover:scale-105 transition-transform"
               placeholder="blur"
-              blurDataURL="/images/placeholder.png"
+              blurDataURL="//images/logo.png"
             />
           </div>
 

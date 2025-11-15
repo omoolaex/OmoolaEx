@@ -18,6 +18,7 @@ export default function ContactForm() {
     timeline: '',
     attachment: null,
     consent: false,
+    consentNewsletter: false,
   })
 
   const [loading, setLoading] = useState(false)
@@ -90,6 +91,8 @@ export default function ContactForm() {
       formData.append('message', form.message || 'N/A')
       formData.append('budget', form.budget || 'N/A')
       formData.append('timeline', form.timeline || 'N/A')
+      formData.append('consent', form.consent)
+      formData.append('consentNewsletter', form.consentNewsletter)
       if (form.attachment) formData.append('attachment', form.attachment)
 
       const res = await fetch('/api/contact', { method: 'POST', body: formData })
@@ -111,6 +114,7 @@ export default function ContactForm() {
           timeline: '',
           attachment: null,
           consent: false,
+          consentNewsletter: false,
         })
       } else {
         setStatus({ type: 'error', message: json.message || '❌ Submission failed. Try again.' })
@@ -301,7 +305,22 @@ export default function ContactForm() {
               {"."}
             </span>
           </div>
-
+          <div className="flex items-start text-sm text-gray-600 mt-4">
+            <input
+              type="checkbox"
+              name="consentNewsletter"
+              checked={form.consentNewsletter}
+              onChange={handleChange}
+              className="mt-1 mr-2 accent-blue-600"
+            />
+            <span>
+              {"I want to receive newsletters and updates. To understand how we use your data, read our "}
+              <a href="/privacy-policy" className="underline text-blue-600 hover:text-blue-800">
+                Privacy Policy
+              </a>
+              {"."}
+            </span>
+          </div>
           {status && (
             <div
               className={`mt-4 p-3 rounded ${status.type === 'success' ? 'bg-green-50 text-green-800' : 'bg-red-50 text-red-800'
