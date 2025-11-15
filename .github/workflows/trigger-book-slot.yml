@@ -1,0 +1,15 @@
+name: Trigger Vercel Book Slot
+
+# Schedule the workflow
+on:
+  schedule:
+    - cron: '*/5 * * * *' # every 5 minutes
+  workflow_dispatch: # allows manual trigger from GitHub UI
+
+jobs:
+  trigger:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Vercel endpoint
+        run: |
+          curl -X GET https://omoolaex.com.ng/api/book-slot
