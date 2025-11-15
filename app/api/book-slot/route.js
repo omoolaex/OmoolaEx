@@ -17,12 +17,12 @@ const DEFAULT_MAX_ATTEMPTS = parseInt(process.env.QUEUE_MAX_ATTEMPTS || "5", 10)
 
 // ===== 2️⃣ OAuth Client =====
 function getOAuthClient() {
-  const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, GOOGLE_REFRESH_TOKEN } = process.env;
-  if (!GOOGLE_CLIENT_ID || !GOOGLE_CLIENT_SECRET || !GOOGLE_REFRESH_TOKEN) {
+  const { CLIENT_ID, CLIENT_SECRET, REFRESH_TOKEN } = process.env;
+  if (!CLIENT_ID || !CLIENT_SECRET || !REFRESH_TOKEN) {
     throw new Error("Missing Google OAuth environment variables");
   }
-  const client = new google.auth.OAuth2(GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET);
-  client.setCredentials({ refresh_token: GOOGLE_REFRESH_TOKEN });
+  const client = new google.auth.OAuth2(CLIENT_ID, CLIENT_SECRET);
+  client.setCredentials({ refresh_token: REFRESH_TOKEN });
   return client;
 }
 
