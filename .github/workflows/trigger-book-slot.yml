@@ -12,4 +12,4 @@ jobs:
     steps:
       - name: Trigger Vercel endpoint
         run: |
-          curl -X GET https://omoolaex.com.ng/api/book-slot
+          curl -X GET https://omoolaex.com.ng/api/queue-worker
