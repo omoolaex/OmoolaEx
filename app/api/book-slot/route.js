@@ -102,7 +102,7 @@ export async function POST(req) {
     const timestamp = new Date().toISOString();
     const rowValues = [timestamp, name, email, phone, company || "", website || "", industry, consultationType, slotStart, slotEnd, message || "", consentNDPR ? "Yes" : "No", consentNewsletter ? "Yes" : "No", meetLink || "", eventId || ""];
 
-    await enqueueJob("sheets.append", { spreadsheetId: process.env.GOOGLE_SHEET_ID, range: "Bookings!A1", values: [rowValues] });
+    await enqueueJob("sheets.append", { spreadsheetId: process.env.SHEET_ID, range: "Bookings!A1", values: [rowValues] });
 
     const admins = (process.env.ADMIN_EMAILS || "").split(",").map(s => s.trim()).filter(Boolean);
     for (const admin of admins) {
