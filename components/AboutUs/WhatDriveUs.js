@@ -57,7 +57,7 @@ export default function WhatDrivesUs() {
               <h3 className="text-xl font-semibold text-blue-800">Our Mission</h3>
             </div>
             <p className="text-gray-700 leading-relaxed">
-              To empower Nigerian businesses with strategic IT consulting and digital solutions that drive measurable growth, built on a foundation of global standards adapted for local realities.
+              Empower businesses with IT consulting that delivers measurable results. We help Nigerian organizations leverage technology strategically to drive growth, efficiency, and competitive advantage in a digital world.
             </p>
           </motion.div>
 

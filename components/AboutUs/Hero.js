@@ -30,11 +30,13 @@ export default function AboutHero() {
           </h1>
 
           <p className="text-gray-600 text-base sm:text-lg md:text-[1.075rem] lg:text-xl leading-relaxed max-w-xl md:max-w-lg lg:max-w-2xl mb-5">
-            OmoolaEx is an IT consulting firm in Nigeria helping businesses navigate the complexities of digital transformation with confidence. Based in Lagos, we&apos;re more than consultants — we&apos;re partners in your growth journey. Whether you&apos;re a startup building your first digital product, an SME scaling operations, or a corporate optimizing IT infrastructure, we bring the strategic thinking and technical expertise needed to turn technology challenges into business opportunities.
+            OmoolaEx is a Lagos-based IT consulting firm helping Nigerian businesses navigate digital transformation with confidence. We partner with startups, SMEs, and corporates to turn technology challenges into measurable business growth. 
+            <br />
+            From IT strategy and custom software to cloud solutions and managed IT services, we provide practical, results-driven guidance. Our mission: empower organizations to leverage technology effectively, without unnecessary complexity or cost.
           </p>
 
           <p className="text-gray-600 text-base sm:text-lg md:text-[1.05rem] leading-relaxed max-w-xl md:max-w-lg lg:max-w-2xl mb-8">
-            Since 2020, we&apos;ve been helping businesses leverage technology effectively. Now, as we evolve into a full-fledged IT consulting firm, we&apos;re bridging the gap between global technology standards and the realities of operating in the Nigerian market.
+            Founded in 2020, OmoolaEx started by delivering digital solutions for local startups. Over the years, we expanded to strategic IT consulting, cloud migration, and capacity-building services. Today, we help businesses across Nigeria and West Africa implement technology that works for them—aligning strategy, execution, and growth outcomes.
           </p>
 
           {/* Trust Badge */}

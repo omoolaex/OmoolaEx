@@ -23,7 +23,7 @@ export default function ServicesHero() {
             Comprehensive IT Consulting Services in Nigeria
           </h1>
           <p className="text-lg sm:text-xl md:text-2xl text-gray-700 max-w-xl">
-            Technology should drive your business forward, not hold it back. At OmoolaEx, we provide IT consulting, digital solutions, cloud services, and managed IT support tailored to your business goals, budget, and growth trajectory.
+            Technology should drive your business forward, not hold it back. OmoolaEx offers comprehensive IT consulting services tailored to startups, SMEs, and corporates across Nigeria. Our solutions cover IT strategy, custom software, cloud migration, digital growth, and managed IT services designed to deliver results you can measure.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 mt-4">

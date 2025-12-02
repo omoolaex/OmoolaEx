@@ -4,213 +4,252 @@ import crypto from "crypto";
 import { enqueueJob } from "@/lib/queue";
 import nodemailer from "nodemailer";
 
-function getOAuthClient() {
-  const { CLIENT_ID, CLIENT_SECRET, REFRESH_TOKEN } = process.env;
-  if (!CLIENT_ID || !CLIENT_SECRET || !REFRESH_TOKEN) throw new Error("Missing Google OAuth env vars");
-  const client = new google.auth.OAuth2(CLIENT_ID, CLIENT_SECRET);
-  client.setCredentials({ refresh_token: REFRESH_TOKEN });
-  return client;
-}
+import {
+  getOAuthClient,
+  toLocalCalendarDateTime,
+  formatDisplay
+} from "@/lib/google";
 
-function sanitizeString(s){ return s ? String(s).trim() : ""; }
-function isValidEmail(e){ return /^\S+@\S+\.\S+$/.test(e); }
+// ---------------------------------------
+// Utility helpers
+// ---------------------------------------
+const sanitize = s => (s ? String(s).trim() : "");
+const isValidEmail = e => /^\S+@\S+\.\S+$/.test(e);
 
-// Format a Date/ISO string into parts in a specific timezone (returns object)
-function partsInZone(dateStr, zone = "Africa/Lagos") {
-  const d = new Date(dateStr);
-  if (Number.isNaN(d.getTime())) throw new Error("Invalid date string");
-  const fmt = new Intl.DateTimeFormat("en", {
-    timeZone: zone,
-    year: "numeric", month: "2-digit", day: "2-digit",
-    hour: "2-digit", minute: "2-digit", second: "2-digit",
-    hour12: false
-  });
-  const parts = fmt.formatToParts(d).reduce((acc, p) => {
-    if (p.type !== "literal") acc[p.type] = p.value;
-    return acc;
-  }, {});
-  return {
-    year: parts.year, month: parts.month, day: parts.day,
-    hour: parts.hour, minute: parts.minute, second: parts.second
-  };
-}
-
-// Build Google Calendar local dateTime string: "YYYY-MM-DDTHH:MM:SS"
-function toLocalCalendarDateTime(dateStr, zone = "Africa/Lagos") {
-  const p = partsInZone(dateStr, zone);
-  return `${p.year}-${p.month}-${p.day}T${p.hour}:${p.minute}:${p.second}`;
-}
-
-// Build clean display string: "YYYY/MM/DD HH:MM"
-function formatDisplay(dateStr, zone = "Africa/Lagos") {
-  const p = partsInZone(dateStr, zone);
-  return `${p.year}/${p.month}/${p.day} ${p.hour}:${p.minute}`;
-}
-
+// ---------------------------------------
+// Email transporter
+// ---------------------------------------
 const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST,
-  port: parseInt(process.env.SMTP_PORT || '587', 10),
-  secure: String(process.env.SMTP_PORT) === '465',
+  port: parseInt(process.env.SMTP_PORT ?? "587", 10),
+  secure: String(process.env.SMTP_PORT) === "465",
   auth: { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS },
   tls: { rejectUnauthorized: false },
 });
 
+// =======================================
+// MAIN ROUTE
+// =======================================
 export async function POST(req) {
   try {
     const data = await req.json();
 
-    const name = sanitizeString(data.name);
-    const email = sanitizeString(data.email);
-    const phone = sanitizeString(data.phone);
-    const company = sanitizeString(data.company);
-    const website = sanitizeString(data.website);
-    const industry = sanitizeString(data.industry);
-    const consultationType = sanitizeString(data.consultationType);
-    const message = sanitizeString(data.message);
+    // Extract fields
+    const name = sanitize(data.name);
+    const email = sanitize(data.email);
+    const phone = sanitize(data.phone);
+    const company = sanitize(data.company);
+    const website = sanitize(data.website);
+    const industry = sanitize(data.industry);
+    const consultationType = sanitize(data.consultationType);
+    const message = sanitize(data.message);
     const consentNDPR = Boolean(data.consentNDPR);
     const consentNewsletter = Boolean(data.consentNewsletter);
-    const slotStartRaw = sanitizeString(data.slotStart || "");
-    const slotEndRaw = sanitizeString(data.slotEnd || "");
+    const slotStartRaw = sanitize(data.slotStart);
+    const slotEndRaw = sanitize(data.slotEnd);
 
-    if (!name || !email || !phone || !slotStartRaw || !slotEndRaw || !industry || !consultationType) {
+    // ---------------------------------------
+    // Validation
+    // ---------------------------------------
+    if (!name || !email || !phone || !industry || !consultationType || !slotStartRaw || !slotEndRaw) {
       return new Response(JSON.stringify({ error: "Missing required fields" }), { status: 400 });
     }
-    if (!isValidEmail(email)) return new Response(JSON.stringify({ error: "Invalid email" }), { status: 400 });
-    if (!consentNDPR) return new Response(JSON.stringify({ error: "NDPR consent required" }), { status: 400 });
+    if (!isValidEmail(email)) {
+      return new Response(JSON.stringify({ error: "Invalid email" }), { status: 400 });
+    }
+    if (!consentNDPR) {
+      return new Response(JSON.stringify({ error: "NDPR consent required" }), { status: 400 });
+    }
 
-    // Validate date strings
-    const slotStartDate = new Date(slotStartRaw);
-    const slotEndDate = new Date(slotEndRaw);
-    if (Number.isNaN(slotStartDate.getTime()) || Number.isNaN(slotEndDate.getTime())) {
+    // Parse dates
+    const slotStart = new Date(slotStartRaw);
+    const slotEnd = new Date(slotEndRaw);
+    if (Number.isNaN(slotStart.getTime()) || Number.isNaN(slotEnd.getTime())) {
       return new Response(JSON.stringify({ error: "Invalid slot timestamps" }), { status: 400 });
     }
-    if (slotEndDate <= slotStartDate) {
+    if (slotEnd <= slotStart) {
       return new Response(JSON.stringify({ error: "Slot end must be after slot start" }), { status: 400 });
     }
 
-    // Calendar event
+    // =======================================
+    // GOOGLE CALENDAR
+    // =======================================
     const auth = getOAuthClient();
     const calendar = google.calendar({ version: "v3", auth });
-    const calendars = [process.env.PRIMARY_CALENDAR_ID, process.env.SECONDARY_CALENDAR_ID].filter(Boolean);
-    if (!calendars.length) return new Response(JSON.stringify({ error: "No calendars configured" }), { status: 500 });
 
-    // Freebusy check: use canonical UTC ISO instants for the query (server-friendly)
-    const fbStart = slotStartDate.toISOString();
-    const fbEnd = slotEndDate.toISOString();
+    const calendars = [
+      process.env.PRIMARY_CALENDAR_ID,
+      process.env.SECONDARY_CALENDAR_ID
+    ].filter(Boolean);
+
+    if (!calendars.length) {
+      return new Response(JSON.stringify({ error: "No calendars configured" }), { status: 500 });
+    }
+
+    // Free/busy check
     const fb = await calendar.freebusy.query({
       requestBody: {
-        timeMin: fbStart,
-        timeMax: fbEnd,
-        timeZone: "Africa/Lagos",
+        timeMin: slotStart.toISOString(),
+        timeMax: slotEnd.toISOString(),
         items: [{ id: calendars[0] }],
+        timeZone: "Africa/Lagos"
       }
     });
-    if ((fb.data.calendars?.[calendars[0]]?.busy || []).length) {
+
+    const busySlots = fb.data.calendars?.[calendars[0]]?.busy ?? [];
+    if (busySlots.length > 0) {
       return new Response(JSON.stringify({ error: "Selected slot already booked" }), { status: 409 });
     }
 
-    // Convert to local calendar dateTimes (no Z) and set timeZone explicitly
+    // Convert datetimes to Lagos-local
     const startLocal = toLocalCalendarDateTime(slotStartRaw, "Africa/Lagos");
     const endLocal = toLocalCalendarDateTime(slotEndRaw, "Africa/Lagos");
 
+    // Event payload
     const eventBody = {
       summary: `Consultation: ${name} — ${consultationType}`,
       description: [
         `Name: ${name}`,
         `Email: ${email}`,
         `Phone: ${phone}`,
-        company ? `Company: ${company}` : null,
-        website ? `Website: ${website}` : null,
+        company ? `Company: ${company}` : "",
+        website ? `Website: ${website}` : "",
         `Industry: ${industry}`,
         `Consultation Type: ${consultationType}`,
-        `Message: ${message || '(none)'}`,
-        `Consent NDPR: ${consentNDPR ? 'Yes' : 'No'}`,
-        `Subscribe newsletter: ${consentNewsletter ? 'Yes' : 'No'}`,
+        `Message: ${message || "(none)"}`,
+        `Consent NDPR: Yes`,
+        `Subscribe newsletter: ${consentNewsletter ? "Yes" : "No"}`
       ].filter(Boolean).join("\n"),
+
       start: { dateTime: startLocal, timeZone: "Africa/Lagos" },
       end: { dateTime: endLocal, timeZone: "Africa/Lagos" },
+
       attendees: [{ email }],
-      conferenceData: { createRequest: { requestId: `meet-${crypto.randomUUID()}`, conferenceSolutionKey: { type: "hangoutsMeet" } } },
       reminders: { useDefault: true },
+
+      conferenceData: {
+        createRequest: {
+          requestId: `meet-${crypto.randomUUID()}`,
+          conferenceSolutionKey: { type: "hangoutsMeet" }
+        }
+      }
     };
 
+    // Insert into calendars
     let createdEvent = null;
     const addedCalendars = [];
+
     for (const calId of calendars) {
       try {
-        const inserted = await calendar.events.insert({
+        const result = await calendar.events.insert({
           calendarId: calId,
           requestBody: eventBody,
           conferenceDataVersion: 1,
           sendUpdates: "all",
         });
-        if (!createdEvent) createdEvent = inserted.data;
+        if (!createdEvent) createdEvent = result.data;
         addedCalendars.push(calId);
       } catch (err) {
-        console.error(`[calendar] Insert into ${calId} failed:`, err);
+        console.error(`[Calendar Insert Error: ${calId}]`, err);
       }
     }
 
-    if (!createdEvent) return new Response(JSON.stringify({ error: "Failed to create calendar event" }), { status: 500 });
+    if (!createdEvent) {
+      return new Response(JSON.stringify({ error: "Failed to create calendar event" }), { status: 500 });
+    }
 
-    const meetLink = createdEvent?.conferenceData?.entryPoints?.find(ep => ep.entryPointType === "video")?.uri || createdEvent?.hangoutLink || null;
+    const meetLink =
+      createdEvent?.conferenceData?.entryPoints?.find(ep => ep.entryPointType === "video")?.uri ||
+      createdEvent?.hangoutLink ||
+      null;
+
     const eventId = createdEvent.id;
 
-    // Clean display strings for sheets and emails
-    const displayStart = formatDisplay(slotStartRaw, "Africa/Lagos"); // YYYY/MM/DD HH:MM
-    const displayEnd = formatDisplay(slotEndRaw, "Africa/Lagos");     // YYYY/MM/DD HH:MM
-
-    // Enqueue jobs
-    const timestamp = new Date().toISOString(); // UTC record for audit (keeps canonical)
-    const safeCompany = company || "";
-    const safeWebsite = website || "";
-    const safeMessage = message || "";
+    // =======================================
+    // SHEETS ENTRY
+    // =======================================
+    const timestamp = new Date().toISOString();
+    const displayStart = formatDisplay(slotStartRaw);
+    const displayEnd = formatDisplay(slotEndRaw);
 
     const rowValues = [
       timestamp,
       name,
       email,
       phone,
-      safeCompany,
-      safeWebsite,
+      company || "",
+      website || "",
       industry,
       consultationType,
       displayStart,
       displayEnd,
-      safeMessage,
-      consentNDPR ? "Yes" : "No",
+      message || "",
+      "Yes",
       consentNewsletter ? "Yes" : "No",
       meetLink || "",
       eventId || ""
     ];
 
-    await enqueueJob("sheets.append", { spreadsheetId: process.env.SHEET_ID, range: "Bookings!A1", values: [rowValues] });
+    await enqueueJob("sheets.append", {
+      spreadsheetId: process.env.SHEET_ID,
+      range: "Bookings!A1",
+      values: [rowValues]
+    });
 
-    const admins = (process.env.ADMIN_EMAILS || "").split(",").map(s => s.trim()).filter(Boolean);
+    // =======================================
+    // ADMIN EMAIL(S)
+    // =======================================
+    const admins = (process.env.ADMIN_EMAILS || "")
+      .split(",")
+      .map(a => a.trim())
+      .filter(Boolean);
+
     for (const admin of admins) {
       await enqueueJob("email.send", {
         from: `"OmoolaEx Bookings" <no-reply@omoolaex.com.ng>`,
         to: admin,
         subject: `New Booking: ${name}`,
-        text: `New booking:\nName: ${name}\nEmail: ${email}\nPhone: ${phone}\nIndustry: ${industry}\nType: ${consultationType}\nDate: ${displayStart} - ${displayEnd}\nMeet: ${meetLink || "N/A"}`
+        text: `New booking:\nName: ${name}\nEmail: ${email}\nPhone: ${phone}\nIndustry: ${industry}\nType: ${consultationType}\nDate: ${displayStart} - ${displayEnd}\nMeet: ${meetLink ?? "N/A"}`
       });
     }
 
+    // =======================================
+    // CLIENT CONFIRMATION EMAIL
+    // =======================================
     await enqueueJob("email.send", {
       from: `"OmoolaEx Bookings" <no-reply@omoolaex.com.ng>`,
       to: email,
       subject: `Your OmoolaEx Consultation — ${displayStart}`,
-      text: `Hi ${name},\n\nYour consultation is confirmed.\nDate: ${displayStart} - ${displayEnd}\nMeet link: ${meetLink || 'N/A'}\n\nOmoolaEx Team`
+      text: `Hi ${name},\n\nYour consultation is confirmed.\nDate: ${displayStart} - ${displayEnd}\nMeet link: ${meetLink || "N/A"}\n\nOmoolaEx Team`
     });
 
+    // CRM Add if subscribed
     if (consentNewsletter) {
-      await enqueueJob("crm.addContact", { email, firstName: name, phone });
+      await enqueueJob("crm.addContact", {
+        email,
+        firstName: name,
+        phone
+      });
     }
 
-    return new Response(JSON.stringify({ success: true, eventId, meetLink, calendars: addedCalendars }), { status: 200 });
+    return new Response(
+      JSON.stringify({
+        success: true,
+        eventId,
+        meetLink,
+        calendars: addedCalendars
+      }),
+      { status: 200 }
+    );
 
   } catch (err) {
     console.error("[book-slot] ERROR:", err);
-    return new Response(JSON.stringify({ error: "Booking error", detail: String(err.message || err) }), { status: 500 });
+    return new Response(
+      JSON.stringify({
+        error: "Booking error",
+        detail: err.message ?? String(err)
+      }),
+      { status: 500 }
+    );
   }
 }

@@ -29,7 +29,7 @@ export default function Hero() {
           >
           {/* Headline */}
           <h1 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-blue-900 leading-tight tracking-tight max-w-2xl">
-            Transform Your Business with Strategic IT Consulting in Nigeria
+            Your Trusted Partner for Digital Transformation in Nigeria.
           </h1>
 
           {/* Subheading with Typewriter effect */}
@@ -52,13 +52,13 @@ export default function Hero() {
 
           {/* Description */}
           <p className="text-gray-700 text-sm sm:text-base md:text-lg leading-relaxed mb-6 max-w-xl mt-6">
-            In today&apos;s fast-paced digital landscape, staying ahead means making the right technology decisions. OmoolaEx is an IT consulting firm in Nigeria helping businesses bridge the gap between global technology standards and local market realities. Whether you&apos;re a startup looking to scale, an SME navigating digital transformation, or a corporate optimizing IT infrastructure, we provide the strategic guidance and technical expertise you need to thrive.
+            In today&apos;s fast-paced digital landscape, staying ahead means making the right technology decisions. OmoolaEx is an IT consulting firm in Nigeria helping businesses bridge the gap between global technology standards and local market realities. Whether you&apos;re a startup looking to scale, an SME navigating digital transformation, or a corporate optimizing IT infrastructure, we help Nigerian businesses navigate IT complexity with strategy, custom solutions, and cloud-ready infrastructure.
           </p>
 
           {/* CTA */}
           <div className="flex gap-4 mt-4">
             <Link
-              href="/services"
+              href="/bookings"
               className="group inline-flex items-center justify-center px-2 sm:px-3 py-3 font-semibold text-blue-700 bg-white/50 backdrop-blur-md hover:scale-105 transition-all duration-300 text-sm sm:text-base whitespace-nowrap rounded-md"
             >
               Ready to future-proof your business?

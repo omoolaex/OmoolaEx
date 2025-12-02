@@ -1,84 +1,129 @@
+// app/api/lead/route.js
+import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 
+import {
+  getOAuthClient,
+  appendToSheet
+} from "@/lib/google";
+
+// -------------------------------------------
+// Email transporter
+// -------------------------------------------
+const transporter = nodemailer.createTransport({
+  host: process.env.SMTP_HOST,
+  port: parseInt(process.env.SMTP_PORT ?? "587", 10),
+  secure: String(process.env.SMTP_PORT) === "465",
+  auth: {
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASS
+  },
+  tls: { rejectUnauthorized: false }
+});
+
+// -------------------------------------------
+// Utility
+// -------------------------------------------
+const clean = (s) => (s ? String(s).trim() : "");
+
+function isValidEmail(email) {
+  return /^\S+@\S+\.\S+$/.test(email);
+}
+
+// ===========================================
+// MAIN ROUTE
+// ===========================================
 export async function POST(req) {
   try {
-    // ✅ Parse JSON body safely
-    const body = await req.json();
-    const { name, email, organization, role, resource, downloadUrl } = body;
+    const data = await req.json();
 
-    if (!name || !email || !resource || !downloadUrl) {
-      return new Response(JSON.stringify({ error: "Missing required fields" }), { status: 400 });
+    const name = clean(data.name);
+    const email = clean(data.email);
+    const organization = clean(data.organization);
+    const role = clean(data.role);
+    const resourceTitle = clean(data.resource);
+    const downloadUrl = clean(data.downloadUrl);
+
+    if (!name || !email || !resourceTitle || !downloadUrl) {
+      return NextResponse.json(
+        { success: false, error: "Missing required fields." },
+        { status: 400 }
+      );
     }
 
-    // 1️⃣ Save to Google Sheet via SheetDB or Apps Script
-    if (process.env.SHEETDB_API_URL) {
-      try {
-        await fetch(process.env.SHEETDB_API_URL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ name, email, organization, role, resource, downloadUrl }),
-        });
-      } catch (sheetErr) {
-        console.warn("Failed to save to SheetDB:", sheetErr.message);
-      }
+    if (!isValidEmail(email)) {
+      return NextResponse.json(
+        { success: false, error: "Invalid email address." },
+        { status: 400 }
+      );
     }
 
-    // 2️⃣ Send Email Notification with download link (Zoho SMTP)
-    if (process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS) {
-      try {
-        const transporter = nodemailer.createTransport({
-          host: process.env.SMTP_HOST, // e.g., "smtp.zoho.com"
-          port: parseInt(process.env.SMTP_PORT) || 587, // 465 for SSL
-          secure: process.env.SMTP_SECURE === "true",
-          auth: {
-            user: process.env.SMTP_USER,
-            pass: process.env.SMTP_PASS,
-          },
-        });
+    const timestamp = new Date().toISOString();
 
-        await transporter.sendMail({
-          from: `"OmoolaEx Resource Library" <${process.env.SMTP_USER}>`,
-          to: email,
-          subject: `Your resource download: ${resource}`,
-          html: `
-            <p>Hi ${name},</p>
-            <p>Thanks for your interest! Click <a href="${downloadUrl}" target="_blank">here</a> to download your resource: <strong>${resource}</strong>.</p>
-            <p>— OmoolaEx Team</p>
-          `,
-        });
-      } catch (emailErr) {
-        console.error("Failed to send email:", emailErr.message);
-      }
-    }
+    // -------------------------------------------
+    // Google Sheets: Save lead entry
+    // -------------------------------------------
+    const auth = getOAuthClient();
 
-    // 3️⃣ Optional: Subscribe to Mailchimp
-    if (process.env.MAILCHIMP_API_KEY && process.env.MAILCHIMP_LIST_ID) {
-      try {
-        const dc = process.env.MAILCHIMP_API_KEY.split("-")[1];
-        await fetch(`https://${dc}.api.mailchimp.com/3.0/lists/${process.env.MAILCHIMP_LIST_ID}/members`, {
-          method: "POST",
-          headers: {
-            Authorization: `apikey ${process.env.MAILCHIMP_API_KEY}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email_address: email,
-            status: "subscribed",
-            merge_fields: {
-              FNAME: name,
-              ORG: organization || "",
-              ROLE: role || "",
-            },
-          }),
-        });
-      } catch (mailchimpErr) {
-        console.warn("Mailchimp subscription failed:", mailchimpErr.message);
-      }
-    }
+    await appendToSheet(
+      auth,
+      process.env.SHEET_ID,
+      "Leads!A1",
+      [
+        timestamp,
+        name,
+        email,
+        organization || "",
+        role || "",
+        resourceTitle,
+        downloadUrl
+      ]
+    );
 
-    return new Response(JSON.stringify({ success: true }), { status: 200 });
+    // -------------------------------------------
+    // Admin email notification
+    // -------------------------------------------
+    await transporter.sendMail({
+      from: `"OmoolaEx Leads" <${process.env.SMTP_USER}>`,
+      to: process.env.ADMIN_EMAILS,  // comma-separated emails
+      subject: `New Resource Lead — ${resourceTitle}`,
+      html: `
+        <h2>New Library Lead Captured</h2>
+        <p><b>Name:</b> ${name}</p>
+        <p><b>Email:</b> ${email}</p>
+        <p><b>Organization:</b> ${organization}</p>
+        <p><b>Role:</b> ${role}</p>
+        <p><b>Resource:</b> ${resourceTitle}</p>
+        <p><b>Download Link:</b> <a href="${downloadUrl}" target="_blank">Open File</a></p>
+        <hr/>
+        <p>Captured at: ${timestamp}</p>
+      `
+    });
+
+    // -------------------------------------------
+    // Lead confirmation email
+    // -------------------------------------------
+    await transporter.sendMail({
+      from: `"OmoolaEx Library" <${process.env.SMTP_USER}>`,
+      to: email,
+      subject: `Your Download — ${resourceTitle}`,
+      html: `
+        <p>Dear ${name},</p>
+        <p>Thank you for accessing our resource: <b>${resourceTitle}</b>.</p>
+        <p>You can download it anytime using the link below:</p>
+        <p><a href="${downloadUrl}" target="_blank">Click to Download</a></p>
+        <br/>
+        <p>Warm regards,<br/>OmoolaEx Team</p>
+      `
+    });
+
+    return NextResponse.json({ success: true });
+
   } catch (err) {
-    console.error("Lead API error:", err);
-    return new Response(JSON.stringify({ error: err.message }), { status: 500 });
+    console.error("[lead] ERROR:", err);
+    return NextResponse.json(
+      { success: false, error: "Lead capture error", detail: err.message },
+      { status: 500 }
+    );
   }
 }
