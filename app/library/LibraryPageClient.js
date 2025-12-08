@@ -16,7 +16,6 @@ export default function LibraryPageClient({ resources = [] }) {
   const [search, setSearch] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("All");
   const [typeFilter, setTypeFilter] = useState("All");
-  const [previewFile, setPreviewFile] = useState(null);
 
   // Lead Modal State
   const [leadModalOpen, setLeadModalOpen] = useState(false);
@@ -41,7 +40,6 @@ export default function LibraryPageClient({ resources = [] }) {
     return matchesSearch && matchesCategory && matchesType;
   });
 
-  // Generate structured data JSON-LD
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
@@ -66,15 +64,10 @@ export default function LibraryPageClient({ resources = [] }) {
     })),
   };
 
-  const rssLink = `${siteUrl}/api/rss/resources`; // dynamic RSS feed link
+  const rssLink = `${siteUrl}/api/rss/resources`;
 
   const handleDownloadClick = (res) => {
-    const fileUrl = res.file?.asset?.url || res.fileUrl;
-    if (!fileUrl) {
-      alert("Download URL not available.");
-      return;
-    }
-    setSelectedResource({ ...res, fileUrl });
+    setSelectedResource(res);
     setLeadModalOpen(true);
     setSubmitted(false);
     setLeadName("");
@@ -86,7 +79,7 @@ export default function LibraryPageClient({ resources = [] }) {
 
   const handleLeadSubmit = async (e) => {
     e.preventDefault();
-    if (!leadName || !leadEmail || !selectedResource?.fileUrl) return;
+    if (!leadName || !leadEmail || !selectedResource?.file?.asset?.url) return;
     setLoading(true);
 
     try {
@@ -99,7 +92,7 @@ export default function LibraryPageClient({ resources = [] }) {
           organization: leadOrganization,
           role: leadRole,
           resource: selectedResource.title,
-          downloadUrl: selectedResource.fileUrl,
+          downloadUrl: selectedResource.file.asset.url,
         }),
       });
 
@@ -107,13 +100,11 @@ export default function LibraryPageClient({ resources = [] }) {
 
       if (data.success) {
         setSubmitted(true);
-        window.open(selectedResource.fileUrl, "_blank");
+        window.open(selectedResource.file.asset.url, "_blank");
       } else {
-        console.error("Lead submission failed:", data.error);
         alert(data.error || "Failed to submit lead. Please try again.");
       }
     } catch (error) {
-      console.error("Error submitting lead:", error);
       alert("An unexpected error occurred. Please try again.");
     } finally {
       setLoading(false);
@@ -147,8 +138,6 @@ export default function LibraryPageClient({ resources = [] }) {
           Explore guides, workbooks, templates, and more for Founders, Career
           Builders, and Students.
         </p>
-
-        {/* RSS Feed Link */}
         <a
           href={rssLink}
           className="text-blue-600 hover:underline text-sm md:text-base"
@@ -203,61 +192,21 @@ export default function LibraryPageClient({ resources = [] }) {
               <span className="text-gray-400 text-6xl">📄</span>
             </div>
             <h2 className="text-xl sm:text-2xl font-semibold mb-2">{res.title}</h2>
-            <p className="text-gray-700 text-sm sm:text-base mb-4">{res.description}</p>
+            <p className="text-gray-700 text-sm sm:text-base mb-4">
+              {/* Display first 150 chars as teaser */}
+              {res.description?.substring(0, 150)}...
+            </p>
             <div className="flex flex-col sm:flex-row gap-2">
               <button
-                onClick={() => setPreviewFile(res.file?.asset?.url || res.fileUrl)}
-                className="px-5 py-2 bg-gray-200 text-gray-800 rounded-full hover:bg-gray-300 transition"
-              >
-                Preview
-              </button>
-              <button
                 onClick={() => handleDownloadClick(res)}
-                className="px-5 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition"
+                className="px-5 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition cursor-pointer"
               >
-                Download
+                Access Full Resource
               </button>
             </div>
           </div>
         ))}
       </section>
-
-      {/* Preview Modal */}
-      <AnimatePresence>
-        {previewFile && (
-          <motion.div
-            className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-2"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={() => setPreviewFile(null)}
-          >
-            <motion.div
-              className="bg-white rounded-3xl overflow-hidden w-full sm:w-11/12 md:w-3/4 lg:w-2/3 h-full sm:h-4/5 shadow-lg"
-              initial={{ scale: 0.9 }}
-              animate={{ scale: 1 }}
-              exit={{ scale: 0.9 }}
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div className="flex justify-between items-center p-4 border-b">
-                <h3 className="text-lg sm:text-xl font-semibold">Preview</h3>
-                <button
-                  onClick={() => setPreviewFile(null)}
-                  className="text-gray-600 hover:text-gray-900 font-bold"
-                >
-                  ✕
-                </button>
-              </div>
-              <iframe
-                src={previewFile}
-                className="w-full h-full"
-                title="Resource Preview"
-                style={{ border: "none" }}
-              />
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
 
       {/* Lead Capture Modal */}
       <AnimatePresence>
@@ -276,7 +225,9 @@ export default function LibraryPageClient({ resources = [] }) {
               exit={{ scale: 0.9 }}
               onClick={(e) => e.stopPropagation()}
             >
-              <h3 className="text-2xl font-semibold mb-6 text-center">Download Resource</h3>
+              <h3 className="text-2xl font-semibold mb-6 text-center">
+                Download Resource
+              </h3>
               {submitted ? (
                 <p className="text-green-600 font-semibold text-center">
                   Thank you! Your download should start automatically. Check your email for the link as well.
