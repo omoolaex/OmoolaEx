@@ -10,6 +10,7 @@ import CookieConsent from "@/components/CookieConsent";
 import { GA_TRACKING_ID } from "../lib/ga";
 import StyledComponentsRegistry from "@/lib/styledComponentsRegistry";
 import FloatingContactActions from "@/components/FloatingContactActions";
+import { Providers } from "./providers";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
@@ -227,9 +228,11 @@ export default function RootLayout({ children }) {
           <SpeedInsights />
           <Navbar className="sticky" />
           <Popup />
-          <main className="flex-grow">
-            {children}
-            <FloatingContactActions />
+          <main className="grow">
+            <Providers>
+                {children}
+              <FloatingContactActions />
+            </Providers>
 
           </main>
           <Footer />

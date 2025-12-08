@@ -29,7 +29,7 @@ export default function BlogCard({ post }) {
           </Link>
 
           {/* Overlay: Categories + Views */}
-          <div className="absolute bottom-0 w-full flex justify-between items-center px-3 py-2 bg-gradient-to-t from-black/70 to-transparent text-white text-xs">
+          <div className="absolute bottom-0 w-full flex justify-between items-center px-3 py-2 bg-linear-to-t from-black/70 to-transparent text-white text-xs">
             <div className="flex flex-wrap gap-1">
               {uniqueCategories.map((cat) => (
                 <span
