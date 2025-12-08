@@ -96,13 +96,13 @@ export default function NewsletterPopup() {
         {/* Close button */}
         <button
           onClick={dismiss}
-          className="absolute right-5 top-5 text-gray-400 hover:text-gray-600 text-xl cursor-pointer"
+          className="absolute right-5 top-5 z-99 text-gray-400 hover:text-gray-600 text-xl cursor-pointer"
         >
           ✕
         </button>
 
         <div className="grid grid-cols-1 md:grid-cols-2">
-          {/* Left Image */}
+          {/* Left Image */}a
           <div className="h-56 md:h-auto relative">
             <Image
               src="/images/popups/process-audit.png"
