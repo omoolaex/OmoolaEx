@@ -71,7 +71,7 @@ export default function SocialShare({ url, title }) {
 
   return (
     <div className="mt-10 border-t pt-6">
-      <h3 className="text-lg font-semibold mb-3">Share this post:</h3>
+      <h3 className="text-left text-xs font-bold text-gray-400 uppercase tracking-widest mb-6">Share this article</h3>
       <div className="flex flex-wrap gap-3">
         {shareButtons.map((btn) => (
           <a

@@ -10,6 +10,110 @@ import Link from "next/link";
 import Image from "next/image";
 import { Calendar, Clock, User, ChevronLeft, ChevronRight, Home } from "lucide-react";
 
+/* ---------------------
+   Helpers
+   --------------------- */
+
+/**
+ * Extract text content from a Portable Text block (block.children)
+ */
+function blockText(block) {
+  if (!block) return "";
+  // For Sanity block type 'block', children is array of spans
+  if (block._type === "block" && Array.isArray(block.children)) {
+    return block.children.map((c) => c.text || "").join("");
+  }
+  // For other block types (e.g., custom), try common fields
+  if (typeof block.text === "string") return block.text;
+  if (block.content && typeof block.content === "string") return block.content;
+  return "";
+}
+
+/**
+ * Build FAQ pairs from Portable Text content using headings (h2/h3) as questions.
+ * Strategy:
+ * - Walk the array of blocks.
+ * - When we hit a block with style h2 or h3, treat it as a question.
+ * - Collect subsequent 'normal' paragraph blocks as the answer until the next heading.
+ * - Return up to maxItems FAQ pairs.
+ */
+function extractFAQFromPortableText(body = [], maxItems = 8) {
+  const faqs = [];
+  let i = 0;
+  while (i < body.length && faqs.length < maxItems) {
+    const block = body[i];
+
+    // detect heading block: block._type === 'block' && style is 'h2' or 'h3' (or 'h1' optionally)
+    const isHeading =
+      block &&
+      block._type === "block" &&
+      typeof block.style === "string" &&
+      ["h1", "h2", "h3"].includes(block.style.toLowerCase());
+
+    if (isHeading) {
+      const question = blockText(block).trim();
+      let answerParts = [];
+      let j = i + 1;
+      // collect paragraph blocks until next heading
+      while (j < body.length) {
+        const next = body[j];
+        const nextIsHeading =
+          next &&
+          next._type === "block" &&
+          typeof next.style === "string" &&
+          ["h1", "h2", "h3"].includes(next.style.toLowerCase());
+        if (nextIsHeading) break;
+
+        // include paragraphs, lists, callouts, simple text blocks
+        // For 'block' style 'normal' or other, grab text
+        if (next._type === "block") {
+          const text = blockText(next).trim();
+          if (text) answerParts.push(text);
+        } else if (next._type === "callout" && next.text) {
+          answerParts.push(String(next.text).trim());
+        } else if (next._type === "image" && next.caption) {
+          answerParts.push(String(next.caption).trim());
+        } else if (typeof next === "string") {
+          answerParts.push(next);
+        }
+        j++;
+      }
+
+      const answer = answerParts.join("\n\n").trim();
+      if (question && answer) {
+        faqs.push({
+          question: question,
+          answer: answer,
+        });
+      }
+      i = j;
+    } else {
+      i++;
+    }
+  }
+
+  return faqs;
+}
+
+/**
+ * Build an OG image URL. This expects you to implement /api/og to render dynamic OG images.
+ * Fallback: if an OG generator isn't available, returns the post image (if any) or site logo.
+ */
+function getOgImageUrl({ siteUrl, title, author, imageUrl }) {
+  // Primary: custom OG generator endpoint (implement at /api/og)
+  // This endpoint should return a PNG/SVG — your choice.
+  // Query params: title, author, img (optional background)
+  const encodedTitle = encodeURIComponent(title || "");
+  const encodedAuthor = encodeURIComponent(author || "");
+  const encodedImg = imageUrl ? encodeURIComponent(imageUrl) : "";
+
+  // Example OG generator endpoint path (you must implement it)
+  const ogEndpoint = `${siteUrl}/api/og?title=${encodedTitle}&author=${encodedAuthor}${encodedImg ? `&img=${encodedImg}` : ""}`;
+
+  // Return the generator URL (preferred). The generator should return a valid image.
+  return ogEndpoint;
+}
+
 /* -----------------------------------------------------
    1️⃣ Static Params
 ----------------------------------------------------- */
@@ -23,54 +127,75 @@ export async function generateStaticParams() {
 }
 
 /* -----------------------------------------------------
-   2️⃣ Metadata (Supports Canonical URL)
+   2️⃣ Metadata + Keywords for ChatGPT Search optimization
 ----------------------------------------------------- */
 export async function generateMetadata({ params }) {
   const { slug } = await params;
   if (!slug) return { title: "Post Not Found | OmoolaEx Blog" };
 
   const post = await client.fetch(singlePostQuery, { slug });
-  if (!post) return { title: "Post Not Found | OmoolaEx Blog" };
+  if (!post) return { title: "Post not found | OmoolaEx Blog" };
 
-  const siteUrl =
-    process.env.NEXT_PUBLIC_SITE_URL || "https://omoolaex.com.ng";
-
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://omoolaex.com.ng";
   const canonicalUrl = `${siteUrl}/blog/${slug}`;
 
-  const imageUrl = post.image
-    ? urlFor(post.image).width(1200).height(630).url()
-    : `${siteUrl}/images/logo.svg`;
+  // derive keywords: prefer explicit post.keywords, else derive from headings and title
+  const explicitKeywords = Array.isArray(post.keywords) ? post.keywords : [];
+  let derivedKeywords = [];
+  if (!explicitKeywords.length && Array.isArray(post.body)) {
+    // collect headings and first few significant words
+    const headings = post.body
+      .filter((b) => b._type === "block" && b.style && /^h[1-3]$/.test(b.style))
+      .map((h) => blockText(h).trim())
+      .filter(Boolean)
+      .slice(0, 6);
+    derivedKeywords = headings.flatMap((h) =>
+      h.split(/\s+/).slice(0, 6)
+    );
+  }
 
-  const seoDescription =
-    post.seoDescription ||
-    post.excerpt?.slice(0, 155) ||
-    `Read this article: ${post.title}`;
+  const keywords = explicitKeywords.length
+    ? explicitKeywords
+    : [...new Set([...(derivedKeywords || []), ...(post.tags || [])])].slice(0, 20);
 
-  const seoTitle = post.seoTitle || post.title;
+  // OG image: prefer generated OG, fallback to post.image or site logo
+  const postImageUrl = post.image ? urlFor(post.image).width(1200).height(630).url() : `${siteUrl}/images/logo.svg`;
+  const ogImageUrl = getOgImageUrl({
+    siteUrl,
+    title: post.title,
+    author: post.author?.name || "OmoolaEx",
+    imageUrl: postImageUrl,
+  });
+
+  // Short SEO-friendly description
+  const seoDescription = post.seoDescription || post.excerpt?.slice(0, 155) || `Read: ${post.title}`;
 
   return {
-    title: seoTitle,
+    title: post.seoTitle || post.title,
     description: seoDescription,
+    // Provide canonical for deep linking
     alternates: { canonical: canonicalUrl },
+    // Keywords help vanilla SEO and may help ChatGPT Search signals
+    keywords,
     openGraph: {
-      title: seoTitle,
+      title: post.seoTitle || post.title,
       description: seoDescription,
       url: canonicalUrl,
-      images: [{ url: imageUrl, width: 1200, height: 630 }],
+      images: [{ url: ogImageUrl, width: 1200, height: 630 }],
       siteName: "OmoolaEx",
       type: "article",
     },
     twitter: {
       card: "summary_large_image",
-      title: seoTitle,
+      title: post.seoTitle || post.title,
       description: seoDescription,
-      images: [imageUrl],
+      images: [ogImageUrl],
     },
   };
 }
 
 /* -----------------------------------------------------
-   3️⃣ Blog Page Component (With JSON-LD)
+   3️⃣ Blog Page Component (with JSON-LD: Article, Breadcrumb, FAQ)
 ----------------------------------------------------- */
 export default async function BlogPostPage({ params }) {
   const { slug } = await params;
@@ -78,23 +203,48 @@ export default async function BlogPostPage({ params }) {
   if (!slug) return <NotFoundMessage />;
 
   const post = await client.fetch(singlePostQuery, { slug });
+
   if (!post) return <NotFoundMessage />;
 
-  const siteUrl =
-    process.env.NEXT_PUBLIC_SITE_URL || "https://omoolaex.com.ng";
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://omoolaex.com.ng";
   const postUrl = `${siteUrl}/blog/${slug}`;
-  const keywords = post.keywords || [];
+  const keywords = Array.isArray(post.keywords) ? post.keywords : [];
 
-  /* ---------------------- JSON-LD SEO ---------------------- */
+  // Prev / Next
+  const prevPost = await client.fetch(
+    `*[_type=="post" && publishedAt < $current] | order(publishedAt desc)[0]{title, "slug": slug.current, excerpt}`,
+    { current: post.publishedAt }
+  );
+
+  const nextPost = await client.fetch(
+    `*[_type=="post" && publishedAt > $current] | order(publishedAt asc)[0]{title, "slug": slug.current, excerpt}`,
+    { current: post.publishedAt }
+  );
+
+  const relatedPosts = await client.fetch(
+    `*[_type=="post" && slug.current != $slug &&
+      defined(keywords) && count(keywords[@ in $keywords]) > 0]
+      | order(publishedAt desc)[0..2]{title, "slug": slug.current, excerpt, "imageUrl": image.asset->url}`,
+    { slug, keywords }
+  );
+
+  // Build JSON-LD pieces
+  const siteLogo = `${siteUrl}/images/logo.svg`;
+  const postImageUrl = post.image ? urlFor(post.image).width(1200).height(630).url() : siteLogo;
+  const ogImageUrl = getOgImageUrl({
+    siteUrl,
+    title: post.title,
+    author: post.author?.name || "OmoolaEx Team",
+    imageUrl: postImageUrl,
+  });
+
   const articleJsonLd = {
     "@context": "https://schema.org",
     "@type": "Article",
     headline: post.title,
-    description:
-      post.seoDescription ||
-      post.excerpt?.slice(0, 155) ||
-      `Read this article: ${post.title}`,
-    image: post.image ? urlFor(post.image).url() : `${siteUrl}/images/logo.svg`,
+    alternativeHeadline: post.seoTitle || undefined,
+    description: post.seoDescription || post.excerpt || undefined,
+    image: [postImageUrl],
     author: {
       "@type": "Person",
       name: post.author?.name || "OmoolaEx Team",
@@ -104,7 +254,7 @@ export default async function BlogPostPage({ params }) {
       name: "OmoolaEx IT Consultancy Ltd",
       logo: {
         "@type": "ImageObject",
-        url: `${siteUrl}/images/logo.svg`,
+        url: siteLogo,
       },
     },
     datePublished: post.publishedAt,
@@ -113,8 +263,12 @@ export default async function BlogPostPage({ params }) {
       "@type": "WebPage",
       "@id": postUrl,
     },
+    inLanguage: "en-NG",
+    keywords: keywords.length ? keywords.join(", ") : undefined,
+    isAccessibleForFree: true,
   };
 
+  // BreadcrumbList
   const breadcrumbJsonLd = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
@@ -140,47 +294,30 @@ export default async function BlogPostPage({ params }) {
     ],
   };
 
-  const prevPost = await client.fetch(
-    `*[_type=="post" && publishedAt < $current] 
-     | order(publishedAt desc)[0]{
-        title, "slug": slug.current, excerpt
-     }`,
-    { current: post.publishedAt }
-  );
-
-  const nextPost = await client.fetch(
-    `*[_type=="post" && publishedAt > $current] 
-     | order(publishedAt asc)[0]{
-        title, "slug": slug.current, excerpt
-     }`,
-    { current: post.publishedAt }
-  );
-
-  const relatedPosts = await client.fetch(
-    `*[_type=="post" && slug.current != $slug &&
-      defined(keywords) && count(keywords[@ in $keywords]) > 0]
-      | order(publishedAt desc)[0..2]{
-        title, 
-        "slug": slug.current, 
-        excerpt, 
-        "imageUrl": image.asset->url
-      }`,
-    { slug, keywords }
-  );
+  // FAQ: generate from headings
+  const faqItems = Array.isArray(post.body) ? extractFAQFromPortableText(post.body, 8) : [];
+  let faqJsonLd = null;
+  if (faqItems.length) {
+    faqJsonLd = {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: faqItems.map((f) => ({
+        "@type": "Question",
+        name: f.question,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: f.answer,
+        },
+      })),
+    };
+  }
 
   function NotFoundMessage() {
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center text-center px-4">
-        <h2 className="text-3xl font-bold text-gray-900 mb-2">
-          Post not found
-        </h2>
-        <p className="text-gray-500 mb-6">
-          The article you are looking for does not exist or has been removed.
-        </p>
-        <Link
-          href="/blog"
-          className="px-6 py-3 bg-blue-600 text-white rounded-full font-medium hover:bg-blue-700 transition-colors"
-        >
+        <h2 className="text-3xl font-bold text-gray-900 mb-2">Post not found</h2>
+        <p className="text-gray-500 mb-6">The article you are looking for does not exist or has been removed.</p>
+        <Link href="/blog" className="px-6 py-3 bg-blue-600 text-white rounded-full font-medium hover:bg-blue-700 transition-colors">
           Return to Blog
         </Link>
       </div>
@@ -189,49 +326,28 @@ export default async function BlogPostPage({ params }) {
 
   return (
     <main className="bg-white min-h-screen">
-      <PageViewTracker
-        title={post.title}
-        path={`/blog/${slug}`}
-        location={postUrl}
-      />
+      <PageViewTracker title={post.title} path={`/blog/${slug}`} location={postUrl} />
 
-      {/* Inject JSON-LD */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
-      />
+      {/* JSON-LD injections */}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
+      {faqJsonLd && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />}
 
+      {/* Schema.org microdata attributes for compatibility */}
       <article itemScope itemType="https://schema.org/BlogPosting">
         {/* HEADER */}
         <header className="pt-12 pb-10 px-6 lg:pt-20 lg:px-8 max-w-4xl mx-auto text-center">
-          <nav
-            className="flex flex-wrap items-center justify-center space-x-2 text-sm text-gray-500 mb-8 font-medium"
-            aria-label="Breadcrumb"
-          >
-            <Link
-              href="/"
-              className="hover:text-blue-600 transition-colors flex items-center gap-1"
-            >
+          <nav className="flex flex-wrap items-center justify-center space-x-2 text-sm text-gray-500 mb-8 font-medium" aria-label="Breadcrumb">
+            <Link href="/" className="hover:text-blue-600 transition-colors flex items-center gap-1">
               <Home className="w-4 h-4" /> Home
             </Link>
             <span className="text-gray-300">/</span>
-            <Link
-              href="/blog"
-              className="hover:text-blue-600 transition-colors"
-            >
-              Blog
-            </Link>
+            <Link href="/blog" className="hover:text-blue-600 transition-colors">Blog</Link>
             <span className="text-gray-300">/</span>
-            <span className="text-gray-900 truncate max-w-[150px] sm:max-w-xs cursor-default">
-              {post.title}
-            </span>
+            <span className="text-gray-900 truncate max-w-[150px] sm:max-w-xs cursor-default">{post.title}</span>
           </nav>
 
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight mb-8 leading-[1.1]">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight mb-8 leading-[1.1]" itemProp="headline">
             {post.title}
           </h1>
 
@@ -240,19 +356,11 @@ export default async function BlogPostPage({ params }) {
               <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600">
                 <User className="w-4 h-4" />
               </div>
-              <span className="font-semibold text-gray-900">
-                {post.author?.name || "OmoolaEx Team"}
-              </span>
+              <span className="font-semibold text-gray-900">{post.author?.name || "OmoolaEx Team"}</span>
             </div>
             <div className="flex items-center gap-2">
               <Calendar className="w-4 h-4 text-gray-400" />
-              <time dateTime={post.publishedAt}>
-                {new Date(post.publishedAt).toLocaleDateString("en-NG", {
-                  day: "numeric",
-                  month: "long",
-                  year: "numeric",
-                })}
-              </time>
+              <time dateTime={post.publishedAt} itemProp="datePublished">{new Date(post.publishedAt).toLocaleDateString("en-NG", { day: "numeric", month: "long", year: "numeric" })}</time>
             </div>
             <div className="flex items-center gap-2">
               <Clock className="w-4 h-4 text-gray-400" />
@@ -268,84 +376,43 @@ export default async function BlogPostPage({ params }) {
         {post.image && (
           <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 mb-16">
             <div className="relative aspect-video md:aspect-21/9 w-full overflow-hidden rounded-2xl shadow-xl ring-1 ring-gray-900/5">
-              <Image
-                src={urlFor(post.image).width(1200).url()}
-                alt={post.title}
-                fill
-                priority
-                className="object-cover"
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1200px"
-              />
+              <Image src={urlFor(post.image).width(1600).url()} alt={post.title} fill priority className="object-cover" sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1600px" />
             </div>
           </div>
         )}
 
         {/* MAIN BODY */}
         <div className="px-6 lg:px-8">
-          <div
-            className="mx-auto max-w-3xl prose prose-lg prose-slate"
-            itemProp="articleBody"
-          >
-            <PortableText
-              value={post.body}
-              components={PortableTextComponents}
-            />
+          <div className="mx-auto max-w-3xl prose prose-lg prose-slate" itemProp="articleBody">
+            <PortableText value={post.body} components={PortableTextComponents} />
           </div>
         </div>
 
         <meta itemProp="datePublished" content={post.publishedAt} />
-        <meta
-          itemProp="dateModified"
-          content={post._updatedAt || post.publishedAt}
-        />
+        <meta itemProp="dateModified" content={post._updatedAt || post.publishedAt} />
         <div itemProp="author" itemScope itemType="https://schema.org/Person">
-          <meta
-            itemProp="name"
-            content={post.author?.name || "OmoolaEx Team"}
-          />
+          <meta itemProp="name" content={post.author?.name || "OmoolaEx Team"} />
         </div>
       </article>
 
       {/* SHARE */}
-      <div className="max-w-3xl mx-auto px-6 lg:px-8 mt-20 mb-12">
-        <div className="border-t border-b border-gray-100 py-10">
-          <h3 className="text-center text-xs font-bold text-gray-400 uppercase tracking-widest mb-6">
-            Share this article
-          </h3>
-          <div className="flex justify-center">
-            <SocialShare url={postUrl} title={post.title} />
-          </div>
+      <div className="max-w-3xl mx-auto px-6 lg:px-8 mt-10 mb-10">
+          <div className="flex justify-center border-t border-b border-gray-100 py-10"><SocialShare url={postUrl} title={post.title} /></div>
         </div>
-      </div>
 
-      {/* PREV / NEXT */}
+      {/* PREV/NEXT NAV */}
       <nav className="max-w-5xl mx-auto px-6 lg:px-8 mb-24">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {prevPost && (
-            <Link
-              href={`/blog/${prevPost.slug}`}
-              className="group flex flex-col p-8 bg-white rounded-3xl border border-gray-100 shadow-sm hover:shadow-xl hover:border-blue-100 transition-all duration-300"
-            >
-              <span className="flex items-center text-xs font-bold uppercase tracking-wider text-gray-400 mb-3 group-hover:text-blue-600 transition-colors">
-                <ChevronLeft className="w-4 h-4 mr-1" /> Previous Article
-              </span>
-              <h4 className="text-xl font-bold text-gray-900 group-hover:text-blue-700 transition-colors line-clamp-2">
-                {prevPost.title}
-              </h4>
+            <Link href={`/blog/${prevPost.slug}`} className="group flex flex-col p-8 bg-white rounded-3xl border border-gray-100 shadow-sm hover:shadow-xl hover:border-blue-100 transition-all duration-300">
+              <span className="flex items-center text-xs font-bold uppercase tracking-wider text-gray-400 mb-3 group-hover:text-blue-600 transition-colors"><ChevronLeft className="w-4 h-4 mr-1" /> Previous Article</span>
+              <h4 className="text-xl font-bold text-gray-900 group-hover:text-blue-700 transition-colors line-clamp-2">{prevPost.title}</h4>
             </Link>
           )}
-
           {nextPost && (
-            <Link
-              href={`/blog/${nextPost.slug}`}
-              className="group flex flex-col items-end text-right p-8 bg-white rounded-3xl border border-gray-100 shadow-sm hover:shadow-xl hover:border-blue-100 transition-all duration-300"
-            >
-              <span className="flex items-center text-xs font-bold uppercase tracking-wider text-gray-400 mb-3 group-hover:text-blue-600 transition-colors">
-                Next Article <ChevronRight className="w-4 h-4 ml-1" />
-              </span>
-              <h4 className="text-xl font-bold text-gray-900 group-hover:text-blue-700 transition-colors line-clamp-2">
-                {nextPost.title}
-              </h4>
+            <Link href={`/blog/${nextPost.slug}`} className="group flex flex-col items-end text-right p-8 bg-white rounded-3xl border border-gray-100 shadow-sm hover:shadow-xl hover:border-blue-100 transition-all duration-300">
+              <span className="flex items-center text-xs font-bold uppercase tracking-wider text-gray-400 mb-3 group-hover:text-blue-600 transition-colors">Next Article <ChevronRight className="w-4 h-4 ml-1" /></span>
+              <h4 className="text-xl font-bold text-gray-900 group-hover:text-blue-700 transition-colors line-clamp-2">{nextPost.title}</h4>
             </Link>
           )}
         </div>
@@ -357,66 +424,37 @@ export default async function BlogPostPage({ params }) {
           <div className="max-w-7xl mx-auto">
             <div className="flex items-center justify-between mb-12">
               <div>
-                <h2 className="text-3xl font-bold text-slate-900">
-                  Related Articles:
-                </h2>
-                <p className="text-slate-500 mt-2">
-                  More articles you might find interesting
-                </p>
+                <h2 className="text-3xl font-bold text-slate-900">Read Next</h2>
+                <p className="text-slate-500 mt-2">More articles you might find interesting</p>
               </div>
-
-              <Link
-                href="/blog"
-                className="hidden sm:flex text-blue-600 font-semibold hover:text-blue-800 items-center transition-colors"
-              >
+              <Link href="/blog" className="hidden sm:flex text-blue-600 font-semibold hover:text-blue-800 items-center transition-colors">
                 View all articles <ChevronRight className="w-4 h-4 ml-1" />
               </Link>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-              {relatedPosts.map((rp) => (
-                <Link
-                  key={rp.slug}
-                  href={`/blog/${rp.slug}`}
-                  className="flex flex-col group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-2xl hover:-translate-y-1 transition-all duration-300"
-                >
+              {relatedPosts.map(rp => (
+                <Link key={rp.slug} href={`/blog/${rp.slug}`} className="flex flex-col group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-2xl hover:-translate-y-1 transition-all duration-300">
                   <div className="relative h-56 w-full overflow-hidden bg-gray-200">
                     {rp.imageUrl ? (
-                      <Image
-                        src={rp.imageUrl}
-                        alt={rp.title}
-                        fill
-                        className="object-cover transition-transform duration-700 group-hover:scale-105"
-                      />
+                      <Image src={rp.imageUrl} alt={rp.title} fill className="object-cover transition-transform duration-700 group-hover:scale-105" />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center text-gray-400">
                         <Home className="w-8 h-8 opacity-20" />
                       </div>
                     )}
                   </div>
-
                   <div className="p-8 flex flex-col grow">
-                    <h3 className="text-xl font-bold text-slate-900 group-hover:text-blue-600 transition-colors mb-3 line-clamp-2 leading-snug">
-                      {rp.title}
-                    </h3>
-
-                    <p className="text-slate-600 text-sm line-clamp-3 mb-6 grow leading-relaxed">
-                      {rp.excerpt}
-                    </p>
-
-                    <span className="text-blue-600 text-sm font-bold uppercase tracking-wide mt-auto inline-flex items-center group-hover:translate-x-1 transition-transform">
-                      Read Now <ChevronRight className="w-3 h-3 ml-1" />
-                    </span>
+                    <h3 className="text-xl font-bold text-slate-900 group-hover:text-blue-600 transition-colors mb-3 line-clamp-2 leading-snug">{rp.title}</h3>
+                    <p className="text-slate-600 text-sm line-clamp-3 mb-6 grow leading-relaxed">{rp.excerpt}</p>
+                    <span className="text-blue-600 text-sm font-bold uppercase tracking-wide mt-auto inline-flex items-center group-hover:translate-x-1 transition-transform">Read Now <ChevronRight className="w-3 h-3 ml-1" /></span>
                   </div>
                 </Link>
               ))}
             </div>
 
             <div className="mt-10 sm:hidden text-center">
-              <Link
-                href="/blog"
-                className="text-blue-600 font-semibold hover:text-blue-800 inline-flex items-center transition-colors"
-              >
+              <Link href="/blog" className="text-blue-600 font-semibold hover:text-blue-800 inline-flex items-center transition-colors">
                 View all articles <ChevronRight className="w-4 h-4 ml-1" />
               </Link>
             </div>
