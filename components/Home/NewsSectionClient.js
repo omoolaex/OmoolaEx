@@ -24,7 +24,7 @@ export default function NewsSectionClient({ posts = [] }) {
 
   return (
     <motion.section
-      className="py-16 px-6 relative bg-gradient-to-br from-yellow-50 via-white to-blue-50 sm:py-16 md:py-20 lg:py-24 overflow-hidden"
+      className="py-16 px-6 relative bg-linear-to-br from-yellow-50 via-white to-blue-50 sm:py-16 md:py-20 lg:py-24 overflow-hidden"
       initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8 }}
