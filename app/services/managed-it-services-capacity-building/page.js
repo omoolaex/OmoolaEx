@@ -32,7 +32,7 @@ export const metadata = {
     "Staff training on digital tools",
   ],
   alternates: {
-    canonical: `${siteUrl}/services/managed-it-services-and-training`,
+    canonical: `${siteUrl}/services/managed-it-services-capacity-building`,
   },
   openGraph: {
     title: "Managed IT Services & Training | OmoolaEx Nigeria",
