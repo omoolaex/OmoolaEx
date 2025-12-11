@@ -1,0 +1,101 @@
+# OmoolaEx
+
+OmoolaEx is a Lagos-based IT consulting firm dedicated to guiding Nigerian businesses through their digital transformation journeys. Serving startups, SMEs, and corporates, our mission is to convert technology challenges into tangible business growth. We provide strategic IT consulting, cloud solutions, custom software, and managed services designed for measurable outcomes.
+
+## About Us
+
+OmoolaEx empowers organizations by simplifying the complexities of technology through practical guidance. Founded in 2020, we initially focused on delivering solutions for local startups, expanding into robust IT consulting, cloud migration, and capacity-building services. Today, we support businesses across Nigeria and West Africa in harnessing the power of technology effectively.
+
+### Our Journey
+
+- **2020:** Founded with a vision to promote digital growth among local founders.
+- **2021:** Launched our first web solutions and developed our reputation in the market.
+- **2022:** Expanded our offerings based on client feedback and market needs.
+- **2023:** Positioned to scale, focusing on IT strategy and UX design.
+  
+### Our Team
+
+We have a diverse team of strategists, developers, and designers passionate about technology. Our leadership boasts extensive experience in IT strategy, ensuring we deliver exceptional value.
+
+### Our Mission
+
+To empower businesses to leverage technology strategically, enhancing efficiency and competitiveness in an increasingly digital world.
+
+### Our Vision
+
+To be a trusted IT consulting partner across West Africa, transforming how businesses use technology.
+
+## Services
+
+OmoolaEx offers a comprehensive range of IT consulting services tailored to meet the unique needs of various organizations.
+
+### IT Consulting & Advisory
+
+Our strategic IT consulting services help businesses define technology roadmaps and optimize costs to achieve operational efficiency.
+
+- **Key Services:**
+  - IT Strategy Development
+  - Digital Transformation Consulting
+  - Technology Cost Optimization
+
+### Digital Solutions & Systems Integration
+
+We develop custom software solutions tailored to client needs, ensuring seamless integration across platforms.
+
+- **Key Services:**
+  - Website Development
+  - Web & Mobile Applications
+  - Systems Integration
+
+### Brand & Digital Growth Consulting
+
+We assist businesses in building strong brands and implementing effective digital marketing strategies.
+
+- **Key Services:**
+  - Brand Identity Creation
+  - Digital Marketing Strategy
+  - Content Strategy
+
+### Cloud Solutions & IT Infrastructure
+
+OmoolaEx provides cloud migration and IT infrastructure setup to modernize business operations effectively.
+
+- **Key Services:**
+  - Cloud Migration & Deployment
+  - Data Security & Backup Solutions
+
+### Managed IT Services & Capacity Building
+
+We offer ongoing IT support and provide training to empower teams to navigate the digital landscape confidently.
+
+- **Key Services:**
+  - Cybersecurity Training
+  - Managed IT Support
+
+## Portfolio
+
+We have successfully delivered a variety of projects across sectors, showcasing our capability to meet diverse client needs.
+
+### Recent Projects
+
+- **Hub9ja Logistics:** A delivery and dispatch platform.
+- **RhynoCredit:** Website design and development for a microfinance institution.
+- **Ecolyft:** Development of a web platform focusing on sustainability.
+
+## Bookings
+
+Our consulting services include a free initial consultation where you can discuss your specific IT needs and learn how we can assist you.
+
+[Book a Consultation](/bookings)
+
+## Contact Us
+
+For inquiries regarding our services or to learn more about how we can support your business, please reach out:
+- **Email:** [contact@omoolaex.com.ng](mailto:contact@omoolaex.com.ng)
+- **Phone:** +234 708 921 7123
+- **Address:** Regent Palace, 8 R.T.S. Apena Cl, Oriyomi St, off Olowu Street, Opebi, Ikeja, Lagos.
+
+## Why Choose OmoolaEx?
+
+By combining local expertise with global standards, we deliver IT solutions that are not only practical and innovative but also tailored to the specific challenges faced by Nigerian businesses.
+
