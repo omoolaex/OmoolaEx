@@ -81,7 +81,7 @@ export default function Footer() {
             <li><Link href="/services/digital-solutions-systems-integration" className="hover:text-blue-700 transition">Digital Solutions & Systems Integration</Link></li>
             <li><Link href="/services/managed-it-services-capacity-building" className="hover:text-blue-700 transition">Managed IT Services & Capacity Building</Link></li>
             <li><Link href="/services/cloud-solutions-it-infrastructure" className="hover:text-blue-700 transition">Cloud Solutions & IT Infrastructure</Link></li>
-            <li><Link href="/services/branding" className="hover:text-blue-700 transition">Brand & Digital Growth Consulting</Link></li>
+            <li><Link href="/services/brand-digital-growth-consulting" className="hover:text-blue-700 transition">Brand & Digital Growth Consulting</Link></li>
           </ul>
         </div>
 

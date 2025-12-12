@@ -1,6 +1,6 @@
 // app/terms/page.js
 import Script from "next/script";
-import TermsContent from "@/components/TermsContent";
+import TermsContent from "@/components/TermsOfService/TermsContent";
 import PageViewTracker from "@/components/Analytics/PageViewTracker";
 
 const siteUrl =

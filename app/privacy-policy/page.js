@@ -1,6 +1,6 @@
 // app/privacy/page.js
 import Script from "next/script";
-import PrivacyContent from "@/components/PrivacyContent";
+import PrivacyContent from "@/components/Privacy/PrivacyContent";
 import PageViewTracker from "@/components/Analytics/PageViewTracker";
 
 const siteUrl =
