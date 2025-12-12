@@ -370,7 +370,7 @@ export default async function BlogPostPage({ params }) {
           <div className="max-w-7xl mx-auto">
             <div className="flex items-center justify-between mb-12">
               <div>
-                <h2 className="text-3xl font-bold text-slate-900">Read Next</h2>
+                <h2 className="text-3xl font-bold text-slate-900">Related Articles:</h2>
                 <p className="text-slate-500 mt-2">More articles you might find interesting</p>
               </div>
               <Link href="/blog" className="hidden sm:flex text-blue-600 font-semibold hover:text-blue-800 items-center transition-colors">
