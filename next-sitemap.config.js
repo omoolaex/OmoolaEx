@@ -14,6 +14,6 @@ module.exports = {
   ],
   additionalSitemaps: ['https://omoolaex.com.ng/api/sitemap'],
   robotsTxtOptions: {
-    policies: [{ userAgent: '*', allow: '/' }],
+    policies: [{ userAgent: '*', allow: '/', disallow: ['/api', '/admin'], }],
   },
 };

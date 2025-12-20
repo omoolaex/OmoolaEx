@@ -163,7 +163,7 @@ export default function TermsContent() {
                 OmoolaEx processes Personal Data in compliance with the Nigeria Data 
                 Protection Regulation (NDPR) and adheres to global data protection best 
                 practices. Our full data handling practices are detailed in our{" "}
-                <a href="/privacy" className="text-blue-600 underline">
+                <a href="/privacy-policy" className="text-blue-600 underline">
                   Privacy Policy
                 </a>.
               </p>
