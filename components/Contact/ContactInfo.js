@@ -4,7 +4,7 @@ import { FaPhoneAlt, FaEnvelope, FaMapMarkerAlt } from 'react-icons/fa'
 import { motion } from 'framer-motion'
 
 const contactItems = [
-  { icon: <FaEnvelope size={24} />, title: 'Email', value: 'contact@omoolaex.com.ng', link: 'mailto:contact@omoolaex.com.ng' },
+  { icon: <FaEnvelope size={24} />, title: 'Email', value: 'info@omoolaex.com.ng', link: 'mailto:info@omoolaex.com.ng' },
   { icon: <FaPhoneAlt size={24} />, title: 'Phone', value: '+234 708 921 7123', link: 'tel:+2347089217123' },
   { icon: <FaMapMarkerAlt size={24} />, title: 'Address', value: 'Regent Palace, 8 R.T.S. Apena Cl, Oriyomi St, off Olowu Street, Opebi, Ikeja 100271, Lagos', link: 'https://maps.app.goo.gl/yRGZ5sgvVJsn8ozw6' },
 ]

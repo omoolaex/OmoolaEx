@@ -1,9 +1,11 @@
 # *
 User-agent: *
 Allow: /
+Disallow: /admin
 
 # Host
 Host: https://omoolaex.com.ng
 
 # Sitemaps
 Sitemap: https://omoolaex.com.ng/sitemap.xml
+Sitemap: https://omoolaex.com.ng/api/sitemap
