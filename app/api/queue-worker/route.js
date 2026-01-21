@@ -31,6 +31,7 @@ async function workerFn(job) {
         spreadsheetId: job.payload.spreadsheetId,
         range: job.payload.range,
         valueInputOption: "USER_ENTERED",
+        insertDataOption: "INSERT_ROWS",
         requestBody: { values: job.payload.values },
       });
 
