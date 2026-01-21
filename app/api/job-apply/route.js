@@ -1,17 +1,18 @@
-'use server'
+'use server';
 
-import { NextResponse } from "next/server"
-import nodemailer from "nodemailer"
+import { NextResponse } from "next/server";
+import nodemailer from "nodemailer";
 
 import {
   getOAuthClient,
   uploadToDrive,
-  appendToSheet
-} from "@/lib/google"
+  appendToSheet,
+  formatDisplay
+} from "@/lib/google";
 
-// -----------------------------------------------------
-// EMAIL TRANSPORT (Zoho)
-// -----------------------------------------------------
+// ---------------------------
+// Zoho Email Transport
+// ---------------------------
 const transporter = nodemailer.createTransport({
   host: "smtp.zoho.com",
   port: 587,
@@ -20,51 +21,50 @@ const transporter = nodemailer.createTransport({
     user: process.env.ZOHO_USER,
     pass: process.env.ZOHO_PASS,
   },
-})
+});
 
-// =======================================================
+// ---------------------------
+// Utility
+// ---------------------------
+const sanitize = s => (s ? String(s).trim() : "");
+
+// ---------------------------
 // MAIN ENDPOINT
-// =======================================================
+// ---------------------------
 export async function POST(req) {
   try {
-    const formData = await req.formData()
+    const formData = await req.formData();
 
-    const name = formData.get("name")
-    const email = formData.get("email")
-    const phone = formData.get("phone")
-    const linkedin = formData.get("linkedin")
-    const position = formData.get("position")
-    const coverLetter = formData.get("coverLetter")
-    const resumeFile = formData.get("resume")
+    const name = sanitize(formData.get("name"));
+    const email = sanitize(formData.get("email"));
+    const phone = sanitize(formData.get("phone"));
+    const linkedin = sanitize(formData.get("linkedin"));
+    const position = sanitize(formData.get("position"));
+    const coverLetter = sanitize(formData.get("coverLetter"));
+    const resumeFile = formData.get("resume");
 
+    // ---------------------------
+    // Validation
+    // ---------------------------
     if (!name || !email || !phone || !position) {
-      return NextResponse.json(
-        { success: false, message: "Missing required fields" },
-        { status: 400 }
-      )
+      return NextResponse.json({ success: false, message: "Missing required fields" }, { status: 400 });
     }
 
-    const auth = getOAuthClient()
+    const auth = getOAuthClient();
 
-    // -----------------------------------------------------
+    // ---------------------------
     // 1. Upload resume to Google Drive
-    // -----------------------------------------------------
-    let driveFile = null
-
+    // ---------------------------
+    let driveFile = null;
     if (resumeFile && typeof resumeFile.arrayBuffer === "function") {
-      driveFile = await uploadToDrive(
-        auth,
-        resumeFile,
-        process.env.GDRIVE_APPLICATIONS_FOLDER_ID
-      )
+      driveFile = await uploadToDrive(auth, resumeFile, process.env.GDRIVE_APPLICATIONS_FOLDER_ID);
     }
 
-    // -----------------------------------------------------
+    // ---------------------------
     // 2. Append to Google Sheets
-    // -----------------------------------------------------
-    const timestamp = new Date().toISOString()
-
-    await appendToSheet(auth, process.env.SHEET_ID, "Applications", [
+    // ---------------------------
+    const timestamp = formatDisplay(new Date()); // Human-readable timestamp
+    const rowValues = [
       timestamp,
       name,
       email,
@@ -74,11 +74,19 @@ export async function POST(req) {
       driveFile?.webViewLink || "",
       driveFile?.id || "",
       coverLetter || ""
-    ])
+    ];
 
-    // -----------------------------------------------------
+    try {
+      await appendToSheet(auth, process.env.SHEET_ID, "Applications", rowValues);
+      console.log("Sheets append successful");
+    } catch (err) {
+      console.error("Failed to append to Google Sheets:", err);
+      return NextResponse.json({ success: false, message: "Failed to log submission" }, { status: 500 });
+    }
+
+    // ---------------------------
     // 3. Notify Admin
-    // -----------------------------------------------------
+    // ---------------------------
     await transporter.sendMail({
       from: `"OmoolaEx Careers" <${process.env.ZOHO_USER}>`,
       to: process.env.ZOHO_USER,
@@ -97,11 +105,11 @@ export async function POST(req) {
             : `<p><b>Resume:</b> No file uploaded</p>`
         }
       `,
-    })
+    });
 
-    // -----------------------------------------------------
-    // 4. Confirmation to Applicant (delayed)
-    // -----------------------------------------------------
+    // ---------------------------
+    // 4. Confirmation to Applicant
+    // ---------------------------
     setTimeout(() => {
       transporter.sendMail({
         from: `"OmoolaEx Careers" <${process.env.ZOHO_USER}>`,
@@ -114,16 +122,13 @@ export async function POST(req) {
           <br/>
           <p>Warm regards,<br/><b>OmoolaEx Team</b></p>
         `,
-      }).catch(err => console.error("Applicant email failed:", err))
-    }, 10_000)
+      }).catch(err => console.error("Applicant email failed:", err));
+    }, 10_000);
 
-    return NextResponse.json({ success: true })
+    return NextResponse.json({ success: true });
 
   } catch (error) {
-    console.error("Job Application Error:", error)
-    return NextResponse.json(
-      { success: false, message: error.message },
-      { status: 500 }
-    )
+    console.error("Job Application Error:", error);
+    return NextResponse.json({ success: false, message: error.message }, { status: 500 });
   }
 }

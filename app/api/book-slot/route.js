@@ -1,4 +1,3 @@
-// app/api/book-slot/route.js
 import { google } from "googleapis";
 import crypto from "crypto";
 import { enqueueJob } from "@/lib/queue";
@@ -6,7 +5,8 @@ import nodemailer from "nodemailer";
 
 import {
   getOAuthClient,
-  toLocalCalendarDateTime
+  toLocalCalendarDateTime,
+  formatDisplay
 } from "@/lib/google";
 
 // ---------------------------------------
@@ -14,19 +14,6 @@ import {
 // ---------------------------------------
 const sanitize = s => (s ? String(s).trim() : "");
 const isValidEmail = e => /^\S+@\S+\.\S+$/.test(e);
-const pad = n => n.toString().padStart(2, "0");
-
-// Convert JS Date to "MM/DD/YYYY HH:mm:ss" format
-const formatDateTimeLocal = date => {
-  const d = new Date(date);
-  const month = d.getMonth() + 1;
-  const day = d.getDate();
-  const year = d.getFullYear();
-  const hours = pad(d.getHours());
-  const minutes = pad(d.getMinutes());
-  const seconds = pad(d.getSeconds());
-  return `${month}/${day}/${year} ${hours}:${minutes}:${seconds}`;
-};
 
 // ---------------------------------------
 // Email transporter
@@ -89,10 +76,7 @@ export async function POST(req) {
     const auth = getOAuthClient();
     const calendar = google.calendar({ version: "v3", auth });
 
-    const calendars = [
-      process.env.PRIMARY_CALENDAR_ID,
-      process.env.SECONDARY_CALENDAR_ID
-    ].filter(Boolean);
+    const calendars = [process.env.PRIMARY_CALENDAR_ID].filter(Boolean);
 
     if (!calendars.length) {
       return new Response(JSON.stringify({ error: "No calendars configured" }), { status: 500 });
@@ -174,11 +158,11 @@ export async function POST(req) {
     const eventId = createdEvent.id;
 
     // =======================================
-    // SHEETS ENTRY (fixed date formatting)
+    // SHEETS ENTRY (human-readable)
     // =======================================
-    const timestamp = new Date().toISOString();
-    const displayStart = formatDateTimeLocal(slotStart);
-    const displayEnd = formatDateTimeLocal(slotEnd);
+    const timestamp = formatDisplay(new Date());           // now uses formatDisplay
+    const displayStart = formatDisplay(slotStart);         // human-readable
+    const displayEnd = formatDisplay(slotEnd);             // human-readable
 
     const rowValues = [
       timestamp,
@@ -189,8 +173,8 @@ export async function POST(req) {
       website || "",
       industry,
       consultationType,
-      displayStart, // now properly formatted
-      displayEnd,   // now properly formatted
+      displayStart,
+      displayEnd,
       message || "",
       "Yes",
       consentNewsletter ? "Yes" : "No",
@@ -200,7 +184,7 @@ export async function POST(req) {
 
     await enqueueJob("sheets.append", {
       spreadsheetId: process.env.SHEET_ID,
-      range: "Bookings", // remove "!A1" for proper append
+      range: "Bookings", // append properly
       values: [rowValues]
     });
 
@@ -240,24 +224,18 @@ export async function POST(req) {
       });
     }
 
-    return new Response(
-      JSON.stringify({
-        success: true,
-        eventId,
-        meetLink,
-        calendars: addedCalendars
-      }),
-      { status: 200 }
-    );
+    return new Response(JSON.stringify({
+      success: true,
+      eventId,
+      meetLink,
+      calendars: addedCalendars
+    }), { status: 200 });
 
   } catch (err) {
     console.error("[book-slot] ERROR:", err);
-    return new Response(
-      JSON.stringify({
-        error: "Booking error",
-        detail: err.message ?? String(err)
-      }),
-      { status: 500 }
-    );
+    return new Response(JSON.stringify({
+      error: "Booking error",
+      detail: err.message ?? String(err)
+    }), { status: 500 });
   }
 }
