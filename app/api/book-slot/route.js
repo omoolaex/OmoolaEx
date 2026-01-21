@@ -6,8 +6,7 @@ import nodemailer from "nodemailer";
 
 import {
   getOAuthClient,
-  toLocalCalendarDateTime,
-  formatDisplay
+  toLocalCalendarDateTime
 } from "@/lib/google";
 
 // ---------------------------------------
@@ -15,6 +14,19 @@ import {
 // ---------------------------------------
 const sanitize = s => (s ? String(s).trim() : "");
 const isValidEmail = e => /^\S+@\S+\.\S+$/.test(e);
+const pad = n => n.toString().padStart(2, "0");
+
+// Convert JS Date to "MM/DD/YYYY HH:mm:ss" format
+const formatDateTimeLocal = date => {
+  const d = new Date(date);
+  const month = d.getMonth() + 1;
+  const day = d.getDate();
+  const year = d.getFullYear();
+  const hours = pad(d.getHours());
+  const minutes = pad(d.getMinutes());
+  const seconds = pad(d.getSeconds());
+  return `${month}/${day}/${year} ${hours}:${minutes}:${seconds}`;
+};
 
 // ---------------------------------------
 // Email transporter
@@ -34,7 +46,7 @@ export async function POST(req) {
   try {
     const data = await req.json();
 
-    // Extract fields
+    // Extract and sanitize fields
     const name = sanitize(data.name);
     const email = sanitize(data.email);
     const phone = sanitize(data.phone);
@@ -101,11 +113,10 @@ export async function POST(req) {
       return new Response(JSON.stringify({ error: "Selected slot already booked" }), { status: 409 });
     }
 
-    // Convert datetimes to Lagos-local
+    // Convert datetimes to Lagos-local for Google Calendar
     const startLocal = toLocalCalendarDateTime(slotStartRaw, "Africa/Lagos");
     const endLocal = toLocalCalendarDateTime(slotEndRaw, "Africa/Lagos");
 
-    // Event payload
     const eventBody = {
       summary: `Consultation: ${name} — ${consultationType}`,
       description: [
@@ -120,13 +131,10 @@ export async function POST(req) {
         `Consent NDPR: Yes`,
         `Subscribe newsletter: ${consentNewsletter ? "Yes" : "No"}`
       ].filter(Boolean).join("\n"),
-
       start: { dateTime: startLocal, timeZone: "Africa/Lagos" },
       end: { dateTime: endLocal, timeZone: "Africa/Lagos" },
-
       attendees: [{ email }],
       reminders: { useDefault: true },
-
       conferenceData: {
         createRequest: {
           requestId: `meet-${crypto.randomUUID()}`,
@@ -166,11 +174,11 @@ export async function POST(req) {
     const eventId = createdEvent.id;
 
     // =======================================
-    // SHEETS ENTRY
+    // SHEETS ENTRY (fixed date formatting)
     // =======================================
     const timestamp = new Date().toISOString();
-    const displayStart = formatDisplay(slotStartRaw);
-    const displayEnd = formatDisplay(slotEndRaw);
+    const displayStart = formatDateTimeLocal(slotStart);
+    const displayEnd = formatDateTimeLocal(slotEnd);
 
     const rowValues = [
       timestamp,
@@ -181,8 +189,8 @@ export async function POST(req) {
       website || "",
       industry,
       consultationType,
-      displayStart,
-      displayEnd,
+      displayStart, // now properly formatted
+      displayEnd,   // now properly formatted
       message || "",
       "Yes",
       consentNewsletter ? "Yes" : "No",
@@ -192,7 +200,7 @@ export async function POST(req) {
 
     await enqueueJob("sheets.append", {
       spreadsheetId: process.env.SHEET_ID,
-      range: "Bookings!A1",
+      range: "Bookings", // remove "!A1" for proper append
       values: [rowValues]
     });
 

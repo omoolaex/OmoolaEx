@@ -64,7 +64,7 @@ export async function POST(req) {
     // -----------------------------------------------------
     const timestamp = new Date().toISOString()
 
-    await appendToSheet(auth, process.env.SHEET_ID, "Applications!A1", [
+    await appendToSheet(auth, process.env.SHEET_ID, "Applications", [
       timestamp,
       name,
       email,
