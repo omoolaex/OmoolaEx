@@ -55,7 +55,7 @@ export default function FloatingContactActions() {
 
   return (
     <motion.div
-      className="fixed bottom-6 right-6 z-[1000] flex flex-col items-end gap-3 touch-none"
+      className="fixed bottom-6 right-6 z-1000 flex flex-col items-end gap-3 touch-none"
       drag
       dragConstraints={{ top: -200, bottom: 200, left: -200, right: 200 }}
       dragElastic={0.2}

@@ -2,7 +2,6 @@
 import { processBatch } from "@/lib/queue";
 import { google } from "googleapis";
 import nodemailer from "nodemailer";
-import { redis, QUEUE_KEY, PROCESSING_KEY, DEAD_LETTER_KEY } from "@/lib/queue";
 
 function getOAuthClient() {
   const client = new google.auth.OAuth2(
@@ -24,66 +23,35 @@ const transporter = nodemailer.createTransport({
 async function workerFn(job) {
   const auth = getOAuthClient();
   const sheets = google.sheets({ version: "v4", auth });
+  const calendar = google.calendar({ version: "v3", auth });
 
   switch (job.type) {
-
-    case "sheets.append": {
-      const res = await sheets.spreadsheets.values.append({
+    case "sheets.append":
+      return sheets.spreadsheets.values.append({
         spreadsheetId: job.payload.spreadsheetId,
         range: job.payload.range,
         valueInputOption: "USER_ENTERED",
         requestBody: { values: job.payload.values },
       });
 
-      if (!res.data?.updates?.updatedRows) {
-        throw new Error("Sheets append failed");
-      }
-      return res;
-    }
+    case "email.send":
+      return transporter.sendMail(job.payload);
 
-    case "email.send": {
-      const info = await transporter.sendMail(job.payload);
-      if (!info?.messageId) {
-        throw new Error("Email send failed");
-      }
-      return info;
-    }
-
-    case "crm.addContact": {
-      const res = await fetch(process.env.BREVO_API_URL, {
+    case "crm.addContact":
+      return fetch(process.env.BREVO_API_URL, {
         method: "POST",
-        headers: {
-          "content-type": "application/json",
-          "api-key": process.env.BREVO_API_KEY,
-        },
+        headers: { "content-type": "application/json", "api-key": process.env.BREVO_API_KEY },
         body: JSON.stringify(job.payload),
       });
-
-      if (!res.ok) {
-        throw new Error(`CRM error: ${res.status}`);
-      }
-      return true;
-    }
 
     default:
       throw new Error(`Unknown job type: ${job.type}`);
   }
 }
 
-export async function GET() {
-  const [pending, processing, dead] = await Promise.all([
-    redis.llen(QUEUE_KEY),
-    redis.llen(PROCESSING_KEY),
-    redis.llen(DEAD_LETTER_KEY),
-  ]);
-
-  return new Response(JSON.stringify({ pending, processing, dead }), { status: 200 });
-}
-
 export async function POST(req) {
-  if (req.headers.get("x-worker-token") !== process.env.WORKER_TOKEN) {
-    return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
-  }
+  const token = req.headers.get("x-worker-token");
+  if (token !== process.env.WORKER_TOKEN) return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 });
 
   const result = await processBatch(workerFn, 10);
   return new Response(JSON.stringify({ ok: true, result }), { status: 200 });
