@@ -21,7 +21,7 @@ const actionsData = [
   },
   {
     label: "Send an Email",
-    href: "mailto:hello@omoolaex.com.ng",
+    href: "mailto:info@omoolaex.com.ng",
     icon: <FaEnvelope size={20} />,
     bgColor: "bg-amber-500 hover:bg-amber-600",
   },
